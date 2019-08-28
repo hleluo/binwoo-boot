@@ -1,0 +1,8 @@
+target
+.idea/
+*.iml
+binwoo-framework/bin
+binwoo-test/bin
+binwoo-framework/target
+binwoo-test/target
+.idea/workspace.xml

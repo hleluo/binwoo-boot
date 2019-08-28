@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: binwoo-test
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+server:
+  port: 9600
