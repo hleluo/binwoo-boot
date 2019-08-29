@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: binwoo-oauth
+logging:
+  path: ${user.home}/${spring.application.name}
+
+oauth:
+  jwt:
+    signing-key: 123456
+  server:
+    grant-type: authorization_code,password,refresh_token,client_credentials
+
+server:
+  port: 9899
