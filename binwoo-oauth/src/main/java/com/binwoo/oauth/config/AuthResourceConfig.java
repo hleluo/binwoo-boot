@@ -1,14 +1,17 @@
 package com.binwoo.oauth.config;
 
-import com.binwoo.oauth.security.AuthEntryPoint;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
+import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 
 /**
+ * 资源服务适配器.
+ *
  * @author hleluo
  * @date 2019/8/29 23:41
  */
@@ -16,37 +19,50 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 @EnableResourceServer
 public class AuthResourceConfig extends ResourceServerConfigurerAdapter {
 
+  /**
+   * 资源id.
+   */
+  @Value("${oauth.resource.id}")
+  private String resourceId;
+  /**
+   * 忽略验证的URL，多个都好隔开.
+   */
+  @Value("${oauth.resource.exclude}")
+  private String exclude;
+
+  /**
+   * 配置详见JwtTokenConfig.
+   */
+  private final ResourceServerTokenServices tokenServices;
+
+  /**
+   * 构造函数.
+   *
+   * @param tokenServices token服务.
+   */
+  @Autowired
+  public AuthResourceConfig(ResourceServerTokenServices tokenServices) {
+    this.tokenServices = tokenServices;
+  }
+
   @Override
   public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-    resources.authenticationEntryPoint(new AuthEntryPoint());
+    //资源配置.
+    resources.resourceId(resourceId)
+        //token服务.
+        .tokenServices(tokenServices);
   }
 
   @Override
   public void configure(HttpSecurity http) throws Exception {
-    //如果 启用 http.addFilterBefore(oAuth2AuthenticationFilter,AbstractPreAuthenticatedProcessingFilter.class) 代码 则需要启用下面被注释的代码
-    OAuth2AuthenticationProcessingFilter oAuth2AuthenticationFilter = new OAuth2AuthenticationProcessingFilter();
-    OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
-    oAuth2AuthenticationEntryPoint.setExceptionTranslator(webResponseExceptionTranslator());
-    oAuth2AuthenticationFilter.setAuthenticationEntryPoint(oAuth2AuthenticationEntryPoint);
-    OAuth2AuthenticationManager oAuth2AuthenticationManager = new OAuth2AuthenticationManager();
-    DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-    defaultTokenServices.setTokenStore(tokenStore);
-    oAuth2AuthenticationManager.setTokenServices(defaultTokenServices);
-    oAuth2AuthenticationFilter.setAuthenticationManager(oAuth2AuthenticationManager);
-
-    // 配置那些资源需要保护的
-    http.requestMatchers().antMatchers("/api/**")
+    //忽略验证的URL.
+    String[] excludes = exclude.split(",");
+    http.authorizeRequests()
+        //配置忽略验证的URL.
+        .antMatchers(excludes).permitAll()
+        .anyRequest().authenticated()
         .and()
-        .authorizeRequests()
-        .antMatchers("/api/**").authenticated()
-        .and()
-        //权限认证失败业务处理
-        .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler())
-        //认证失败的业务处理
-        .authenticationEntryPoint(customAuthenticationEntryPoint());
-    //自定义token过滤 token校验失败后自定义返回数据格式
-    http.addFilterBefore(permitAuthenticationFilter,
-        AbstractPreAuthenticatedProcessingFilter.class);
-
+        //跨域配置.
+        .csrf().disable();
   }
 }

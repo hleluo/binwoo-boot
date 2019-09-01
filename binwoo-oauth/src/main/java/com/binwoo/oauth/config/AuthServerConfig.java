@@ -1,23 +1,24 @@
 package com.binwoo.oauth.config;
 
-import com.binwoo.oauth.security.CustomUserDetailsService;
+import com.binwoo.oauth.security.AuthExceptionTranslator;
+import com.binwoo.oauth.security.AuthTokenEndpointFilter;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 /**
  * OAuth Server Config.
@@ -29,38 +30,111 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
+  /**
+   * 客户端id.
+   */
+  @Value("${oauth.server.client-id}")
+  private String clientId;
+  /**
+   * 客户端密码.
+   */
+  @Value("${oauth.server.secret}")
+  private String secret;
+  /**
+   * 支持的GrantType，多个都好隔开.
+   */
   @Value("${oauth.server.grant-type}")
   private String grantType;
-  @Value("${oauth.jwt.signing-key}")
-  private String signingKey;
+  /**
+   * 作用域，多个逗号隔开.
+   */
+  @Value("${oauth.server.scope}")
+  private String scope;
+  /**
+   * 资源id，多个逗号隔开.
+   */
+  @Value("${oauth.server.resource-id}")
+  private String resourceId;
+
+  /**
+   * 详见WebSecurityConfig.
+   */
+  private final AuthenticationManager authenticationManager;
+  /**
+   * 详见WebSecurityConfig.
+   */
+  private final UserDetailsService userDetailsService;
+  /**
+   * 详见JwtTokenConfig.
+   */
+  private final TokenStore tokenStore;
+  /**
+   * 详见JwtTokenConfig.
+   */
+  private final JwtAccessTokenConverter jwtAccessTokenConverter;
+  /**
+   * token额外信息，详见JwtTokenConfig.
+   */
+  private final TokenEnhancer tokenEnhancer;
+  /**
+   * 加密方式，详见WebSecurityConfig.
+   */
+  private final PasswordEncoder passwordEncoder;
+  /**
+   * 异常拦截及数据自定义.
+   */
+  private final AuthExceptionTranslator authExceptionTranslator;
+  /**
+   * 验证拦截.
+   */
+  private final AuthTokenEndpointFilter authTokenEndpointFilter;
 
   @Autowired
-  private AuthenticationManager authenticationManager;
-
-  @Autowired
-  private CustomUserDetailsService userDetailsService;
-
-  @Autowired
-  private WebResponseExceptionTranslator webResponseExceptionTranslator;
+  public AuthServerConfig(AuthenticationManager authenticationManager,
+      UserDetailsService userDetailsService, TokenStore tokenStore,
+      JwtAccessTokenConverter jwtAccessTokenConverter, TokenEnhancer tokenEnhancer,
+      PasswordEncoder passwordEncoder, AuthExceptionTranslator authExceptionTranslator,
+      AuthTokenEndpointFilter authTokenEndpointFilter) {
+    this.authenticationManager = authenticationManager;
+    this.userDetailsService = userDetailsService;
+    this.tokenStore = tokenStore;
+    this.jwtAccessTokenConverter = jwtAccessTokenConverter;
+    this.tokenEnhancer = tokenEnhancer;
+    this.passwordEncoder = passwordEncoder;
+    this.authExceptionTranslator = authExceptionTranslator;
+    this.authTokenEndpointFilter = authTokenEndpointFilter;
+  }
 
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
     String[] grantTypes = grantType.split(",");
-    clients.inMemory().authorizedGrantTypes(grantTypes);
+    String[] scopes = scope.split(",");
+    String[] resourceIds = resourceId.split(",");
+    clients.inMemory().withClient(clientId)
+        //账号密码加密的同时，客户端密码也要加密.
+        .secret(passwordEncoder.encode(secret))
+        .authorizedGrantTypes(grantTypes)
+        .scopes(scopes)
+        .resourceIds(resourceIds)
+        .accessTokenValiditySeconds(7200)
+        .refreshTokenValiditySeconds(7400);
   }
 
   @Override
   public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-    endpoints
-        .tokenStore(tokenStore())
-        .accessTokenConverter(jwtAccessTokenConverter())
+    TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
+    List<TokenEnhancer> enhancers = new ArrayList<>();
+    //token额外信息.
+    enhancers.add(tokenEnhancer);
+    enhancers.add(jwtAccessTokenConverter);
+    enhancerChain.setTokenEnhancers(enhancers);
+    endpoints.tokenStore(tokenStore)
+        .accessTokenConverter(jwtAccessTokenConverter)
+        .tokenEnhancer(enhancerChain)
         .authenticationManager(authenticationManager)
-        .exceptionTranslator(customWebResponseExceptionTranslator)
         .userDetailsService(userDetailsService)
-        //开启刷新token
-        .reuseRefreshTokens(true)
-        .tokenServices(tokenServices());
-    ;
+        //异常拦截处理.
+        .exceptionTranslator(authExceptionTranslator);
   }
 
   @Override
@@ -71,37 +145,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         .tokenKeyAccess("permitAll()")
         //isAuthenticated():排除anonymous；isFullyAuthenticated():排除anonymous以及remember-me
         .checkTokenAccess("isAuthenticated()")
-        //client password加密即oauth_client_details表的client_secret字段
-        .passwordEncoder(passwordEncoder());
-  }
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
-
-  @Bean
-  public TokenStore tokenStore() {
-    return new JwtTokenStore(jwtAccessTokenConverter());
-  }
-
-  @Bean
-  public JwtAccessTokenConverter jwtAccessTokenConverter() {
-    JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-    converter.setSigningKey(signingKey);
-    return converter;
-  }
-
-  /**
-   * 重写默认的资源服务token
-   */
-  @Bean
-  public DefaultTokenServices tokenServices() {
-    final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-    defaultTokenServices.setTokenEnhancer(jwtAccessTokenConverter());
-    defaultTokenServices.setTokenStore(tokenStore());
-    defaultTokenServices.setSupportRefreshToken(true);
-    defaultTokenServices.setAccessTokenValiditySeconds(7200);
-    return defaultTokenServices;
+        //token认证拦截.
+        .addTokenEndpointAuthenticationFilter(authTokenEndpointFilter);
   }
 }

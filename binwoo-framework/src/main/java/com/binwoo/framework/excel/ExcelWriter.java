@@ -1,6 +1,5 @@
 package com.binwoo.framework.excel;
 
-import com.sun.istack.internal.NotNull;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -230,7 +229,7 @@ public class ExcelWriter {
    * @param filepath 文件路径
    * @return 输出流
    */
-  private OutputStream buildOutput(@NotNull String filepath) throws FileNotFoundException {
+  private OutputStream buildOutput(String filepath) throws FileNotFoundException {
     File file = new File(filepath);
     if (!file.getParentFile().exists()) {
       boolean b = file.getParentFile().mkdirs();
