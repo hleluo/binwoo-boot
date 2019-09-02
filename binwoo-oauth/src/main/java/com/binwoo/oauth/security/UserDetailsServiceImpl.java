@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
+ * 用户详细信息服务.
+ *
  * @author hleluo
  * @date 2019/8/29 23:27
  */

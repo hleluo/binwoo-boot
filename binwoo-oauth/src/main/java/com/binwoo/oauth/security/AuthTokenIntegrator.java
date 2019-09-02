@@ -14,6 +14,7 @@ public interface AuthTokenIntegrator {
    * 处理集成认证.
    *
    * @param param 登录参数
+   * @return User
    */
   User authenticate(AuthTokenParam param);
 

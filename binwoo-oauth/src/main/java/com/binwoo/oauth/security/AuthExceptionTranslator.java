@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 /**
- * 异常处理.
+ * 登录抛异常 比如用户或者密码/scope报错接住的异常.
  *
  * @author hleluo
  * @date 2019/8/31 20:25
@@ -25,30 +25,38 @@ public class AuthExceptionTranslator implements WebResponseExceptionTranslator {
   public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
     e.printStackTrace();
     if (e instanceof InvalidTokenException) {
+      //无效Token.
       InvalidTokenException invalidTokenException = (InvalidTokenException) e;
       return ResponseEntity.status(invalidTokenException.getHttpErrorCode())
           .body(new AuthException(e.getMessage()));
     } else if (e instanceof InvalidGrantException) {
+      // 账号密码错误.
       InvalidGrantException invalidGrantException = (InvalidGrantException) e;
       return ResponseEntity.status(invalidGrantException.getHttpErrorCode())
           .body(new AuthException("54345"));
     } else if (e instanceof OAuth2Exception) {
+      // 授权异常.
       OAuth2Exception auth2Exception = (OAuth2Exception) e;
       return ResponseEntity.status(auth2Exception.getHttpErrorCode())
           .body(new AuthException(e.getMessage()));
     } else if (e instanceof DisabledException) {
+      // 账号禁用，不可访问.
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
           .body(new AuthException(e.getMessage()));
     } else if (e instanceof AuthenticationException) {
+      // 权限异常.
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
           .body(new AuthException(e.getMessage()));
     } else if (e instanceof AccessDeniedException) {
+      // 拒绝访问.
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
           .body(new AuthException(e.getMessage()));
     } else if (e instanceof HttpRequestMethodNotSupportedException) {
+      // 请求方式不支持.
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
           .body(new AuthException(e.getMessage()));
     }
+    // 服务器内部错误.
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(new AuthException(e.getMessage()));
   }

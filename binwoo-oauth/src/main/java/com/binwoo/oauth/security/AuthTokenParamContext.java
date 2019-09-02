@@ -8,6 +8,9 @@ package com.binwoo.oauth.security;
  */
 public class AuthTokenParamContext {
 
+  /**
+   * 本地线程.
+   */
   private static ThreadLocal<AuthTokenParam> holder = new ThreadLocal<>();
 
   /**

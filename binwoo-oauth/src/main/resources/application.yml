@@ -18,4 +18,6 @@ oauth:
     exclude: /swagger-ui.html,/swagger-resources/**,/images/**,/webjars/**,/v2/api-docs
 
 server:
+  servlet:
+    context-path: /api
   port: 9979

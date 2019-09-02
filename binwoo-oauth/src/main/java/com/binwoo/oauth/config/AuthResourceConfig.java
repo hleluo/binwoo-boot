@@ -1,8 +1,11 @@
 package com.binwoo.oauth.config;
 
+import com.binwoo.oauth.security.AuthTokenEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
@@ -13,8 +16,8 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
  * @author hleluo
  * @date 2019/8/29 23:41
  */
-//@Configuration
-//@EnableResourceServer
+@Configuration
+@EnableResourceServer
 public class AuthResourceConfig extends ResourceServerConfigurerAdapter {
 
   /**
@@ -45,7 +48,8 @@ public class AuthResourceConfig extends ResourceServerConfigurerAdapter {
 
   @Override
   public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-    resources.resourceId(resourceId).tokenServices(tokenServices);
+    resources.resourceId(resourceId).tokenServices(tokenServices)
+        .authenticationEntryPoint(new AuthTokenEntryPoint());
   }
 
   @Override

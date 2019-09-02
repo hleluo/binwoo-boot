@@ -8,6 +8,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -22,7 +23,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 /**
- * OAuth Server Config.
+ * 授权服务配置.
  *
  * @author hleluo
  * @date 2019/8/29 22:28
@@ -60,6 +61,11 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
    */
   private final AuthTokenEndpointFilter authTokenEndpointFilter;
 
+  /**
+   * 客户端信息服务.
+   *
+   * @return 客户端信息服务.
+   */
   @Bean
   public ClientDetailsService clientDetails() {
     return new ClientDetailsServiceImpl();
@@ -83,6 +89,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    //自定义客户端信息.
     clients.withClientDetails(clientDetails());
   }
 
@@ -95,12 +102,14 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         .tokenStore(tokenStore)
         .accessTokenConverter(accessTokenConverter)
         .tokenEnhancer(enhancerChain)
-        // 指定认证管理器
+        // 指定认证管理器.
         .authenticationManager(authenticationManager)
         .userDetailsService(userDetailsService)
-        //异常拦截处理.
+        //允许 GET、POST 请求获取 token，即访问端点：oauth/token.
+        .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
+        //登录异常拦截处理.
         .exceptionTranslator(authExceptionTranslator);
-    //自定义任何情况下都返回refresh_token，
+    //自定义任何情况下都返回refresh_token，如无refresh_token权限则不返回.
     endpoints.tokenGranter(new JwtTokenGranter(endpoints, authenticationManager).build());
   }
 

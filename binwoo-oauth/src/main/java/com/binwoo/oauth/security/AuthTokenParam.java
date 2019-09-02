@@ -17,8 +17,17 @@ public class AuthTokenParam {
    */
   public static final String AUTH_TYPE_PASSWORD = "password";
 
+  /**
+   * 权限验证方式.
+   */
   private String authType;
+  /**
+   * 用户名.
+   */
   private String username;
+  /**
+   * 参数列表.
+   */
   private Map<String, String[]> parameters;
 
   /**

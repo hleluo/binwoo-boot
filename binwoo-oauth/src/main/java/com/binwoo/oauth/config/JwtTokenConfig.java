@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 /**
- * JWT Config.
+ * Jwt Token配置.
  *
  * @author hleluo
  * @date 2019/8/31 16:17
@@ -48,6 +48,11 @@ public class JwtTokenConfig {
     return accessTokenConverter;
   }
 
+  /**
+   * token额外数据.
+   *
+   * @return TokenEnhancer
+   */
   @Bean
   public TokenEnhancer tokenEnhancer() {
     return new JwtTokenEnhancer();

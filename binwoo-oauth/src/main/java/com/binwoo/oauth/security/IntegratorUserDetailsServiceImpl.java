@@ -9,12 +9,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
+ * 集成自定义用户信息服务.
+ *
  * @author hleluo
  * @date 2019/8/29 23:27
  */
 @Service
 public class IntegratorUserDetailsServiceImpl implements UserDetailsService {
 
+  /**
+   * 集成器列表.
+   */
   private List<AuthTokenIntegrator> integrators;
 
   @Autowired(required = false)
@@ -37,6 +42,12 @@ public class IntegratorUserDetailsServiceImpl implements UserDetailsService {
     return user;
   }
 
+  /**
+   * 调用指定登录验证.
+   *
+   * @param param 登录参数
+   * @return 用户
+   */
   private User authenticate(AuthTokenParam param) {
     if (this.integrators != null) {
       for (AuthTokenIntegrator integrator : integrators) {

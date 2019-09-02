@@ -1,6 +1,6 @@
 package com.binwoo.oauth.config;
 
-import com.binwoo.oauth.security.UserDetailsServiceImpl;
+import com.binwoo.oauth.security.IntegratorUserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   @Override
   public UserDetailsService userDetailsService() {
-    return new UserDetailsServiceImpl();
+    return new IntegratorUserDetailsServiceImpl();
   }
 
   /**
@@ -62,12 +62,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     auth.authenticationProvider(authenticationProvider());
   }
 
+  /**
+   * 权限验证设置.
+   *
+   * @return AuthenticationProvider
+   */
   @Bean
   public AuthenticationProvider authenticationProvider() {
     DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
     provider.setUserDetailsService(userDetailsService());
     //是否隐藏用户不存在的异常
-    //provider.setHideUserNotFoundExceptions(false);
+    provider.setHideUserNotFoundExceptions(true);
     provider.setPasswordEncoder(passwordEncoder());
     return provider;
   }

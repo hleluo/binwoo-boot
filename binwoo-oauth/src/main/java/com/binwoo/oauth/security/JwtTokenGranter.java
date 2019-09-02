@@ -53,7 +53,7 @@ public class JwtTokenGranter {
    * 针对所有验证返回refresh_token.
    *
    * @param endpoints 权限配置节点
-   * @return List<TokenGranter>
+   * @return TokenGranter列表
    */
   private List<TokenGranter> getCustomizedTokenGranters(
       AuthorizationServerEndpointsConfigurer endpoints) {
