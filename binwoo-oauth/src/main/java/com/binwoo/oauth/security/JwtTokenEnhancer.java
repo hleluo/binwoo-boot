@@ -1,5 +1,8 @@
 package com.binwoo.oauth.security;
 
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
@@ -20,7 +23,9 @@ public class JwtTokenEnhancer implements TokenEnhancer {
     //只有如下两种模式才能获取到当前用户信息.
     if (GRANT_TYPE_AUTHORIZATION_CODE.equals(grantType) || GRANT_TYPE_PASSWORD.equals(grantType)) {
       String username = oAuth2Authentication.getUserAuthentication().getName();
-
+      final Map<String, Object> additionalInfo = new HashMap<>();
+      additionalInfo.put("username", username);
+      ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(additionalInfo);
     }
     return oAuth2AccessToken;
   }

@@ -18,4 +18,4 @@ oauth:
     exclude: /swagger-ui.html,/swagger-resources/**,/images/**,/webjars/**,/v2/api-docs
 
 server:
-  port: 9899
+  port: 9979

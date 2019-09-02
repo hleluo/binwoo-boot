@@ -2,19 +2,20 @@ package com.binwoo.oauth.config;
 
 import com.binwoo.oauth.security.AuthExceptionTranslator;
 import com.binwoo.oauth.security.AuthTokenEndpointFilter;
-import java.util.ArrayList;
-import java.util.List;
+import com.binwoo.oauth.security.ClientDetailsServiceImpl;
+import com.binwoo.oauth.security.JwtTokenGranter;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -31,32 +32,6 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
   /**
-   * 客户端id.
-   */
-  @Value("${oauth.server.client-id}")
-  private String clientId;
-  /**
-   * 客户端密码.
-   */
-  @Value("${oauth.server.secret}")
-  private String secret;
-  /**
-   * 支持的GrantType，多个都好隔开.
-   */
-  @Value("${oauth.server.grant-type}")
-  private String grantType;
-  /**
-   * 作用域，多个逗号隔开.
-   */
-  @Value("${oauth.server.scope}")
-  private String scope;
-  /**
-   * 资源id，多个逗号隔开.
-   */
-  @Value("${oauth.server.resource-id}")
-  private String resourceId;
-
-  /**
    * 详见WebSecurityConfig.
    */
   private final AuthenticationManager authenticationManager;
@@ -71,15 +46,11 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
   /**
    * 详见JwtTokenConfig.
    */
-  private final JwtAccessTokenConverter jwtAccessTokenConverter;
+  private final JwtAccessTokenConverter accessTokenConverter;
   /**
-   * token额外信息，详见JwtTokenConfig.
+   * 详见JwtTokenConfig.
    */
   private final TokenEnhancer tokenEnhancer;
-  /**
-   * 加密方式，详见WebSecurityConfig.
-   */
-  private final PasswordEncoder passwordEncoder;
   /**
    * 异常拦截及数据自定义.
    */
@@ -89,52 +60,48 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
    */
   private final AuthTokenEndpointFilter authTokenEndpointFilter;
 
+  @Bean
+  public ClientDetailsService clientDetails() {
+    return new ClientDetailsServiceImpl();
+  }
+
   @Autowired
   public AuthServerConfig(AuthenticationManager authenticationManager,
       UserDetailsService userDetailsService, TokenStore tokenStore,
-      JwtAccessTokenConverter jwtAccessTokenConverter, TokenEnhancer tokenEnhancer,
-      PasswordEncoder passwordEncoder, AuthExceptionTranslator authExceptionTranslator,
+      JwtAccessTokenConverter accessTokenConverter, TokenEnhancer tokenEnhancer,
+      AuthExceptionTranslator authExceptionTranslator,
       AuthTokenEndpointFilter authTokenEndpointFilter) {
     this.authenticationManager = authenticationManager;
     this.userDetailsService = userDetailsService;
     this.tokenStore = tokenStore;
-    this.jwtAccessTokenConverter = jwtAccessTokenConverter;
+    this.accessTokenConverter = accessTokenConverter;
     this.tokenEnhancer = tokenEnhancer;
-    this.passwordEncoder = passwordEncoder;
     this.authExceptionTranslator = authExceptionTranslator;
     this.authTokenEndpointFilter = authTokenEndpointFilter;
+
   }
 
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-    String[] grantTypes = grantType.split(",");
-    String[] scopes = scope.split(",");
-    String[] resourceIds = resourceId.split(",");
-    clients.inMemory().withClient(clientId)
-        //账号密码加密的同时，客户端密码也要加密.
-        .secret(passwordEncoder.encode(secret))
-        .authorizedGrantTypes(grantTypes)
-        .scopes(scopes)
-        .resourceIds(resourceIds)
-        .accessTokenValiditySeconds(7200)
-        .refreshTokenValiditySeconds(7400);
+    clients.withClientDetails(clientDetails());
   }
 
   @Override
   public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-    TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
-    List<TokenEnhancer> enhancers = new ArrayList<>();
     //token额外信息.
-    enhancers.add(tokenEnhancer);
-    enhancers.add(jwtAccessTokenConverter);
-    enhancerChain.setTokenEnhancers(enhancers);
-    endpoints.tokenStore(tokenStore)
-        .accessTokenConverter(jwtAccessTokenConverter)
+    TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
+    enhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhancer, accessTokenConverter));
+    endpoints
+        .tokenStore(tokenStore)
+        .accessTokenConverter(accessTokenConverter)
         .tokenEnhancer(enhancerChain)
+        // 指定认证管理器
         .authenticationManager(authenticationManager)
         .userDetailsService(userDetailsService)
         //异常拦截处理.
         .exceptionTranslator(authExceptionTranslator);
+    //自定义任何情况下都返回refresh_token，
+    endpoints.tokenGranter(new JwtTokenGranter(endpoints, authenticationManager).build());
   }
 
   @Override
@@ -148,4 +115,5 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         //token认证拦截.
         .addTokenEndpointAuthenticationFilter(authTokenEndpointFilter);
   }
+
 }

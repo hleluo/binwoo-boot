@@ -33,7 +33,7 @@ public class JwtTokenConfig {
    */
   @Bean
   public TokenStore tokenStore() {
-    return new JwtTokenStore(jwtAccessTokenConverter());
+    return new JwtTokenStore(accessTokenConverter());
   }
 
   /**
@@ -42,17 +42,12 @@ public class JwtTokenConfig {
    * @return JwtAccessTokenConverter
    */
   @Bean
-  public JwtAccessTokenConverter jwtAccessTokenConverter() {
+  public JwtAccessTokenConverter accessTokenConverter() {
     JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
     accessTokenConverter.setSigningKey(signingKey);
     return accessTokenConverter;
   }
 
-  /**
-   * token额外数据.
-   *
-   * @return TokenEnhancer
-   */
   @Bean
   public TokenEnhancer tokenEnhancer() {
     return new JwtTokenEnhancer();
@@ -68,6 +63,7 @@ public class JwtTokenConfig {
   public DefaultTokenServices tokenServices() {
     DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
     defaultTokenServices.setTokenStore(tokenStore());
+    //是否支持刷新Token.
     defaultTokenServices.setSupportRefreshToken(true);
     return defaultTokenServices;
   }

@@ -1,7 +1,6 @@
 package com.binwoo.oauth.security;
 
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
  * @author hleluo
  * @date 2019/8/29 23:27
  */
-@Slf4j
 @Service
 public class IntegratorUserDetailsServiceImpl implements UserDetailsService {
 
