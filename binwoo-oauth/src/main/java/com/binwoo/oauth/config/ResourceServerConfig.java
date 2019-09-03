@@ -49,6 +49,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   @Override
   public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
     resources.resourceId(resourceId).tokenServices(tokenServices)
+        //Token异常处理.
         .authenticationEntryPoint(new ResourceTokenEntryPoint());
   }
 

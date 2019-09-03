@@ -7,12 +7,6 @@ logging:
 oauth:
   jwt:
     signing-key: 123456
-  server:
-    client-id: aaa
-    secret: aaa
-    grant-type: authorization_code,password,refresh_token,client_credentials
-    scope: write,read
-    resource-id: 123
   resource:
     id: 123
     exclude: /swagger-ui.html,/swagger-resources/**,/images/**,/webjars/**,/v2/api-docs

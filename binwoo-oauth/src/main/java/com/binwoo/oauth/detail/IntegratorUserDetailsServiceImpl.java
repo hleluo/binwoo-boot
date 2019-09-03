@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
- * 集成自定义用户信息服务.
+ * 多登录方式集成用户信息服务.
  *
  * @author hleluo
  * @date 2019/8/29 23:27

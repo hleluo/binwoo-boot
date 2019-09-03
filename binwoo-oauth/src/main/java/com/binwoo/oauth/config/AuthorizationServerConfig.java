@@ -119,7 +119,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         //允许 GET、POST 请求获取 token，即访问端点：oauth/token.
         .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
         //登录异常拦截处理.
-        .exceptionTranslator(authExceptionTranslator);
+        .exceptionTranslator(authExceptionTranslator)
+        //设置设置refresh token是否重复使用.
+        .reuseRefreshTokens(false);
     //自定义任何情况下都返回refresh_token，如无refresh_token权限则不返回.
     endpoints.tokenGranter(new AuthTokenGranter(endpoints, authenticationManager).build());
   }
