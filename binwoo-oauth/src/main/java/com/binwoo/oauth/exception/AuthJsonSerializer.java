@@ -21,7 +21,7 @@ public class AuthJsonSerializer extends StdSerializer<AuthException> {
   public void serialize(AuthException e, JsonGenerator jsonGenerator,
       SerializerProvider serializerProvider) throws IOException {
     jsonGenerator.writeStartObject();
-    jsonGenerator.writeObjectField("status", e.getHttpErrorCode());
+    jsonGenerator.writeObjectField("status", e.getFlag());
     jsonGenerator.writeEndObject();
   }
 }

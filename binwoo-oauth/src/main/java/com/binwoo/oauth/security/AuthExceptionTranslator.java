@@ -1,11 +1,13 @@
 package com.binwoo.oauth.security;
 
 import com.binwoo.oauth.exception.AuthException;
+import com.binwoo.oauth.exception.AuthExceptionFlag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
@@ -30,11 +32,15 @@ public class AuthExceptionTranslator implements WebResponseExceptionTranslator {
       InvalidTokenException invalidTokenException = (InvalidTokenException) e;
       return ResponseEntity.status(invalidTokenException.getHttpErrorCode())
           .body(new AuthException(e.getMessage()));
+    } else if (e instanceof UsernameNotFoundException) {
+      // 用户不存在.
+      return ResponseEntity.status(HttpStatus.OK)
+          .body(new AuthException(AuthExceptionFlag.USER_NOT_EXIST, e.getMessage()));
     } else if (e instanceof InvalidGrantException) {
       // 账号密码错误.
       InvalidGrantException invalidGrantException = (InvalidGrantException) e;
       return ResponseEntity.status(invalidGrantException.getHttpErrorCode())
-          .body(new AuthException("54345"));
+          .body(new AuthException("54345", e.getCause()));
     } else if (e instanceof OAuth2Exception) {
       // 授权异常.
       OAuth2Exception auth2Exception = (OAuth2Exception) e;

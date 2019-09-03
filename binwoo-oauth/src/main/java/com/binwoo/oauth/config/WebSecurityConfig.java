@@ -72,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
     provider.setUserDetailsService(userDetailsService());
     //是否隐藏用户不存在的异常
-    provider.setHideUserNotFoundExceptions(true);
+    provider.setHideUserNotFoundExceptions(false);
     provider.setPasswordEncoder(passwordEncoder());
     return provider;
   }

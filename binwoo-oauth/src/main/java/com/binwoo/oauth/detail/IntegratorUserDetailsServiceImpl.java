@@ -40,7 +40,7 @@ public class IntegratorUserDetailsServiceImpl implements UserDetailsService {
     param.setUsername(s);
     User user = this.authenticate(param);
     if (user == null) {
-      throw new UsernameNotFoundException("用户名或密码错误");
+      throw new UsernameNotFoundException("username not found");
     }
     return user;
   }

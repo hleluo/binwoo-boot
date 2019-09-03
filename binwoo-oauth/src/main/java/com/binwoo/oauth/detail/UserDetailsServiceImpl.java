@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
     if (!"root".equals(s)) {
-      throw new UsernameNotFoundException("user not exist");
+      throw new UsernameNotFoundException("username not found");
     }
     String password = new BCryptPasswordEncoder().encode("111111");
     List<GrantedAuthority> authorities = new ArrayList<>();

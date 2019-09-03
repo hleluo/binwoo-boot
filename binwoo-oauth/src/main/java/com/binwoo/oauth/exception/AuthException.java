@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 @JsonSerialize(using = AuthJsonSerializer.class)
 public class AuthException extends OAuth2Exception {
 
+  private AuthExceptionFlag flag;
+
   /**
    * 构造函数.
    *
@@ -29,5 +31,24 @@ public class AuthException extends OAuth2Exception {
    */
   public AuthException(String msg) {
     super(msg);
+  }
+
+  /**
+   * 构造函数.
+   *
+   * @param flag 标识.
+   * @param msg 消息.
+   */
+  public AuthException(AuthExceptionFlag flag, String msg) {
+    super(msg);
+    this.flag = flag;
+  }
+
+  public AuthExceptionFlag getFlag() {
+    return flag;
+  }
+
+  public void setFlag(AuthExceptionFlag flag) {
+    this.flag = flag;
   }
 }

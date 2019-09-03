@@ -22,6 +22,9 @@ public class AuthTokenPasswordIntegrator implements AuthTokenIntegrator {
 
   @Override
   public User authenticate(AuthTokenParam param) {
+    if (!"root".equals(param.getUsername())) {
+      return null;
+    }
     String password = new BCryptPasswordEncoder().encode("111111");
     List<GrantedAuthority> authorities = new ArrayList<>();
     authorities.add(new SimpleGrantedAuthority("A"));
