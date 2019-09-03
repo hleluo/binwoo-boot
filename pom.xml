@@ -12,6 +12,7 @@
     <module>binwoo-framework</module>
     <module>binwoo-test</module>
     <module>binwoo-oauth</module>
+    <module>binwoo-poi</module>
   </modules>
 
   <properties>

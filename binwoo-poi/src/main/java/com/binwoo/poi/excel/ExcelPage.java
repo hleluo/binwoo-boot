@@ -1,9 +1,9 @@
-package com.binwoo.framework.excel;
+package com.binwoo.poi.excel;
 
 import java.util.List;
 
 /**
- * com.binwoo.framework.excel.
+ * Excel页面.
  *
  * @author luoj
  * @date 2019/8/21 9:33

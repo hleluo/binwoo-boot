@@ -12,17 +12,7 @@ import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 @JsonSerialize(using = AuthJsonSerializer.class)
 public class AuthException extends OAuth2Exception {
 
-  private AuthExceptionFlag flag;
-
-  /**
-   * 构造函数.
-   *
-   * @param msg 消息
-   * @param t 异常
-   */
-  public AuthException(String msg, Throwable t) {
-    super(msg, t);
-  }
+  private HttpAuthExceptionCode code;
 
   /**
    * 构造函数.
@@ -36,19 +26,19 @@ public class AuthException extends OAuth2Exception {
   /**
    * 构造函数.
    *
-   * @param flag 标识.
+   * @param code 异常代码.
    * @param msg 消息.
    */
-  public AuthException(AuthExceptionFlag flag, String msg) {
+  public AuthException(HttpAuthExceptionCode code, String msg) {
     super(msg);
-    this.flag = flag;
+    this.code = code;
   }
 
-  public AuthExceptionFlag getFlag() {
-    return flag;
+  public HttpAuthExceptionCode getCode() {
+    return code;
   }
 
-  public void setFlag(AuthExceptionFlag flag) {
-    this.flag = flag;
+  public void setCode(HttpAuthExceptionCode code) {
+    this.code = code;
   }
 }

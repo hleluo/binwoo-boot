@@ -1,6 +1,6 @@
 package com.binwoo.test;
 
-import com.binwoo.framework.response.HttpRetProperty;
+import com.binwoo.framework.http.response.HttpRetProperty;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;

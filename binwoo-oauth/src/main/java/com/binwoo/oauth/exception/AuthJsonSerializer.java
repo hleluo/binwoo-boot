@@ -1,5 +1,7 @@
 package com.binwoo.oauth.exception;
 
+import com.binwoo.framework.http.response.HttpResponse;
+import com.binwoo.framework.http.response.HttpResponseBuilder;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
@@ -20,8 +22,10 @@ public class AuthJsonSerializer extends StdSerializer<AuthException> {
   @Override
   public void serialize(AuthException e, JsonGenerator jsonGenerator,
       SerializerProvider serializerProvider) throws IOException {
+    HttpResponse<String> response = HttpResponseBuilder.failure(e.getCode());
     jsonGenerator.writeStartObject();
-    jsonGenerator.writeObjectField("status", e.getFlag());
+    jsonGenerator.writeObjectField("ret", response.getRet());
+    jsonGenerator.writeObjectField("msg", response.getMsg());
     jsonGenerator.writeEndObject();
   }
 }

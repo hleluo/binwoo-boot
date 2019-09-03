@@ -1,4 +1,4 @@
-package com.binwoo.framework.response;
+package com.binwoo.framework.http.response;
 
 /**
  * com.code.framework.http.
@@ -145,45 +145,6 @@ public class HttpResponse<T> {
    */
   public static <T> HttpResponse<T> failure(int ret, String msg, Object... args) {
     return new HttpResponse<T>(ret, String.format(msg, args), null);
-  }
-
-  /**
-   * 构建，需配置HttpRetProperty.
-   *
-   * @param ret 代码
-   * @param <T> 实体
-   * @return 结果
-   */
-  public static <T> HttpResponse<T> prop(int ret) {
-    String msg = HttpRetProperty.getValue(ret);
-    return new HttpResponse<T>(ret, msg, null);
-  }
-
-  /**
-   * 构建，需配置HttpRetProperty.
-   *
-   * @param ret 代码
-   * @param body 数据
-   * @param <T> 实体
-   * @return 结果
-   */
-  public static <T> HttpResponse<T> prop(int ret, T body) {
-    String msg = HttpRetProperty.getValue(ret);
-    return new HttpResponse<T>(ret, msg, body);
-  }
-
-  /**
-   * 构建，需配置HttpRetProperty.
-   *
-   * @param ret 代码
-   * @param body 数据
-   * @param args format参数
-   * @param <T> 实体
-   * @return 结果
-   */
-  public static <T> HttpResponse<T> prop(int ret, T body, Object... args) {
-    String msg = HttpRetProperty.getValue(ret);
-    return new HttpResponse<T>(ret, String.format(msg, args), body);
   }
 
 }

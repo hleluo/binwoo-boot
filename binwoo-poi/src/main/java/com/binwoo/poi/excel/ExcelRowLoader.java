@@ -1,4 +1,4 @@
-package com.binwoo.framework.excel;
+package com.binwoo.poi.excel;
 
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;

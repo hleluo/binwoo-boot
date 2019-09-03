@@ -1,10 +1,10 @@
-package com.binwoo.framework.excel;
+package com.binwoo.poi.excel;
 
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 
 /**
- * com.binwoo.framework.excel.
+ * Excel单元装饰器.
  *
  * @author luoj
  * @date 2019/8/21 9:33

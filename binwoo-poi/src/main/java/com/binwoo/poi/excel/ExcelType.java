@@ -1,7 +1,7 @@
-package com.binwoo.framework.excel;
+package com.binwoo.poi.excel;
 
 /**
- * com.binwoo.framework.excel.
+ * Excel类型.
  *
  * @author luoj
  * @date 2019/8/26 17:44

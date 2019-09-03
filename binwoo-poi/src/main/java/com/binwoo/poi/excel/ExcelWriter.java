@@ -1,4 +1,4 @@
-package com.binwoo.framework.excel;
+package com.binwoo.poi.excel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,7 +22,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
- * com.binwoo.framework.excel.
+ * Excel写入.
  *
  * @author luoj
  * @date 2019/8/21 9:29
