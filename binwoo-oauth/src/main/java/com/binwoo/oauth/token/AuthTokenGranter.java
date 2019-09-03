@@ -46,7 +46,7 @@ public class AuthTokenGranter {
    * @return TokenGranter
    */
   public TokenGranter build() {
-    return new CompositeTokenGranter(getCustomizedTokenGranters(endpoints));
+    return new CompositeTokenGranter(buildTokenGranters(endpoints));
   }
 
   /**
@@ -55,7 +55,7 @@ public class AuthTokenGranter {
    * @param endpoints 权限配置节点
    * @return TokenGranter列表
    */
-  private List<TokenGranter> getCustomizedTokenGranters(
+  private List<TokenGranter> buildTokenGranters(
       AuthorizationServerEndpointsConfigurer endpoints) {
     ClientDetailsService clientDetails = endpoints.getClientDetailsService();
     AuthorizationCodeServices authorizationCodeServices = endpoints.getAuthorizationCodeServices();
