@@ -1,4 +1,4 @@
-package com.binwoo.oauth.security;
+package com.binwoo.oauth.integrate;
 
 import java.util.Map;
 import lombok.Data;

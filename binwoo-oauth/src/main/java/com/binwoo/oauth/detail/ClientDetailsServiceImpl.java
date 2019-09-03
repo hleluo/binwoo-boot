@@ -1,4 +1,4 @@
-package com.binwoo.oauth.security;
+package com.binwoo.oauth.detail;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,7 +20,7 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
 
   @Override
   public ClientDetails loadClientByClientId(String s) throws ClientRegistrationException {
-    if(!"aaa".equals(s)) {
+    if (!"aaa".equals(s)) {
       return null;
     }
     BaseClientDetails details = new BaseClientDetails();

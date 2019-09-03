@@ -25,9 +25,20 @@ public class ExcelMerge {
    */
   private int endColIndex;
 
+  /**
+   * 构造函数.
+   */
   public ExcelMerge() {
   }
 
+  /**
+   * 构造函数.
+   *
+   * @param startRowIndex 起始行索引
+   * @param endRowIndex 结束行索引
+   * @param startColIndex 起始列索引
+   * @param endColIndex 结束列索引
+   */
   public ExcelMerge(int startRowIndex, int endRowIndex, int startColIndex, int endColIndex) {
     this.startRowIndex = startRowIndex;
     this.endRowIndex = endRowIndex;

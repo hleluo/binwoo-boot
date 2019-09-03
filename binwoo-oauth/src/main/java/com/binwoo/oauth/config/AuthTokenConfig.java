@@ -1,6 +1,6 @@
 package com.binwoo.oauth.config;
 
-import com.binwoo.oauth.security.JwtTokenEnhancer;
+import com.binwoo.oauth.token.AuthTokenEnhancer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
  * @date 2019/8/31 16:17
  */
 @Configuration
-public class JwtTokenConfig {
+public class AuthTokenConfig {
 
   /**
    * token秘钥.
@@ -55,7 +55,7 @@ public class JwtTokenConfig {
    */
   @Bean
   public TokenEnhancer tokenEnhancer() {
-    return new JwtTokenEnhancer();
+    return new AuthTokenEnhancer();
   }
 
   /**

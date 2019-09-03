@@ -31,13 +31,29 @@ public class ExcelPage {
    */
   private List<ExcelMerge> merges;
 
+  /**
+   * 构造函数.
+   */
   public ExcelPage() {
   }
 
+  /**
+   * 构造函数.
+   *
+   * @param sheetName Sheet名称
+   * @param rows 行数据
+   */
   public ExcelPage(String sheetName, List<ExcelRow> rows) {
     this(sheetName, rows, null);
   }
 
+  /**
+   * 构造函数.
+   *
+   * @param sheetName Sheet名称
+   * @param rows 行数据
+   * @param merges 合并数据
+   */
   public ExcelPage(String sheetName, List<ExcelRow> rows,
       List<ExcelMerge> merges) {
     this.sheetName = sheetName;
@@ -46,10 +62,23 @@ public class ExcelPage {
     this.dynamic = false;
   }
 
+  /**
+   * 构造函数.
+   *
+   * @param sheetName Sheet名称
+   * @param loader 数据加载器
+   */
   public ExcelPage(String sheetName, ExcelRowLoader loader) {
     this(sheetName, loader, null);
   }
 
+  /**
+   * 构造函数.
+   *
+   * @param sheetName Sheet名称
+   * @param loader 数据加载器
+   * @param merges 合并数据
+   */
   public ExcelPage(String sheetName, ExcelRowLoader loader,
       List<ExcelMerge> merges) {
     this.sheetName = sheetName;

@@ -1,5 +1,6 @@
 package com.binwoo.oauth.security;
 
+import com.binwoo.oauth.exception.AuthException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;

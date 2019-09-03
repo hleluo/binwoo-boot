@@ -1,5 +1,8 @@
-package com.binwoo.oauth.security;
+package com.binwoo.oauth.detail;
 
+import com.binwoo.oauth.integrate.AuthTokenIntegrator;
+import com.binwoo.oauth.integrate.AuthTokenParam;
+import com.binwoo.oauth.integrate.AuthTokenParamContext;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;

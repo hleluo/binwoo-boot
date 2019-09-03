@@ -1,4 +1,4 @@
-package com.binwoo.oauth.security;
+package com.binwoo.oauth.token;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
  * @author hleluo
  * @date 2019/8/31 16:18
  */
-public class JwtTokenEnhancer implements TokenEnhancer {
+public class AuthTokenEnhancer implements TokenEnhancer {
 
   /**
    * code模式.

@@ -15,6 +15,11 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 @ServletComponentScan("com.binwoo.framework")
 public class TestApplication {
 
+  /**
+   * 启动程序.
+   *
+   * @param args 参数
+   */
   public static void main(String[] args) {
     SpringApplication.run(TestApplication.class, args);
     HttpRetProperty

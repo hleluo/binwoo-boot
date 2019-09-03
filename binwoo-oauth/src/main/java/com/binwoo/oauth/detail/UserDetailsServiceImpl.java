@@ -1,4 +1,4 @@
-package com.binwoo.oauth.security;
+package com.binwoo.oauth.detail;
 
 import java.util.ArrayList;
 import java.util.List;

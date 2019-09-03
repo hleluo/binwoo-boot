@@ -15,10 +15,13 @@ public class ExcelRow {
    */
   private Integer columnCount;
   /**
-   * 单元数据列表
+   * 单元数据列表.
    */
   private List<ExcelCell> cells;
 
+  /**
+   * 构造函数.
+   */
   public ExcelRow() {
   }
 

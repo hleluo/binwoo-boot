@@ -1,6 +1,6 @@
 package com.binwoo.oauth.config;
 
-import com.binwoo.oauth.security.AuthTokenEntryPoint;
+import com.binwoo.oauth.security.ResourceTokenEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
  */
 @Configuration
 @EnableResourceServer
-public class AuthResourceConfig extends ResourceServerConfigurerAdapter {
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
   /**
    * 资源id.
@@ -42,14 +42,14 @@ public class AuthResourceConfig extends ResourceServerConfigurerAdapter {
    * @param tokenServices token服务.
    */
   @Autowired
-  public AuthResourceConfig(ResourceServerTokenServices tokenServices) {
+  public ResourceServerConfig(ResourceServerTokenServices tokenServices) {
     this.tokenServices = tokenServices;
   }
 
   @Override
   public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
     resources.resourceId(resourceId).tokenServices(tokenServices)
-        .authenticationEntryPoint(new AuthTokenEntryPoint());
+        .authenticationEntryPoint(new ResourceTokenEntryPoint());
   }
 
   @Override

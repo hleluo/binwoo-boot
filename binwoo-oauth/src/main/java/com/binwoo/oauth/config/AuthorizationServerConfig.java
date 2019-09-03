@@ -1,9 +1,9 @@
 package com.binwoo.oauth.config;
 
+import com.binwoo.oauth.detail.ClientDetailsServiceImpl;
 import com.binwoo.oauth.security.AuthExceptionTranslator;
 import com.binwoo.oauth.security.AuthTokenEndpointFilter;
-import com.binwoo.oauth.security.ClientDetailsServiceImpl;
-import com.binwoo.oauth.security.JwtTokenGranter;
+import com.binwoo.oauth.token.AuthTokenGranter;
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +30,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
  */
 @Configuration
 @EnableAuthorizationServer
-public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
   /**
    * 详见WebSecurityConfig.
@@ -71,8 +71,19 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     return new ClientDetailsServiceImpl();
   }
 
+  /**
+   * 构造函数.
+   *
+   * @param authenticationManager 认证管理器
+   * @param userDetailsService 用户详情服务
+   * @param tokenStore token存储
+   * @param accessTokenConverter token转换器
+   * @param tokenEnhancer token信息扩展
+   * @param authExceptionTranslator 异常捕捉
+   * @param authTokenEndpointFilter token认证拦截
+   */
   @Autowired
-  public AuthServerConfig(AuthenticationManager authenticationManager,
+  public AuthorizationServerConfig(AuthenticationManager authenticationManager,
       UserDetailsService userDetailsService, TokenStore tokenStore,
       JwtAccessTokenConverter accessTokenConverter, TokenEnhancer tokenEnhancer,
       AuthExceptionTranslator authExceptionTranslator,
@@ -110,7 +121,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         //登录异常拦截处理.
         .exceptionTranslator(authExceptionTranslator);
     //自定义任何情况下都返回refresh_token，如无refresh_token权限则不返回.
-    endpoints.tokenGranter(new JwtTokenGranter(endpoints, authenticationManager).build());
+    endpoints.tokenGranter(new AuthTokenGranter(endpoints, authenticationManager).build());
   }
 
   @Override

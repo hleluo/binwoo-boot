@@ -131,13 +131,12 @@ public class HttpFileUtils {
    * @param downloadName 下载文件名，如test.png，可为空
    */
   public static void download(HttpServletResponse response, String root, String bucket,
-      String filename,
-      String downloadName) throws IOException {
-    String filepath = root + File.separator + bucket + File.separator + filename;
+      String filename, String downloadName) throws IOException {
     response.setContentType("application/force-download");
     response.setHeader("Set-Cookie", "fileDownload=true; path=/");
     response.addHeader("Content-Disposition",
         String.format("attachment;fileName=%s", downloadName == null ? filename : downloadName));
+    String filepath = root + File.separator + bucket + File.separator + filename;
     download(response, filepath);
   }
 

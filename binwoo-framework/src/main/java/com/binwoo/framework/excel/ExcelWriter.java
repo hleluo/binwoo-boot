@@ -307,7 +307,7 @@ public class ExcelWriter {
   }
 
   /**
-   * 关闭
+   * 关闭.
    */
   private void dispose() {
     if (massive && workbook != null) {

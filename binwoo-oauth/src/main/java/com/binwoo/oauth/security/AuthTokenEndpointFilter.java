@@ -1,5 +1,8 @@
 package com.binwoo.oauth.security;
 
+import com.binwoo.oauth.integrate.AuthTokenIntegrator;
+import com.binwoo.oauth.integrate.AuthTokenParam;
+import com.binwoo.oauth.integrate.AuthTokenParamContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;

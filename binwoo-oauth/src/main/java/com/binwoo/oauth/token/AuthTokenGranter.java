@@ -1,4 +1,4 @@
-package com.binwoo.oauth.security;
+package com.binwoo.oauth.token;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import org.springframework.security.oauth2.provider.token.AuthorizationServerTok
  * @author hleluo
  * @date 2019/8/29 23:27
  */
-public class JwtTokenGranter {
+public class AuthTokenGranter {
 
   private AuthorizationServerEndpointsConfigurer endpoints;
   private AuthenticationManager authenticationManager;
@@ -34,7 +34,7 @@ public class JwtTokenGranter {
    * @param endpoints 权限配置节点
    * @param authenticationManager 认证管理器
    */
-  public JwtTokenGranter(AuthorizationServerEndpointsConfigurer endpoints,
+  public AuthTokenGranter(AuthorizationServerEndpointsConfigurer endpoints,
       AuthenticationManager authenticationManager) {
     this.endpoints = endpoints;
     this.authenticationManager = authenticationManager;
@@ -65,8 +65,7 @@ public class JwtTokenGranter {
         tokenServices, authorizationCodeServices, clientDetails, requestFactory);
     RefreshTokenGranter refreshTokenGranter = new RefreshTokenGranter(tokenServices, clientDetails,
         requestFactory);
-    ImplicitTokenGranter implicitTokenGranter = new ImplicitTokenGranter(tokenServices,
-        clientDetails, requestFactory);
+
     ClientCredentialsTokenGranter clientCredentialsTokenGranter = new ClientCredentialsTokenGranter(
         tokenServices, clientDetails, requestFactory);
     // 设置返回refresh_token
@@ -74,6 +73,8 @@ public class JwtTokenGranter {
     List<TokenGranter> tokenGranters = new ArrayList<>();
     tokenGranters.add(authorizationCodeTokenGranter);
     tokenGranters.add(refreshTokenGranter);
+    ImplicitTokenGranter implicitTokenGranter = new ImplicitTokenGranter(tokenServices,
+        clientDetails, requestFactory);
     tokenGranters.add(implicitTokenGranter);
     tokenGranters.add(clientCredentialsTokenGranter);
     if (authenticationManager != null) {

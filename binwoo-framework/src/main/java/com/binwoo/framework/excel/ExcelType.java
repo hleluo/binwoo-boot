@@ -8,11 +8,11 @@ package com.binwoo.framework.excel;
  */
 public enum ExcelType {
   /**
-   * xls后缀
+   * xls后缀.
    */
   XLS,
   /**
-   * xlsx后缀
+   * xlsx后缀.
    */
   XLSX
 }

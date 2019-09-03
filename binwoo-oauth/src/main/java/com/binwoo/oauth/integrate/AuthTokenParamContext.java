@@ -1,4 +1,4 @@
-package com.binwoo.oauth.security;
+package com.binwoo.oauth.integrate;
 
 /**
  * 验证参数上下文.

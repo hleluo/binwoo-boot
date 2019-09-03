@@ -1,6 +1,6 @@
 package com.binwoo.oauth.config;
 
-import com.binwoo.oauth.security.IntegratorUserDetailsServiceImpl;
+import com.binwoo.oauth.detail.IntegratorUserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

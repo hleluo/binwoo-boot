@@ -16,7 +16,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
  * @author hleluo
  * @date 2019/9/2 23:12
  */
-public class AuthTokenEntryPoint implements AuthenticationEntryPoint {
+public class ResourceTokenEntryPoint implements AuthenticationEntryPoint {
 
   @Override
   public void commence(HttpServletRequest httpServletRequest,

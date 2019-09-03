@@ -25,18 +25,39 @@ public class ExcelCell {
    */
   private ExcelCellDecorator decorator;
 
+  /**
+   * 构造函数.
+   */
   public ExcelCell() {
   }
 
+  /**
+   * 构造函数.
+   *
+   * @param value 值
+   */
   public ExcelCell(Object value) {
     this.value = value;
   }
 
+  /**
+   * 构造函数.
+   *
+   * @param value 值
+   * @param type 类型
+   */
   public ExcelCell(Object value, Class<?> type) {
     this.value = value;
     this.type = type;
   }
 
+  /**
+   * 构造函数.
+   *
+   * @param value 值
+   * @param type 类型
+   * @param format 格式化
+   */
   public ExcelCell(Object value, Class<?> type, String format) {
     this.value = value;
     this.type = type;
