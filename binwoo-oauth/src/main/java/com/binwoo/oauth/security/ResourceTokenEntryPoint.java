@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
@@ -22,6 +23,7 @@ public class ResourceTokenEntryPoint implements AuthenticationEntryPoint {
   public void commence(HttpServletRequest httpServletRequest,
       HttpServletResponse httpServletResponse, AuthenticationException e)
       throws IOException, ServletException {
+    String authorization = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
     //HttpResponse<String> response = HttpResponseBuilder.failure(e.getCode());
     //Map<String, Object> map = HttpResponseBuilder.toMapWithoutNullValue(response);
     Map map = new HashMap();
