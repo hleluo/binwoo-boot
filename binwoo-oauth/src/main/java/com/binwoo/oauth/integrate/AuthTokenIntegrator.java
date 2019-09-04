@@ -1,6 +1,6 @@
 package com.binwoo.oauth.integrate;
 
-import org.springframework.security.core.userdetails.User;
+import com.binwoo.oauth.entity.User;
 
 /**
  * 用户验证集成器.

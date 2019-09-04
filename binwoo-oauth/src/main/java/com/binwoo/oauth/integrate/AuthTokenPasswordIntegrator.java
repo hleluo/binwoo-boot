@@ -1,11 +1,7 @@
 package com.binwoo.oauth.integrate;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.binwoo.oauth.entity.User;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -22,13 +18,11 @@ public class AuthTokenPasswordIntegrator implements AuthTokenIntegrator {
 
   @Override
   public User authenticate(AuthTokenParam param) {
-    if (!"root".equals(param.getUsername())) {
-      return null;
-    }
-    String password = new BCryptPasswordEncoder().encode("111111");
-    List<GrantedAuthority> authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority("A"));
-    return new User("root", password, authorities);
+    User user = new User();
+    user.setUsername(param.getUsername());
+    user.setPassword(new BCryptPasswordEncoder().encode("111111"));
+    user.setDisable(false);
+    return user;
   }
 
   @Override

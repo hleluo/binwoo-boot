@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 /**
  * 资源服务适配器.
@@ -16,8 +17,8 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
  * @author hleluo
  * @date 2019/8/29 23:41
  */
-@Configuration
-@EnableResourceServer
+//@Configuration
+//@EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
   /**
@@ -35,6 +36,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
    * 配置详见JwtTokenConfig.
    */
   private final ResourceServerTokenServices tokenServices;
+  private final AccessDeniedHandler accessDeniedHandler;
 
   /**
    * 构造函数.
@@ -42,15 +44,19 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
    * @param tokenServices token服务.
    */
   @Autowired
-  public ResourceServerConfig(ResourceServerTokenServices tokenServices) {
+  public ResourceServerConfig(ResourceServerTokenServices tokenServices,
+      AccessDeniedHandler accessDeniedHandler) {
     this.tokenServices = tokenServices;
+    this.accessDeniedHandler = accessDeniedHandler;
   }
 
   @Override
   public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
     resources.resourceId(resourceId).tokenServices(tokenServices)
         //Token异常处理.
-        .authenticationEntryPoint(new ResourceTokenEntryPoint());
+        .authenticationEntryPoint(new ResourceTokenEntryPoint())
+        //无权限访问异常.
+        .accessDeniedHandler(accessDeniedHandler);
   }
 
   @Override

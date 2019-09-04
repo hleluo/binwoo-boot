@@ -6,9 +6,10 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
+import java.util.Map;
 
 /**
- * 异常数据返回定义.
+ * 异常数据jackson返回定义.
  *
  * @author hleluo
  * @date 2019/9/1 00:05
@@ -23,9 +24,11 @@ public class AuthJsonSerializer extends StdSerializer<AuthException> {
   public void serialize(AuthException e, JsonGenerator jsonGenerator,
       SerializerProvider serializerProvider) throws IOException {
     HttpResponse<String> response = HttpResponseBuilder.failure(e.getCode());
+    Map<String, Object> map = HttpResponseBuilder.toMapWithoutNullValue(response);
     jsonGenerator.writeStartObject();
-    jsonGenerator.writeObjectField("ret", response.getRet());
-    jsonGenerator.writeObjectField("msg", response.getMsg());
+    for (String key : map.keySet()) {
+      jsonGenerator.writeObjectField(key, map.get(key));
+    }
     jsonGenerator.writeEndObject();
   }
 }

@@ -14,9 +14,41 @@ public enum HttpAuthExceptionCode implements HttpExceptionCode {
    */
   USER_NOT_EXIST(10000),
   /**
-   * 密码错误.
+   * 账号密码错误.
    */
-  PASSWORD_ERROR(10001);
+  INVALID_GRANT(10001),
+  /**
+   * 认证失败.
+   */
+  AUTHENTICATION_ERROR(10001),
+  /**
+   * 无效Scope.
+   */
+  INVALID_SCOPE(10001),
+  /**
+   * 用户已被禁用.
+   */
+  USER_DISABLED(10002),
+  /**
+   * 用户已被删除.
+   */
+  USER_DELETED(10003),
+  /**
+   * 无权限访问.
+   */
+  ACCESS_DENIED(10003),
+  /**
+   * 无效Token.
+   */
+  INVALID_TOKEN(10003),
+  /**
+   * 请求方式不支持.
+   */
+  REQUEST_METHOD_NOT_SUPPORTED(10004),
+  /**
+   * 服务器内部错误.
+   */
+  INTERNAL_SERVER_ERROR(10005);
 
   private int ret;
 

@@ -35,11 +35,11 @@ public class AuthTokenEndpointFilter extends GenericFilterBean implements Applic
   /**
    * 登录地址.
    */
-  private static final String URI_AUTH_TOKEN = "/oauth/token";
+  private static final String URI_PATH_AUTH_TOKEN = "/oauth/token";
   /**
    * 登录授权方式参数名.
    */
-  private static final String PARAM_AUTH_TYPE = "auth_type";
+  private static final String PARAM_KEY_AUTH_TYPE = "auth_type";
   /**
    * 登录方式集合.
    */
@@ -59,8 +59,8 @@ public class AuthTokenEndpointFilter extends GenericFilterBean implements Applic
   public AuthTokenEndpointFilter() {
     //匹配登录接口的POST和GET请求，用户多方式登录扩展.
     this.requestMatcher = new OrRequestMatcher(
-        new AntPathRequestMatcher(URI_AUTH_TOKEN, HttpMethod.GET.name()),
-        new AntPathRequestMatcher(URI_AUTH_TOKEN, HttpMethod.POST.name())
+        new AntPathRequestMatcher(URI_PATH_AUTH_TOKEN, HttpMethod.GET.name()),
+        new AntPathRequestMatcher(URI_PATH_AUTH_TOKEN, HttpMethod.POST.name())
     );
   }
 
@@ -72,7 +72,7 @@ public class AuthTokenEndpointFilter extends GenericFilterBean implements Applic
     if (requestMatcher.matches(request)) {
       //获取登录信息，存入上下文.
       AuthTokenParam param = new AuthTokenParam();
-      param.setAuthType(request.getParameter(PARAM_AUTH_TYPE));
+      param.setAuthType(request.getParameter(PARAM_KEY_AUTH_TYPE));
       param.setParameters(request.getParameterMap());
       AuthTokenParamContext.set(param);
       try {

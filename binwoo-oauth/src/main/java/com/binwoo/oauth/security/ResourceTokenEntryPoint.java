@@ -22,6 +22,8 @@ public class ResourceTokenEntryPoint implements AuthenticationEntryPoint {
   public void commence(HttpServletRequest httpServletRequest,
       HttpServletResponse httpServletResponse, AuthenticationException e)
       throws IOException, ServletException {
+    //HttpResponse<String> response = HttpResponseBuilder.failure(e.getCode());
+    //Map<String, Object> map = HttpResponseBuilder.toMapWithoutNullValue(response);
     Map map = new HashMap();
     map.put("code", "401");
     map.put("message", e.getMessage());

@@ -132,7 +132,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         //允许表单认证  这段代码在授权码模式下会导致无法根据code　获取token
         .allowFormAuthenticationForClients()
         .tokenKeyAccess("permitAll()")
-        //isAuthenticated():排除anonymous；isFullyAuthenticated():排除anonymous以及remember-me
+        //isAuthenticated():排除anonymous；
+        //isFullyAuthenticated():排除anonymous以及remember-me；
+        //permitAll():开启check_token访问；
         .checkTokenAccess("isAuthenticated()")
         //token认证拦截.
         .addTokenEndpointAuthenticationFilter(authTokenEndpointFilter);

@@ -1,11 +1,14 @@
 package com.binwoo.oauth.detail;
 
+import com.binwoo.oauth.entity.User;
+import com.binwoo.oauth.exception.AuthException;
+import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.integrate.AuthTokenIntegrator;
 import com.binwoo.oauth.integrate.AuthTokenParam;
 import com.binwoo.oauth.integrate.AuthTokenParamContext;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,7 +45,14 @@ public class IntegratorUserDetailsServiceImpl implements UserDetailsService {
     if (user == null) {
       throw new UsernameNotFoundException("username not found");
     }
-    return user;
+    if (user.isDisable()) {
+      throw new AuthException(HttpAuthExceptionCode.USER_DISABLED.name());
+    }
+    if (user.isDeleted()) {
+      throw new AuthException(HttpAuthExceptionCode.USER_DELETED.name());
+    }
+    return new org.springframework.security.core.userdetails.User(user.getUsername(),
+        user.getPassword(), Collections.emptyList());
   }
 
   /**

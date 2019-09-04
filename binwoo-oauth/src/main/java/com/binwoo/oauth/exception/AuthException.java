@@ -27,10 +27,9 @@ public class AuthException extends OAuth2Exception {
    * 构造函数.
    *
    * @param code 异常代码.
-   * @param msg 消息.
    */
-  public AuthException(HttpAuthExceptionCode code, String msg) {
-    super(msg);
+  public AuthException(HttpAuthExceptionCode code) {
+    super(code.name());
     this.code = code;
   }
 

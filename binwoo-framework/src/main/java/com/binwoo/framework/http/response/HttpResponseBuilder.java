@@ -2,6 +2,9 @@ package com.binwoo.framework.http.response;
 
 import com.binwoo.framework.http.exception.HttpCodeManager;
 import com.binwoo.framework.http.exception.HttpExceptionCode;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * com.code.framework.http.
@@ -45,6 +48,56 @@ public class HttpResponseBuilder {
   public static HttpResponse<String> failure(HttpExceptionCode code, Object... args) {
     String msg = getMessage(code);
     return HttpResponse.failure(code.getRet(), String.format(msg, args));
+  }
+
+  /**
+   * HttpResponse转Map.
+   *
+   * @param response HttpResponse
+   * @param withoutNullValue 是否忽略NULL值
+   * @return Map
+   */
+  private static Map<String, Object> toMap(HttpResponse<String> response,
+      boolean withoutNullValue) {
+    Map<String, Object> result = new HashMap<String, Object>();
+    if (response != null) {
+      Field[] fields = response.getClass().getDeclaredFields();
+      for (Field field : fields) {
+        field.setAccessible(true);
+        String key = field.getName();
+        Object value;
+        try {
+          value = field.get(response);
+        } catch (IllegalAccessException e) {
+          value = null;
+        }
+        if (withoutNullValue && value == null) {
+          continue;
+        }
+        result.put(key, value);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * HttpResponse转Map.
+   *
+   * @param response HttpResponse
+   * @return Map
+   */
+  public static Map<String, Object> toMap(HttpResponse<String> response) {
+    return toMap(response, false);
+  }
+
+  /**
+   * HttpResponse转Map，忽略NULL值.
+   *
+   * @param response HttpResponse
+   * @return Map
+   */
+  public static Map<String, Object> toMapWithoutNullValue(HttpResponse<String> response) {
+    return toMap(response, true);
   }
 
 }

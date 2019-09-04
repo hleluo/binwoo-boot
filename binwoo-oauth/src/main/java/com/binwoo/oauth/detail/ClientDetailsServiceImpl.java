@@ -21,7 +21,7 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
   @Override
   public ClientDetails loadClientByClientId(String s) throws ClientRegistrationException {
     if (!"aaa".equals(s)) {
-      return null;
+      throw new ClientRegistrationException("client not found");
     }
     BaseClientDetails details = new BaseClientDetails();
     details.setClientId(s);

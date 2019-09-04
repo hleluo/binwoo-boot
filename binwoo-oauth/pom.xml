@@ -7,7 +7,7 @@
   <groupId>com.binwoo</groupId>
   <artifactId>binwoo-oauth</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.1-SNAPSHOT</version>s
+  <version>0.0.1-SNAPSHOT</version>
 
   <name>binwoo-oauth</name>
   <description>binwoo-oauth</description>
@@ -73,6 +73,7 @@
       <optional>true</optional>
     </dependency>
 
+    <!-- binwoo-framework -->
     <dependency>
       <groupId>com.binwoo</groupId>
       <artifactId>binwoo-framework</artifactId>
