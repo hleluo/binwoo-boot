@@ -2,6 +2,7 @@ package com.binwoo.oauth.security;
 
 import com.binwoo.oauth.exception.AuthException;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -22,12 +23,13 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
  * @author hleluo
  * @date 2019/8/31 20:25
  */
+@Slf4j
 @Component
 public class AuthExceptionTranslator implements WebResponseExceptionTranslator {
 
   @Override
   public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
-    e.printStackTrace();
+    log.info("OAuth exception >> ", e);
     HttpAuthExceptionCode code;
     if (e instanceof InvalidTokenException) {
       //无效Token.

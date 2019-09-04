@@ -17,8 +17,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
  * @author hleluo
  * @date 2019/8/29 23:41
  */
-//@Configuration
-//@EnableResourceServer
+@Configuration
+@EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
   /**
