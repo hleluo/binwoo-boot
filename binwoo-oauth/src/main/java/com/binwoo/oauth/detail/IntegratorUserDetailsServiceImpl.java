@@ -1,13 +1,9 @@
 package com.binwoo.oauth.detail;
 
 import com.binwoo.oauth.entity.User;
-import com.binwoo.oauth.exception.AuthException;
-import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.integrate.AuthTokenIntegrator;
 import com.binwoo.oauth.integrate.AuthTokenParam;
 import com.binwoo.oauth.integrate.AuthTokenParamContext;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,23 +39,7 @@ public class IntegratorUserDetailsServiceImpl implements UserDetailsService {
     }
     param.setUsername(s);
     User user = this.authenticate(param);
-    if (user == null) {
-      throw new UsernameNotFoundException("username not found");
-    }
-    if (user.isDisable()) {
-      //用户被禁用
-      throw new AuthException(HttpAuthExceptionCode.USER_DISABLED.name());
-    }
-    if (user.isDeleted()) {
-      //用户被删除
-      throw new AuthException(HttpAuthExceptionCode.USER_DELETED.name());
-    }
-    if (user.getExpireTime() != null && user.getExpireTime().getTime() > new Date().getTime()) {
-      //用户已过期
-      throw new AuthException(HttpAuthExceptionCode.USER_DELETED.name());
-    }
-    return new org.springframework.security.core.userdetails.User(user.getUsername(),
-        user.getPassword(), Collections.emptyList());
+    return new UserDetailsServiceAdapter().format(user);
   }
 
   /**
