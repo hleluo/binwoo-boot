@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+  <changeSet author="luojia" id="0.1.1 create table t_user">
+
+    <!-- 用户信息表 -->
+    <createTable tableName="t_user">
+      <column name="id" type="VARCHAR(36)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="username" type="VARCHAR(50)"/>
+      <column name="mobile" type="VARCHAR(20)"/>
+      <column name="email" type="VARCHAR(50)"/>
+      <column name="password" type="VARCHAR(200)"/>
+      <column name="disable" type="BOOLEAN" defaultValue="false"/>
+      <column name="deleted" type="BOOLEAN" defaultValue="false"/>
+      <column name="category" type="VARCHAR(50)"/>
+      <column name="type" type="VARCHAR(50)"/>
+      <column name="source_id" type="VARCHAR(50)"/>
+      <column name="theme" type="VARCHAR(50)"/>
+      <column name="thumbnail" type="TEXT"/>
+      <column name="expire_time" type="TIMESTAMP"/>
+      <column name="create_time" type="TIMESTAMP"/>
+      <column name="update_time" type="TIMESTAMP"/>
+    </createTable>
+
+    <createIndex tableName="t_user" indexName="t_user_index_username">
+      <column name="username" type="VARCHAR(50)"/>
+    </createIndex>
+
+    <createIndex tableName="t_user" indexName="t_user_index_mobile">
+      <column name="mobile" type="VARCHAR(20)"/>
+    </createIndex>
+
+    <!-- 新建默认超级管理员用户，账号：root，密码：U9yK%K -->
+    <insert tableName="t_user">
+      <column name="id" value="6a1ca001-1fa0-451e-b19c-9aa65e6e9c51"/>
+      <column name="username" value="root"/>
+      <column name="password" value="$2a$10$WnC8IUdCs4c1.aMreXapb.zm94PBGHgGdHIL/qFuy1.i/jGNRzNVi"/>
+      <column name="create_time" value="now()"/>
+      <column name="update_time" value="now()"/>
+    </insert>
+
+    <rollback>
+      <dropIndex tableName="t_user" indexName="t_user_index_mobile"/>
+      <dropIndex tableName="t_user" indexName="t_user_index_username"/>
+      <dropTable tableName="t_user"/>
+    </rollback>
+
+  </changeSet>
+
+</databaseChangeLog>

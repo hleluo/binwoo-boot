@@ -1,6 +1,5 @@
 package com.binwoo.test;
 
-import com.binwoo.framework.http.response.HttpRetProperty;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -22,9 +21,6 @@ public class TestApplication {
    */
   public static void main(String[] args) {
     SpringApplication.run(TestApplication.class, args);
-    HttpRetProperty
-        .setResource(TestApplication.class.getResource("/ret_message.properties").getPath());
-    String value = HttpRetProperty.getValue(10000);
   }
 
 }
