@@ -13,6 +13,8 @@
     <module>binwoo-test</module>
     <module>binwoo-oauth</module>
     <module>binwoo-poi</module>
+    <module>liquibase-oauth</module>
+    <module>liquibase</module>
   </modules>
 
   <properties>

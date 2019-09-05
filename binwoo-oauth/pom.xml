@@ -23,6 +23,7 @@
     <oauth.version>2.1.0.RELEASE</oauth.version>
     <jwt.version>1.0.7.RELEASE</jwt.version>
     <swagger.version>2.9.2</swagger.version>
+
   </properties>
 
   <dependencies>
@@ -36,6 +37,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
     <!-- OAuth -->
@@ -77,6 +83,12 @@
     <dependency>
       <groupId>com.binwoo</groupId>
       <artifactId>binwoo-framework</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.binwoo</groupId>
+      <artifactId>liquibase-oauth</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
 

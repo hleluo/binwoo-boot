@@ -1,6 +1,8 @@
 spring:
   application:
     name: binwoo-oauth
+  liquibase:
+    change-log: classpath:oauth/master.xml
 logging:
   path: ${user.home}/${spring.application.name}
 
