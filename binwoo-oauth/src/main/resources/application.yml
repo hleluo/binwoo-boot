@@ -42,10 +42,10 @@ oauth:
   jwt:
     signing-key: 123456
   resource:
+    #用户权限管理resource-id
     id: 123
+    # 排除在权限验证范围内的URL
     exclude: /swagger-ui.html,/swagger-resources/**,/images/**,/webjars/**,/v2/api-docs
 
 server:
-  servlet:
-    context-path: /api
   port: 9979

@@ -22,6 +22,11 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
   /**
+   * API拦截.
+   */
+  private static final String API_REQUEST_INTERCEPT = "/api/**";
+
+  /**
    * 资源id.
    */
   @Value("${oauth.resource.id}")
@@ -63,12 +68,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   public void configure(HttpSecurity http) throws Exception {
     //忽略验证的URL.
     String[] excludes = exclude.split(",");
-    http.authorizeRequests()
+    String[] intercepts = new String[excludes.length + 1];
+    System.arraycopy(excludes, 0, intercepts, 0, excludes.length);
+    intercepts[intercepts.length - 1] = API_REQUEST_INTERCEPT;
+    http.requestMatchers().antMatchers(intercepts)
+        .and()
+        .authorizeRequests()
         //配置忽略验证的URL.
         .antMatchers(excludes).permitAll()
-        .anyRequest().authenticated()
-        .and()
-        //跨域配置.
-        .csrf().disable();
+        .antMatchers(API_REQUEST_INTERCEPT).authenticated();
   }
 }

@@ -1,8 +1,9 @@
 package com.binwoo.oauth.integrate;
 
 import com.binwoo.oauth.entity.User;
+import com.binwoo.oauth.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -16,13 +17,16 @@ import org.springframework.util.StringUtils;
 @Primary
 public class AuthTokenPasswordIntegrator implements AuthTokenIntegrator {
 
+  private final UserRepository userRepository;
+
+  @Autowired
+  public AuthTokenPasswordIntegrator(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
   @Override
   public User authenticate(AuthTokenParam param) {
-    User user = new User();
-    user.setUsername(param.getUsername());
-    user.setPassword(new BCryptPasswordEncoder().encode("111111"));
-    user.setDisable(false);
-    return user;
+    return userRepository.findByUsername(param.getUsername());
   }
 
   @Override

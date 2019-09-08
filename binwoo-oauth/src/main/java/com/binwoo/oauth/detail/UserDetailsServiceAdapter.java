@@ -3,9 +3,12 @@ package com.binwoo.oauth.detail;
 import com.binwoo.oauth.entity.User;
 import com.binwoo.oauth.exception.AuthException;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
-import java.util.Collections;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 用户详情适配器.
@@ -33,12 +36,19 @@ public class UserDetailsServiceAdapter {
       //用户被删除
       throw new AuthException(HttpAuthExceptionCode.USER_DELETED.name());
     }
-    if (user.getExpireTime() != null && user.getExpireTime().getTime() > new Date().getTime()) {
+    if (user.getExpireTime() != null && user.getExpireTime().getTime() > System
+        .currentTimeMillis()) {
       //用户已过期
       throw new AuthException(HttpAuthExceptionCode.USER_DELETED.name());
     }
+    List<GrantedAuthority> authorities = new ArrayList<>();
+    if (!CollectionUtils.isEmpty(user.getRoles())) {
+      for (String role : user.getRoles()) {
+        authorities.add(new SimpleGrantedAuthority(role));
+      }
+    }
     return new org.springframework.security.core.userdetails.User(user.getUsername(),
-        user.getPassword(), Collections.emptyList());
+        user.getPassword(), authorities);
   }
 
 }
