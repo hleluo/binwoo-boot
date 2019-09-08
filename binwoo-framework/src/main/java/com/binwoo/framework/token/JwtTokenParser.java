@@ -29,6 +29,12 @@ public class JwtTokenParser {
     parse(token, secret);
   }
 
+  /**
+   * 解析Token.
+   *
+   * @param token token字符串
+   * @param secret 密码
+   */
   private void parse(String token, String secret) {
     try {
       claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
