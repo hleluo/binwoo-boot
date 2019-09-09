@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.common.exceptions.InvalidGrantExcepti
 import org.springframework.security.oauth2.common.exceptions.InvalidScopeException;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
+import org.springframework.security.oauth2.common.exceptions.UnsupportedGrantTypeException;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -31,18 +32,21 @@ public class AuthExceptionTranslator implements WebResponseExceptionTranslator {
   public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
     log.info("OAuth exception >> ", e);
     HttpAuthExceptionCode code;
-    if (e instanceof InvalidTokenException) {
-      //无效Token.
-      code = HttpAuthExceptionCode.INVALID_TOKEN;
+    if (e instanceof UnsupportedGrantTypeException) {
+      // 不支持的grant_type.
+      code = HttpAuthExceptionCode.GRANT_TYPE_UNSUPPORTED;
     } else if (e instanceof UsernameNotFoundException) {
       // 用户不存在.
       code = HttpAuthExceptionCode.USER_NOT_EXIST;
     } else if (e instanceof InvalidGrantException) {
       // 账号密码错误.
-      code = HttpAuthExceptionCode.INVALID_GRANT;
+      code = HttpAuthExceptionCode.GRANT_INVALID;
     } else if (e instanceof InvalidScopeException) {
       // 无效Scope.
-      code = HttpAuthExceptionCode.INVALID_SCOPE;
+      code = HttpAuthExceptionCode.SCOPE_INVALID;
+    } else if (e instanceof InvalidTokenException) {
+      //无效Token.
+      code = HttpAuthExceptionCode.TOKEN_INVALID;
     } else if (e instanceof OAuth2Exception) {
       // 授权异常.
       code = HttpAuthExceptionCode.AUTHENTICATION_ERROR;
