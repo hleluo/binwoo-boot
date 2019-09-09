@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2019/8/29 21:01
  */
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
   private final UserService userService;

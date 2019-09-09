@@ -129,7 +129,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
   @Override
   public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
     security
-        //允许表单认证  这段代码在授权码模式下会导致无法根据code　获取token
+        //请求/oauth/token的，如果配置支持allowFormAuthenticationForClients的，
+        //且url中有client_id和client_secret的会走ClientCredentialsTokenEndpointFilter
         .allowFormAuthenticationForClients()
         .tokenKeyAccess("permitAll()")
         //isAuthenticated():排除anonymous；
