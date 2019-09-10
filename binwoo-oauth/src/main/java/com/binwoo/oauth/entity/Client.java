@@ -26,8 +26,8 @@ public class Client {
   @GenericGenerator(name = "uid", strategy = "uuid2")
   @GeneratedValue(generator = "uid")
   private String id;
-  @ApiModelProperty(value = "clientId")
-  private String code;
+  @ApiModelProperty(value = "客户端")
+  private String app;
   @ApiModelProperty(value = "秘钥")
   private String secret;
   @ApiModelProperty(value = "认证类型：authorization_code,password,"

@@ -7,7 +7,10 @@ client_secret:aaa
 username:root
 password:U9yK%K
 grant_type:password #登录认证方式，可选参数，默认为用户密码认证方式，如需扩展，参考AuthTokenPasswordIntegrator
-device_type:WEB     #设备类型，用于控制不同设备的角色、菜单和权限，可选参数
+domain:OA           #系统类型，可选参数，如OA、ACCIDENT等不同系统
+platform:WEB        #平台类型，可选参数，如WEB、ANDROID等不同运行平台
+
+参数domain和platform用于控制不同系统、不同平台的角色、菜单和权限
 
 3、刷新Token，/oauth/token，参数如下：
 grant_type:refresh_token

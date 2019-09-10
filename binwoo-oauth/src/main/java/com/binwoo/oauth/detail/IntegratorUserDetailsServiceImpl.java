@@ -20,6 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class IntegratorUserDetailsServiceImpl implements UserDetailsService {
 
+  @Autowired
+  private UserDetailsServiceAdapter adapter;
+
   /**
    * 集成器列表.
    */
@@ -33,13 +36,12 @@ public class IntegratorUserDetailsServiceImpl implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
     AuthTokenParam param = AuthTokenParamContext.get();
-    //判断是否是集成登录
     if (param == null) {
       param = new AuthTokenParam();
     }
     param.setUsername(s);
     User user = this.authenticate(param);
-    return new UserDetailsServiceAdapter().format(user);
+    return adapter.format(user, param);
   }
 
   /**
