@@ -1,4 +1,5 @@
-1、初始账号和密码：root / U9yK%K；
+1、初始账号和密码：root / U9yK%K
+初始化client_id：client，client_secret：9Jv$P1
 
 2、用户认证：/oauth/token，参数如下：
 grant_type:password

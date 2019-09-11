@@ -58,6 +58,8 @@ public class Group {
   private String platform;
   @ApiModelProperty(value = "名称")
   private String name;
+  @ApiModelProperty(value = "描述")
+  private String description;
   @ApiModelProperty(value = "创建时间：yyyy-MM-dd HH:mm:ss")
   @Column(updatable = false)
   @Temporal(value = TemporalType.TIMESTAMP)

@@ -51,6 +51,7 @@
       <column name="domain" type="VARCHAR(100)" remarks="系统类型"/>
       <column name="platform" type="VARCHAR(100)" remarks="平台类型"/>
       <column name="name" type="VARCHAR(200)" remarks="名称"/>
+      <column name="description" type="TEXT" remarks="描述"/>
       <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
       <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
     </createTable>
@@ -67,7 +68,61 @@
     <addPrimaryKey tableName="t_user_group" constraintName="t_user_group_primary"
       columnNames="user_id,group_id"/>
 
+    <!-- 客户端信息 -->
+    <createTable tableName="t_client" remarks="客户端信息表">
+      <column name="id" type="VARCHAR(36)" remarks="主键">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(200)" remarks="客户端名称"/>
+      <column name="code" type="VARCHAR(50)" remarks="客户端，对应client_id"/>
+      <column name="secret" type="VARCHAR(100)" remarks="秘钥"/>
+      <column name="grant_type" type="VARCHAR(200)" remarks="认证类型"/>
+      <column name="scope" type="VARCHAR(200)" remarks="作用范围，逗号隔开"/>
+      <column name="resource_id" type="TEXT" remarks="授权资源，逗号隔开"/>
+      <column name="access_token_expire" type="INTEGER" defaultValue="7200"
+        remarks="AccessToken过期时间，秒"/>
+      <column name="refresh_token_expire" type="INTEGER" defaultValue="10800"
+        remarks="RefreshToken过期时间，秒"/>
+      <column name="description" type="TEXT" remarks="描述"/>
+      <column name="disable" type="BOOLEAN" defaultValue="false" remarks="是否禁用"/>
+      <column name="deleted" type="BOOLEAN" defaultValue="false" remarks="是否删除"/>
+      <column name="expire_time" type="TIMESTAMP" remarks="过期时间"/>
+      <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
+      <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+    </createTable>
+
+    <createIndex tableName="t_client" indexName="t_client_index_code">
+      <column name="code" type="VARCHAR(50)" remarks="客户端，对应client_id"/>
+    </createIndex>
+
+    <!-- 新建客户端信息，client_id：client，client_secret：9Jv$P1 -->
+    <insert tableName="t_client">
+      <column name="id" value="8f03cf12-d431-46e0-9a22-cd641ccd88d8"/>
+      <column name="name" value="初始化客户端"/>
+      <column name="code" value="client"/>
+      <column name="secret" value="$2a$10$nWNgfKNNxQbIo9XevDTN.exWVyHSpMPxZMsWF7cGI7.yKIfjGjWUm"/>
+      <column name="grant_type"
+        value="authorization_code,password,client_credentials,refresh_token"/>
+      <column name="scope" value="all"/>
+      <column name="create_time" value="now()"/>
+      <column name="update_time" value="now()"/>
+    </insert>
+
+    <!-- 客户端组信息 -->
+    <createTable tableName="t_client_group" remarks="客户端组信息表">
+      <column name="client_id" type="VARCHAR(36)" remarks="客户端id"/>
+      <column name="group_id" type="VARCHAR(36)" remarks="组id"/>
+    </createTable>
+    <addPrimaryKey tableName="t_client_group" constraintName="t_client_group_primary"
+      columnNames="client_id,group_id"/>
+
     <rollback>
+      <dropPrimaryKey tableName="t_client_group" constraintName="t_client_group_primary"/>
+      <dropTable tableName="t_client_group"/>
+
+      <dropIndex tableName="t_client" indexName="t_client_index_code"/>
+      <dropTable tableName="t_client"/>
+
       <dropPrimaryKey tableName="t_user_group" constraintName="t_user_group_primary"/>
       <dropTable tableName="t_user_group"/>
 

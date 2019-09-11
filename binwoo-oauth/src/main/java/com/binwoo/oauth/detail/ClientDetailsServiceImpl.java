@@ -1,13 +1,24 @@
 package com.binwoo.oauth.detail;
 
+import com.binwoo.oauth.entity.Client;
+import com.binwoo.oauth.exception.HttpAuthExceptionCode;
+import com.binwoo.oauth.integrate.AuthTokenParam;
+import com.binwoo.oauth.integrate.AuthTokenParamContext;
+import com.binwoo.oauth.repository.ClientRepository;
+import com.binwoo.oauth.repository.GroupRepository;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.client.InMemoryClientDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * 自定义客户端信息.
@@ -18,20 +29,78 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
 
+  @Autowired
+  private GroupRepository groupRepository;
+  @Autowired
+  ClientRepository clientRepository;
+
   @Override
   public ClientDetails loadClientByClientId(String s) throws ClientRegistrationException {
-    if (!"aaa".equals(s)) {
-      throw new ClientRegistrationException("client not found");
+    Client client = clientRepository.findByCode(s);
+    if (client == null) {
+      throw new ClientRegistrationException(HttpAuthExceptionCode.CLIENT_NOT_EXIST.name());
+    }
+    if (client.isDisable()) {
+      //客户端被禁用
+      throw new ClientRegistrationException(HttpAuthExceptionCode.CLIENT_DISABLED.name());
+    }
+    if (client.isDeleted()) {
+      //客户端被删除
+      throw new ClientRegistrationException(HttpAuthExceptionCode.CLIENT_DELETED.name());
+    }
+    if (client.getExpireTime() != null && client.getExpireTime().getTime() > System
+        .currentTimeMillis()) {
+      //客户端已过期
+      throw new ClientRegistrationException(HttpAuthExceptionCode.CLIENT_EXPIRED.name());
     }
     BaseClientDetails details = new BaseClientDetails();
-    details.setClientId(s);
-    details.setClientSecret(new BCryptPasswordEncoder().encode("aaa"));
-    details.setScope(Arrays.asList("write", "read"));
-    details.setAuthorizedGrantTypes(
-        Arrays.asList("authorization_code", "password", "client_credentials", "refresh_token"));
-    details.setResourceIds(Collections.singleton("123"));
-    details.setAccessTokenValiditySeconds(7200);
-    details.setRefreshTokenValiditySeconds(8000);
+    details.setClientId(client.getCode());
+    details.setClientSecret(client.getSecret());
+    if (!StringUtils.isEmpty(client.getScope())) {
+      details.setScope(Arrays.asList(client.getScope().trim().split(",")));
+    }
+    if (!StringUtils.isEmpty(client.getGrantType())) {
+      details.setAuthorizedGrantTypes(Arrays.asList(client.getGrantType().trim().split(",")));
+    }
+    if (!StringUtils.isEmpty(client.getResourceId())) {
+      details.setResourceIds(Arrays.asList(client.getResourceId().trim().split(",")));
+    }
+    details.setAccessTokenValiditySeconds(client.getAccessTokenExpire());
+    details.setRefreshTokenValiditySeconds(client.getRefreshTokenExpire());
+
+    AuthTokenParam param = AuthTokenParamContext.get();
+    List<String> roles = getRoles(client.getCode(), param);
+    List<GrantedAuthority> authorities = new ArrayList<>();
+    if (!CollectionUtils.isEmpty(roles)) {
+      for (String role : roles) {
+        authorities.add(new SimpleGrantedAuthority(role));
+      }
+    }
+    details.setAuthorities(authorities);
     return details;
+  }
+
+  /**
+   * 获取客户端角色列表.
+   *
+   * @param code 客户端id
+   * @param param 参数
+   * @return 角色列表
+   */
+  private List<String> getRoles(String code, AuthTokenParam param) {
+    if (param == null) {
+      return groupRepository.selectClientRole(code);
+    }
+    if (StringUtils.isEmpty(param.getDomain()) && StringUtils.isEmpty(param.getPlatform())) {
+      return groupRepository.selectClientRole(code);
+    } else {
+      if (StringUtils.isEmpty(param.getDomain())) {
+        return groupRepository.selectClientRoleByPlatform(code, param.getPlatform());
+      } else if (StringUtils.isEmpty(param.getPlatform())) {
+        return groupRepository.selectClientRoleByDomain(code, param.getDomain());
+      } else {
+        return groupRepository.selectClientRole(code, param.getDomain(), param.getPlatform());
+      }
+    }
   }
 }

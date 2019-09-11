@@ -1,14 +1,12 @@
 package com.binwoo.oauth.detail;
 
-import com.binwoo.oauth.entity.Group.Type;
 import com.binwoo.oauth.entity.User;
 import com.binwoo.oauth.exception.AuthException;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.integrate.AuthTokenParam;
+import com.binwoo.oauth.repository.GroupRepository;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,11 +24,11 @@ import org.springframework.util.StringUtils;
 @Component
 public class UserDetailsServiceAdapter {
 
-  private final EntityManager entityManager;
+  private final GroupRepository groupRepository;
 
   @Autowired
-  public UserDetailsServiceAdapter(EntityManager entityManager) {
-    this.entityManager = entityManager;
+  public UserDetailsServiceAdapter(GroupRepository groupRepository) {
+    this.groupRepository = groupRepository;
   }
 
   /**
@@ -55,7 +53,7 @@ public class UserDetailsServiceAdapter {
     if (user.getExpireTime() != null && user.getExpireTime().getTime() > System
         .currentTimeMillis()) {
       //用户已过期
-      throw new AuthException(HttpAuthExceptionCode.USER_DELETED.name());
+      throw new AuthException(HttpAuthExceptionCode.USER_EXPIRED.name());
     }
     List<String> roles = getRoles(user.getUsername(), param);
     List<GrantedAuthority> authorities = new ArrayList<>();
@@ -77,25 +75,19 @@ public class UserDetailsServiceAdapter {
    */
   private List<String> getRoles(String username, AuthTokenParam param) {
     if (param == null) {
-      return null;
+      return groupRepository.selectUserRole(username);
     }
-    String sql = "SELECT DISTINCT tg.id FROM t_user tu ";
-    sql += "RIGHT JOIN t_user_group tug ON tu.id = tug.user_id ";
-    sql += "LEFT JOIN t_group tg ON tug.group_id = tg.id ";
-    sql += String.format("WHERE tu.username = '%s'", username);
-    sql += String.format("AND tg.type = '%s' ", Type.ROLE.name());
-    if (StringUtils.isEmpty(param.getDomain())) {
-      sql += "AND tg.domain IS NULL ";
+    if (StringUtils.isEmpty(param.getDomain()) && StringUtils.isEmpty(param.getPlatform())) {
+      return groupRepository.selectUserRole(username);
     } else {
-      sql += String.format("AND tg.domain = '%s' ", param.getDomain());
+      if (StringUtils.isEmpty(param.getDomain())) {
+        return groupRepository.selectUserRoleByPlatform(username, param.getPlatform());
+      } else if (StringUtils.isEmpty(param.getPlatform())) {
+        return groupRepository.selectUserRoleByDomain(username, param.getDomain());
+      } else {
+        return groupRepository.selectUserRole(username, param.getDomain(), param.getPlatform());
+      }
     }
-    if (StringUtils.isEmpty(param.getPlatform())) {
-      sql += "AND tg.platform IS NULL ";
-    } else {
-      sql += String.format("AND tg.platform = '%s' ", param.getPlatform());
-    }
-    Query query = entityManager.createNativeQuery(sql, String.class);
-    return query.getResultList();
   }
 
 }

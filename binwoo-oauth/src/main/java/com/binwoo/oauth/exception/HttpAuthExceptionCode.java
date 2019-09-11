@@ -13,51 +13,71 @@ public enum HttpAuthExceptionCode implements HttpExceptionCode {
   /**
    * 不支持的grant_type.
    */
-  GRANT_TYPE_UNSUPPORTED(10000),
+  GRANT_TYPE_UNSUPPORTED(10100),
   /**
    * 无效Scope.
    */
-  SCOPE_INVALID(10001),
+  SCOPE_INVALID(10101),
   /**
    * 认证失败.
    */
-  AUTHENTICATION_ERROR(10002),
+  AUTHENTICATION_ERROR(10102),
   /**
    * 无权限访问.
    */
-  ACCESS_DENIED(10003),
+  ACCESS_DENIED(10103),
+  /**
+   * 客户端不存在.
+   */
+  CLIENT_NOT_EXIST(10200),
+  /**
+   * 客户端被禁用.
+   */
+  CLIENT_DISABLED(10201),
+  /**
+   * 客户端被删除.
+   */
+  CLIENT_DELETED(10202),
+  /**
+   * 客户端已过期.
+   */
+  CLIENT_EXPIRED(10203),
   /**
    * 用户不存在.
    */
-  USER_NOT_EXIST(10004),
+  USER_NOT_EXIST(10300),
   /**
    * 账号密码错误.
    */
-  GRANT_INVALID(10005),
+  GRANT_INVALID(10301),
   /**
    * 用户已被禁用.
    */
-  USER_DISABLED(10006),
+  USER_DISABLED(10302),
   /**
    * 用户已被删除.
    */
-  USER_DELETED(10007),
+  USER_DELETED(10303),
+  /**
+   * 用户已过期.
+   */
+  USER_EXPIRED(10304),
   /**
    * 无效Token.
    */
-  TOKEN_INVALID(10008),
+  TOKEN_INVALID(10400),
   /**
    * 过期Token.
    */
-  TOKEN_EXPIRED(10009),
+  TOKEN_EXPIRED(10401),
   /**
    * 请求方式不支持.
    */
-  REQUEST_METHOD_NOT_SUPPORTED(10010),
+  REQUEST_METHOD_NOT_SUPPORTED(10000),
   /**
    * 服务器内部错误.
    */
-  INTERNAL_SERVER_ERROR(10011);
+  INTERNAL_SERVER_ERROR(10001);
 
   private int ret;
 

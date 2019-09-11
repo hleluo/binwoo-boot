@@ -49,6 +49,9 @@ public class AuthTokenParam {
    * @return 参数值
    */
   public String getParameterValue(String key) {
+    if (this.parameters == null) {
+      return null;
+    }
     String[] values = this.parameters.get(key);
     if (values != null && values.length > 0) {
       return values[0];
