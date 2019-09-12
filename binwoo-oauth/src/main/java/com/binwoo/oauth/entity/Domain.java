@@ -22,7 +22,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  * @author hleluo
  * @date 2019/9/7 21:06
  */
-@ApiModel(value = "系统信息")
+@ApiModel(value = "系统信息，如OA系统、项目管理系统等")
 @Data
 @Entity
 @Table(name = "t_domain")

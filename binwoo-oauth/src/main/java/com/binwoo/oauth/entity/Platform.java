@@ -22,7 +22,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  * @author hleluo
  * @date 2019/9/7 21:06
  */
-@ApiModel(value = "平台信息")
+@ApiModel(value = "平台信息，如WEB端，ANDROID端等")
 @Data
 @Entity
 @Table(name = "t_platform")
