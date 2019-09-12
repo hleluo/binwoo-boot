@@ -22,20 +22,16 @@ import org.hibernate.annotations.UpdateTimestamp;
  * @author hleluo
  * @date 2019/9/7 21:06
  */
-@ApiModel(value = "角色信息")
+@ApiModel(value = "平台信息")
 @Data
 @Entity
-@Table(name = "t_role")
-public class Role {
+@Table(name = "t_platform")
+public class Platform {
 
   @Id
   @GenericGenerator(name = "uid", strategy = "uuid2")
   @GeneratedValue(generator = "uid")
   private String id;
-  @ApiModelProperty(value = "系统id")
-  private String domainId;
-  @ApiModelProperty(value = "平台id")
-  private String platformId;
   @ApiModelProperty(value = "标识")
   private String code;
   @ApiModelProperty(value = "名称")

@@ -107,19 +107,58 @@
       <column name="update_time" value="now()"/>
     </insert>
 
-    <!-- 角色信息 -->
-    <createTable tableName="t_role" remarks="角色信息表">
+    <!-- 系统信息 -->
+    <createTable tableName="t_domain" remarks="系统信息表">
       <column name="id" type="VARCHAR(36)" remarks="主键">
         <constraints primaryKey="true"/>
       </column>
-      <column name="domain" type="VARCHAR(100)" remarks="系统类型"/>
-      <column name="platform" type="VARCHAR(100)" remarks="平台类型"/>
+      <column name="code" type="VARCHAR(50)" remarks="标识"/>
+      <column name="name" type="VARCHAR(200)" remarks="名称"/>
+      <column name="host" type="VARCHAR(50)" remarks="主机名"/>
+      <column name="port" type="INTEGER" remarks="端口号"/>
+      <column name="entrance" type="TEXT" remarks="访问入口"/>
+      <column name="description" type="TEXT" remarks="描述"/>
+      <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
+      <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+    </createTable>
+    <createIndex tableName="t_domain" indexName="t_domain_index_code">
+      <column name="code" type="VARCHAR(50)" remarks="标识"/>
+    </createIndex>
+
+    <!-- 平台信息 -->
+    <createTable tableName="t_platform" remarks="系统信息表">
+      <column name="id" type="VARCHAR(36)" remarks="主键">
+        <constraints primaryKey="true"/>
+      </column>
       <column name="code" type="VARCHAR(50)" remarks="标识"/>
       <column name="name" type="VARCHAR(200)" remarks="名称"/>
       <column name="description" type="TEXT" remarks="描述"/>
       <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
       <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
     </createTable>
+    <createIndex tableName="t_platform" indexName="t_platform_index_code">
+      <column name="code" type="VARCHAR(50)" remarks="标识"/>
+    </createIndex>
+
+    <!-- 角色信息 -->
+    <createTable tableName="t_role" remarks="角色信息表">
+      <column name="id" type="VARCHAR(36)" remarks="主键">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="domain_id" type="VARCHAR(36)" remarks="系统id"/>
+      <column name="platform_id" type="VARCHAR(36)" remarks="平台id"/>
+      <column name="code" type="VARCHAR(50)" remarks="标识"/>
+      <column name="name" type="VARCHAR(200)" remarks="名称"/>
+      <column name="description" type="TEXT" remarks="描述"/>
+      <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
+      <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+    </createTable>
+    <createIndex tableName="t_role" indexName="t_role_index_domain_id">
+      <column name="domain_id" type="VARCHAR(36)" remarks="系统id"/>
+    </createIndex>
+    <createIndex tableName="t_role" indexName="t_role_index_platform_id">
+      <column name="platform_id" type="VARCHAR(36)" remarks="平台id"/>
+    </createIndex>
     <createIndex tableName="t_role" indexName="t_role_index_code">
       <column name="code" type="VARCHAR(50)" remarks="标识"/>
     </createIndex>
@@ -147,7 +186,15 @@
       <dropPrimaryKey tableName="t_client_role" constraintName="t_client_role_primary"/>
       <dropTable tableName="t_client_role"/>
 
+      <dropIndex tableName="t_platform" indexName="t_platform_index_code"/>
+      <dropTable tableName="t_platform"/>
+
+      <dropIndex tableName="t_domain" indexName="t_domain_index_code"/>
+      <dropTable tableName="t_domain"/>
+
       <dropIndex tableName="t_role" indexName="t_role_index_code"/>
+      <dropIndex tableName="t_role" indexName="t_role_index_platform_id"/>
+      <dropIndex tableName="t_role" indexName="t_role_index_domain_id"/>
       <dropTable tableName="t_role"/>
 
       <dropIndex tableName="t_user" indexName="t_user_index_mobile"/>
