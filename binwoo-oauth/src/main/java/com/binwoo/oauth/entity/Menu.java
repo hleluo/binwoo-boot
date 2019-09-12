@@ -5,10 +5,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
@@ -22,36 +20,16 @@ import org.hibernate.annotations.UpdateTimestamp;
  * @author hleluo
  * @date 2019/9/7 21:06
  */
-@ApiModel(value = "组信息")
+@ApiModel(value = "菜单信息")
 @Data
-@Entity
-@Table(name = "t_group")
-public class Group {
-
-  /**
-   * 组类型.
-   */
-  public static enum Type {
-    /**
-     * 角色.
-     */
-    ROLE,
-    /**
-     * 菜单.
-     */
-    MENU,
-    /**
-     * 接口.
-     */
-    API
-  }
+//@Entity
+//@Table(name = "t_menu")
+public class Menu {
 
   @Id
   @GenericGenerator(name = "uid", strategy = "uuid2")
   @GeneratedValue(generator = "uid")
   private String id;
-  @ApiModelProperty(value = "类型：角色组、菜单组、权限组")
-  private Type type = Type.ROLE;
   @ApiModelProperty(value = "系统类型，如A系统，B系统")
   private String domain;
   @ApiModelProperty(value = "平台类型：如WEB端、手机端等")

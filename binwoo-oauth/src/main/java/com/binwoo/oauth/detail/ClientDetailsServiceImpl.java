@@ -5,7 +5,8 @@ import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.integrate.AuthTokenParam;
 import com.binwoo.oauth.integrate.AuthTokenParamContext;
 import com.binwoo.oauth.repository.ClientRepository;
-import com.binwoo.oauth.repository.GroupRepository;
+import com.binwoo.oauth.repository.ResourceRepository;
+import com.binwoo.oauth.repository.RoleRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,9 +31,11 @@ import org.springframework.util.StringUtils;
 public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
 
   @Autowired
-  private GroupRepository groupRepository;
+  private ClientRepository clientRepository;
   @Autowired
-  ClientRepository clientRepository;
+  private RoleRepository roleRepository;
+  @Autowired
+  private ResourceRepository resourceRepository;
 
   @Override
   public ClientDetails loadClientByClientId(String s) throws ClientRegistrationException {
@@ -62,9 +65,7 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
     if (!StringUtils.isEmpty(client.getGrantType())) {
       details.setAuthorizedGrantTypes(Arrays.asList(client.getGrantType().trim().split(",")));
     }
-    if (!StringUtils.isEmpty(client.getResourceId())) {
-      details.setResourceIds(Arrays.asList(client.getResourceId().trim().split(",")));
-    }
+    details.setResourceIds(getResourceIds(client.getCode()));
     details.setAccessTokenValiditySeconds(client.getAccessTokenExpire());
     details.setRefreshTokenValiditySeconds(client.getRefreshTokenExpire());
 
@@ -81,6 +82,16 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
   }
 
   /**
+   * 获取客户端资源列表.
+   *
+   * @param code 客户端标识
+   * @return 资源id列表
+   */
+  private List<String> getResourceIds(String code) {
+    return resourceRepository.selectClientResourceIds(code);
+  }
+
+  /**
    * 获取客户端角色列表.
    *
    * @param code 客户端id
@@ -89,17 +100,17 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
    */
   private List<String> getRoles(String code, AuthTokenParam param) {
     if (param == null) {
-      return groupRepository.selectClientRole(code);
+      return roleRepository.selectClientRole(code);
     }
     if (StringUtils.isEmpty(param.getDomain()) && StringUtils.isEmpty(param.getPlatform())) {
-      return groupRepository.selectClientRole(code);
+      return roleRepository.selectClientRole(code);
     } else {
       if (StringUtils.isEmpty(param.getDomain())) {
-        return groupRepository.selectClientRoleByPlatform(code, param.getPlatform());
+        return roleRepository.selectClientRoleByPlatform(code, param.getPlatform());
       } else if (StringUtils.isEmpty(param.getPlatform())) {
-        return groupRepository.selectClientRoleByDomain(code, param.getDomain());
+        return roleRepository.selectClientRoleByDomain(code, param.getDomain());
       } else {
-        return groupRepository.selectClientRole(code, param.getDomain(), param.getPlatform());
+        return roleRepository.selectClientRole(code, param.getDomain(), param.getPlatform());
       }
     }
   }

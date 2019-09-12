@@ -4,6 +4,74 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
   <changeSet author="luojia" id="0.1.1 create table t_user">
 
+    <!-- 客户端信息 -->
+    <createTable tableName="t_client" remarks="客户端信息表">
+      <column name="id" type="VARCHAR(36)" remarks="主键">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(200)" remarks="客户端名称"/>
+      <column name="code" type="VARCHAR(50)" remarks="客户端标识，对应client_id"/>
+      <column name="secret" type="VARCHAR(100)" remarks="秘钥"/>
+      <column name="grant_type" type="VARCHAR(200)" remarks="认证类型"/>
+      <column name="scope" type="VARCHAR(200)" remarks="作用范围，逗号隔开"/>
+      <column name="access_token_expire" type="INTEGER" defaultValue="7200"
+        remarks="AccessToken过期时间，秒"/>
+      <column name="refresh_token_expire" type="INTEGER" defaultValue="10800"
+        remarks="RefreshToken过期时间，秒"/>
+      <column name="description" type="TEXT" remarks="描述"/>
+      <column name="disable" type="BOOLEAN" defaultValue="false" remarks="是否禁用"/>
+      <column name="deleted" type="BOOLEAN" defaultValue="false" remarks="是否删除"/>
+      <column name="expire_time" type="TIMESTAMP" remarks="过期时间"/>
+      <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
+      <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+    </createTable>
+    <createIndex tableName="t_client" indexName="t_client_index_code">
+      <column name="code" type="VARCHAR(50)" remarks="客户端标识，对应client_id"/>
+    </createIndex>
+    <!-- 新建客户端信息，client_id：client，client_secret：9Jv$P1 -->
+    <insert tableName="t_client">
+      <column name="id" value="8f03cf12-d431-46e0-9a22-cd641ccd88d8"/>
+      <column name="name" value="初始化客户端"/>
+      <column name="code" value="client"/>
+      <column name="secret" value="$2a$10$nWNgfKNNxQbIo9XevDTN.exWVyHSpMPxZMsWF7cGI7.yKIfjGjWUm"/>
+      <column name="grant_type"
+        value="authorization_code,password,client_credentials,refresh_token"/>
+      <column name="scope" value="all"/>
+      <column name="create_time" value="now()"/>
+      <column name="update_time" value="now()"/>
+    </insert>
+
+    <!-- 资源信息 -->
+    <createTable tableName="t_resource" remarks="资源信息表">
+      <column name="id" type="VARCHAR(36)" remarks="主键">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="name" type="VARCHAR(200)" remarks="名称"/>
+      <column name="code" type="VARCHAR(50)" remarks="资源标识"/>
+      <column name="description" type="TEXT" remarks="描述"/>
+      <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
+      <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+    </createTable>
+    <createIndex tableName="t_resource" indexName="t_resource_index_code">
+      <column name="code" type="VARCHAR(50)" remarks="资源标识"/>
+    </createIndex>
+    <!-- 新增资源信息 -->
+    <insert tableName="t_resource">
+      <column name="id" value="bacaf8bf-f02b-40e7-aedb-1ccae57ab2bf"/>
+      <column name="name" value="用户资源"/>
+      <column name="code" value="res-oauth-DmAzd"/>
+      <column name="create_time" value="now()"/>
+      <column name="update_time" value="now()"/>
+    </insert>
+
+    <!-- 客户端资源信息 -->
+    <createTable tableName="t_client_resource" remarks="客户端资源信息表">
+      <column name="client_id" type="VARCHAR(36)" remarks="客户端id"/>
+      <column name="resource_id" type="VARCHAR(36)" remarks="资源id"/>
+    </createTable>
+    <addPrimaryKey tableName="t_client_resource" constraintName="t_client_resource_primary"
+      columnNames="client_id,resource_id"/>
+
     <!-- 用户信息表 -->
     <createTable tableName="t_user" remarks="用户信息表">
       <column name="id" type="VARCHAR(36)" remarks="主键">
@@ -24,15 +92,12 @@
       <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
       <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
     </createTable>
-
     <createIndex tableName="t_user" indexName="t_user_index_username">
       <column name="username" type="VARCHAR(50)" remarks="用户名"/>
     </createIndex>
-
     <createIndex tableName="t_user" indexName="t_user_index_mobile">
       <column name="mobile" type="VARCHAR(20)" remarks="手机号"/>
     </createIndex>
-
     <!-- 新建默认超级管理员用户，账号：root，密码：U9yK%K -->
     <insert tableName="t_user">
       <column name="id" value="6a1ca001-1fa0-451e-b19c-9aa65e6e9c51"/>
@@ -42,96 +107,61 @@
       <column name="update_time" value="now()"/>
     </insert>
 
-    <!-- 组信息 -->
-    <createTable tableName="t_group" remarks="组信息表">
+    <!-- 角色信息 -->
+    <createTable tableName="t_role" remarks="角色信息表">
       <column name="id" type="VARCHAR(36)" remarks="主键">
         <constraints primaryKey="true"/>
       </column>
-      <column name="type" type="VARCHAR(100)" remarks="类型"/>
       <column name="domain" type="VARCHAR(100)" remarks="系统类型"/>
       <column name="platform" type="VARCHAR(100)" remarks="平台类型"/>
+      <column name="code" type="VARCHAR(50)" remarks="标识"/>
       <column name="name" type="VARCHAR(200)" remarks="名称"/>
       <column name="description" type="TEXT" remarks="描述"/>
       <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
       <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
     </createTable>
-
-    <createIndex tableName="t_group" indexName="t_group_index_type">
-      <column name="type" type="VARCHAR(100)" remarks="类型"/>
+    <createIndex tableName="t_role" indexName="t_role_index_code">
+      <column name="code" type="VARCHAR(50)" remarks="标识"/>
     </createIndex>
 
-    <!-- 用户组信息 -->
-    <createTable tableName="t_user_group" remarks="用户组信息表">
-      <column name="user_id" type="VARCHAR(36)" remarks="用户id"/>
-      <column name="group_id" type="VARCHAR(36)" remarks="组id"/>
-    </createTable>
-    <addPrimaryKey tableName="t_user_group" constraintName="t_user_group_primary"
-      columnNames="user_id,group_id"/>
-
-    <!-- 客户端信息 -->
-    <createTable tableName="t_client" remarks="客户端信息表">
-      <column name="id" type="VARCHAR(36)" remarks="主键">
-        <constraints primaryKey="true"/>
-      </column>
-      <column name="name" type="VARCHAR(200)" remarks="客户端名称"/>
-      <column name="code" type="VARCHAR(50)" remarks="客户端，对应client_id"/>
-      <column name="secret" type="VARCHAR(100)" remarks="秘钥"/>
-      <column name="grant_type" type="VARCHAR(200)" remarks="认证类型"/>
-      <column name="scope" type="VARCHAR(200)" remarks="作用范围，逗号隔开"/>
-      <column name="resource_id" type="TEXT" remarks="授权资源，逗号隔开"/>
-      <column name="access_token_expire" type="INTEGER" defaultValue="7200"
-        remarks="AccessToken过期时间，秒"/>
-      <column name="refresh_token_expire" type="INTEGER" defaultValue="10800"
-        remarks="RefreshToken过期时间，秒"/>
-      <column name="description" type="TEXT" remarks="描述"/>
-      <column name="disable" type="BOOLEAN" defaultValue="false" remarks="是否禁用"/>
-      <column name="deleted" type="BOOLEAN" defaultValue="false" remarks="是否删除"/>
-      <column name="expire_time" type="TIMESTAMP" remarks="过期时间"/>
-      <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
-      <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
-    </createTable>
-
-    <createIndex tableName="t_client" indexName="t_client_index_code">
-      <column name="code" type="VARCHAR(50)" remarks="客户端，对应client_id"/>
-    </createIndex>
-
-    <!-- 新建客户端信息，client_id：client，client_secret：9Jv$P1 -->
-    <insert tableName="t_client">
-      <column name="id" value="8f03cf12-d431-46e0-9a22-cd641ccd88d8"/>
-      <column name="name" value="初始化客户端"/>
-      <column name="code" value="client"/>
-      <column name="secret" value="$2a$10$nWNgfKNNxQbIo9XevDTN.exWVyHSpMPxZMsWF7cGI7.yKIfjGjWUm"/>
-      <column name="grant_type"
-        value="authorization_code,password,client_credentials,refresh_token"/>
-      <column name="scope" value="all"/>
-      <column name="create_time" value="now()"/>
-      <column name="update_time" value="now()"/>
-    </insert>
-
-    <!-- 客户端组信息 -->
-    <createTable tableName="t_client_group" remarks="客户端组信息表">
+    <!-- 客户端角色信息 -->
+    <createTable tableName="t_client_role" remarks="客户端角色信息表">
       <column name="client_id" type="VARCHAR(36)" remarks="客户端id"/>
-      <column name="group_id" type="VARCHAR(36)" remarks="组id"/>
+      <column name="role_id" type="VARCHAR(36)" remarks="角色id"/>
     </createTable>
-    <addPrimaryKey tableName="t_client_group" constraintName="t_client_group_primary"
-      columnNames="client_id,group_id"/>
+    <addPrimaryKey tableName="t_client_role" constraintName="t_client_role_primary"
+      columnNames="client_id,role_id"/>
+
+    <!-- 用户角色信息 -->
+    <createTable tableName="t_user_role" remarks="用户角色信息表">
+      <column name="user_id" type="VARCHAR(36)" remarks="用户id"/>
+      <column name="role_id" type="VARCHAR(36)" remarks="角色id"/>
+    </createTable>
+    <addPrimaryKey tableName="t_user_role" constraintName="t_user_role_primary"
+      columnNames="user_id,role_id"/>
 
     <rollback>
-      <dropPrimaryKey tableName="t_client_group" constraintName="t_client_group_primary"/>
-      <dropTable tableName="t_client_group"/>
+      <dropPrimaryKey tableName="t_user_role" constraintName="t_user_role_primary"/>
+      <dropTable tableName="t_user_role"/>
 
-      <dropIndex tableName="t_client" indexName="t_client_index_code"/>
-      <dropTable tableName="t_client"/>
+      <dropPrimaryKey tableName="t_client_role" constraintName="t_client_role_primary"/>
+      <dropTable tableName="t_client_role"/>
 
-      <dropPrimaryKey tableName="t_user_group" constraintName="t_user_group_primary"/>
-      <dropTable tableName="t_user_group"/>
-
-      <dropIndex tableName="t_group" indexName="t_group_index_type"/>
-      <dropTable tableName="t_group"/>
+      <dropIndex tableName="t_role" indexName="t_role_index_code"/>
+      <dropTable tableName="t_role"/>
 
       <dropIndex tableName="t_user" indexName="t_user_index_mobile"/>
       <dropIndex tableName="t_user" indexName="t_user_index_username"/>
       <dropTable tableName="t_user"/>
+
+      <dropPrimaryKey tableName="t_client_resource" constraintName="t_client_resource_primary"/>
+      <dropTable tableName="t_client_resource"/>
+
+      <dropIndex tableName="t_resource" indexName="t_resource_index_code"/>
+      <dropTable tableName="t_resource"/>
+
+      <dropIndex tableName="t_client" indexName="t_client_index_code"/>
+      <dropTable tableName="t_client"/>
     </rollback>
 
   </changeSet>

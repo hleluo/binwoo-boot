@@ -22,41 +22,22 @@ import org.hibernate.annotations.UpdateTimestamp;
  * @author hleluo
  * @date 2019/9/3 21:14
  */
-@ApiModel(value = "客户端信息")
+@ApiModel(value = "资源信息")
 @Data
 @Entity
-@Table(name = "t_client")
-public class Client {
+@Table(name = "t_resource")
+public class Resource {
 
   @Id
   @GenericGenerator(name = "uid", strategy = "uuid2")
   @GeneratedValue(generator = "uid")
   private String id;
-  @ApiModelProperty(value = "客户端名称")
+  @ApiModelProperty(value = "资源名称")
   private String name;
-  @ApiModelProperty(value = "标识，对应client_id")
+  @ApiModelProperty(value = "资源标识")
   private String code;
-  @ApiModelProperty(value = "秘钥")
-  private String secret;
-  @ApiModelProperty(value = "认证类型：authorization_code,password,"
-      + "client_credentials,refresh_token，逗号隔开")
-  private String grantType;
-  @ApiModelProperty(value = "作用范围，逗号隔开")
-  private String scope;
-  @ApiModelProperty(value = "AccessToken过期时间，秒，默认7200s")
-  private Integer accessTokenExpire = 2 * 60 * 60;
-  @ApiModelProperty(value = "RefreshToken过期时间，秒，默认10800s")
-  private Integer refreshTokenExpire = 3 * 60 * 60;
   @ApiModelProperty(value = "描述")
   private String description;
-  @ApiModelProperty(value = "是否被禁用")
-  private boolean disable = false;
-  @ApiModelProperty(value = "是否被删除")
-  private boolean deleted = false;
-  @ApiModelProperty(value = "过期时间：yyyy-MM-dd HH:mm:ss，为NULL时永不过期")
-  @Temporal(value = TemporalType.TIMESTAMP)
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  private Date expireTime;
 
   @ApiModelProperty(value = "创建时间：yyyy-MM-dd HH:mm:ss")
   @Column(updatable = false)

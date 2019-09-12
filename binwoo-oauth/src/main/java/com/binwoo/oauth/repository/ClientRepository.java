@@ -15,7 +15,7 @@ public interface ClientRepository extends BaseRepository<Client> {
   /**
    * 根据客户端id查询客户端信息.
    *
-   * @param code 客户端
+   * @param code 客户端标识
    * @return 客户端信息.
    */
   Client findByCode(String code);

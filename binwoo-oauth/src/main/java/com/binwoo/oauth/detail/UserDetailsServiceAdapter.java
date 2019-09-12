@@ -4,7 +4,7 @@ import com.binwoo.oauth.entity.User;
 import com.binwoo.oauth.exception.AuthException;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.integrate.AuthTokenParam;
-import com.binwoo.oauth.repository.GroupRepository;
+import com.binwoo.oauth.repository.RoleRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ import org.springframework.util.StringUtils;
 @Component
 public class UserDetailsServiceAdapter {
 
-  private final GroupRepository groupRepository;
+  private final RoleRepository roleRepository;
 
   @Autowired
-  public UserDetailsServiceAdapter(GroupRepository groupRepository) {
-    this.groupRepository = groupRepository;
+  public UserDetailsServiceAdapter(RoleRepository roleRepository) {
+    this.roleRepository = roleRepository;
   }
 
   /**
@@ -75,17 +75,17 @@ public class UserDetailsServiceAdapter {
    */
   private List<String> getRoles(String username, AuthTokenParam param) {
     if (param == null) {
-      return groupRepository.selectUserRole(username);
+      return roleRepository.selectUserRole(username);
     }
     if (StringUtils.isEmpty(param.getDomain()) && StringUtils.isEmpty(param.getPlatform())) {
-      return groupRepository.selectUserRole(username);
+      return roleRepository.selectUserRole(username);
     } else {
       if (StringUtils.isEmpty(param.getDomain())) {
-        return groupRepository.selectUserRoleByPlatform(username, param.getPlatform());
+        return roleRepository.selectUserRoleByPlatform(username, param.getPlatform());
       } else if (StringUtils.isEmpty(param.getPlatform())) {
-        return groupRepository.selectUserRoleByDomain(username, param.getDomain());
+        return roleRepository.selectUserRoleByDomain(username, param.getDomain());
       } else {
-        return groupRepository.selectUserRole(username, param.getDomain(), param.getPlatform());
+        return roleRepository.selectUserRole(username, param.getDomain(), param.getPlatform());
       }
     }
   }
