@@ -1,6 +1,8 @@
 package com.binwoo.oauth.config;
 
-import com.binwoo.oauth.filter.ClientFilter;
+import com.binwoo.oauth.client.ClientFilter;
+import com.binwoo.oauth.client.ClientLoader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,13 @@ public class ClientConfig {
    */
   private static final String[] URL_PATTERNS = {"/oauth/token"};
 
+  private final ClientLoader clientLoader;
+
+  @Autowired
+  public ClientConfig(ClientLoader clientLoader) {
+    this.clientLoader = clientLoader;
+  }
+
   /**
    * 客户端拦截器.
    *
@@ -27,7 +36,7 @@ public class ClientConfig {
   @Bean
   public FilterRegistrationBean filterRegistrationBean() {
     FilterRegistrationBean<ClientFilter> bean = new FilterRegistrationBean<ClientFilter>();
-    bean.setFilter(new ClientFilter());
+    bean.setFilter(new ClientFilter(clientLoader));
     bean.addUrlPatterns(URL_PATTERNS);
     bean.setOrder(Integer.MIN_VALUE);
     return bean;

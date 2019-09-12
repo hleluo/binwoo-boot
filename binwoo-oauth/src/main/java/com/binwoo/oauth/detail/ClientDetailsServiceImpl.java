@@ -1,5 +1,7 @@
 package com.binwoo.oauth.detail;
 
+import com.binwoo.oauth.client.ClientParam;
+import com.binwoo.oauth.client.ClientParamContext;
 import com.binwoo.oauth.entity.Client;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.integrate.AuthTokenParam;
@@ -39,7 +41,19 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
 
   @Override
   public ClientDetails loadClientByClientId(String s) throws ClientRegistrationException {
-    Client client = clientRepository.findByCode(s);
+    ClientParam param = ClientParamContext.get();
+    if (param == null) {
+      param = new ClientParam();
+      ClientParamContext.set(param);
+    }
+    param.setClientId(s);
+    Client client = param.getClient();
+    if (client == null || !client.getCode().equals(s)) {
+      client = clientRepository.findByCode(s);
+      param.setClient(client);
+      param.setResourceIds(null);
+      param.setRoles(null);
+    }
     if (client == null) {
       throw new ClientRegistrationException(HttpAuthExceptionCode.CLIENT_NOT_EXIST.name());
     }
@@ -65,12 +79,16 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
     if (!StringUtils.isEmpty(client.getGrantType())) {
       details.setAuthorizedGrantTypes(Arrays.asList(client.getGrantType().trim().split(",")));
     }
-    details.setResourceIds(getResourceIds(client.getCode()));
+    if (param.getResourceIds() == null) {
+      param.setResourceIds(getResourceIds(client.getCode()));
+    }
+    details.setResourceIds(param.getResourceIds());
     details.setAccessTokenValiditySeconds(client.getAccessTokenExpire());
     details.setRefreshTokenValiditySeconds(client.getRefreshTokenExpire());
-
-    AuthTokenParam param = AuthTokenParamContext.get();
-    List<String> roles = getRoles(client.getCode(), param);
+    if (param.getRoles() == null) {
+      param.setRoles(getRoles(client.getCode(), AuthTokenParamContext.get()));
+    }
+    List<String> roles = param.getRoles();
     List<GrantedAuthority> authorities = new ArrayList<>();
     if (!CollectionUtils.isEmpty(roles)) {
       for (String role : roles) {
