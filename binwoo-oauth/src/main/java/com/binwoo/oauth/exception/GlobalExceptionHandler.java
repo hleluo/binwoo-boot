@@ -31,4 +31,16 @@ public class GlobalExceptionHandler {
     return HttpResponseBuilder.failure(e.getCode());
   }
 
+  /**
+   * SqlException处理器.
+   *
+   * @param e SqlException
+   * @return 返回结果
+   */
+  @ExceptionHandler(SqlException.class)
+  public HttpResponse<String> sqlExceptionHandler(SqlException e) {
+    log.info("HttpException >> ", e);
+    return HttpResponseBuilder.failure(HttpAuthExceptionCode.INTERNAL_SERVER_ERROR);
+  }
+
 }
