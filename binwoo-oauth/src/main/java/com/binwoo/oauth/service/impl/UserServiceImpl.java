@@ -7,6 +7,7 @@ import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.repository.UserRepository;
 import com.binwoo.oauth.req.UserQueryReq;
 import com.binwoo.oauth.service.UserService;
+import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -45,6 +47,13 @@ public class UserServiceImpl implements UserService {
     }
     if (StringUtils.isEmpty(user.getId())) {
       user.setPassword(passwordEncoder.encode(user.getPassword()));
+    } else {
+      //修改用户信息，检测密码是有有修改.
+      if (StringUtils.isEmpty(user.getPassword())) {
+        user.setPassword(source == null ? null : source.getPassword());
+      } else {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+      }
     }
     return userRepository.save(user);
   }
@@ -60,5 +69,21 @@ public class UserServiceImpl implements UserService {
     }, req.getPageRequest());
     return new PageList<>(page.getNumber(), page.getSize(), page.getTotalPages(),
         page.getTotalElements(), page.getContent());
+  }
+
+  @Override
+  public boolean delete(String id) {
+    if (id != null) {
+      userRepository.deleteById(id);
+    }
+    return true;
+  }
+
+  @Override
+  public boolean delete(List<String> ids) {
+    if (!CollectionUtils.isEmpty(ids)) {
+      userRepository.deleteByIdIn(ids);
+    }
+    return true;
   }
 }

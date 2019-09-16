@@ -1,5 +1,6 @@
 package com.binwoo.oauth.req;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import lombok.Data;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
  * @author admin
  * @date 2019/9/16 17:33
  */
+@ApiModel(value = "分页查询参数")
 @Data
 public class BasePagerReq implements Serializable {
 

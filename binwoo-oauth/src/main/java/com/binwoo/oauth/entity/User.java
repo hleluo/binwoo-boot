@@ -1,6 +1,8 @@
 package com.binwoo.oauth.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -70,4 +72,14 @@ public class User implements Serializable {
   @UpdateTimestamp
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date updateTime;
+
+  @JsonIgnore
+  public String getPassword() {
+    return password;
+  }
+
+  @JsonProperty
+  public void setPassword(String password) {
+    this.password = password;
+  }
 }
