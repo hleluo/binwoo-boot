@@ -16,6 +16,6 @@ public class ClientParam {
   private String clientId;
   private Client client;
   private List<String> resourceIds;
-  private List<String> roles;
+  private List<String> authorities;
 
 }

@@ -55,7 +55,7 @@ public class UserDetailsServiceAdapter {
       //用户已过期
       throw new AuthException(HttpAuthExceptionCode.USER_EXPIRED.name());
     }
-    List<String> roles = getRoles(user.getUsername(), param);
+    List<String> roles = getAuthorities(user.getUsername(), param);
     List<GrantedAuthority> authorities = new ArrayList<>();
     if (!CollectionUtils.isEmpty(roles)) {
       for (String role : roles) {
@@ -67,13 +67,13 @@ public class UserDetailsServiceAdapter {
   }
 
   /**
-   * 获取用户角色列表.
+   * 获取用户权职列表.
    *
    * @param username 用户名
    * @param param 参数
-   * @return 角色列表
+   * @return 权职列表
    */
-  private List<String> getRoles(String username, AuthTokenParam param) {
+  private List<String> getAuthorities(String username, AuthTokenParam param) {
     if (param == null) {
       return authorityRepository.selectUserRoleByApp(username);
     }

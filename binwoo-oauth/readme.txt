@@ -23,6 +23,8 @@ refresh_token:${refresh_token}
 grant_type:client_credentials
 client_id:aaa
 client_secret:aaa
+app_code:OA         #应用代码，可选参数，如OA、ACCIDENT等不同系统
+app_type:WEB        #应用类型，可选参数，如WEB、ANDROID等不同运行平台
 
 5、校验Token，/oauth/check_token，参数如下：
 token:${token}

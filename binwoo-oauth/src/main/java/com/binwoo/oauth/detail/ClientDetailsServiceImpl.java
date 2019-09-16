@@ -52,7 +52,7 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
       client = clientRepository.findByCode(s);
       param.setClient(client);
       param.setResourceIds(null);
-      param.setRoles(null);
+      param.setAuthorities(null);
     }
     if (client == null) {
       throw new ClientRegistrationException(HttpAuthExceptionCode.CLIENT_NOT_EXIST.name());
@@ -85,10 +85,10 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
     details.setResourceIds(param.getResourceIds());
     details.setAccessTokenValiditySeconds(client.getAccessTokenExpire());
     details.setRefreshTokenValiditySeconds(client.getRefreshTokenExpire());
-    if (param.getRoles() == null) {
-      param.setRoles(getRoles(client.getCode(), AuthTokenParamContext.get()));
+    if (param.getAuthorities() == null) {
+      param.setAuthorities(getAuthorities(client.getCode(), AuthTokenParamContext.get()));
     }
-    List<String> roles = param.getRoles();
+    List<String> roles = param.getAuthorities();
     List<GrantedAuthority> authorities = new ArrayList<>();
     if (!CollectionUtils.isEmpty(roles)) {
       for (String role : roles) {
@@ -110,13 +110,13 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
   }
 
   /**
-   * 获取客户端角色列表.
+   * 获取客户端权职列表.
    *
    * @param clientId 客户端id
    * @param param 参数
-   * @return 角色列表
+   * @return 权职列表
    */
-  private List<String> getRoles(String clientId, AuthTokenParam param) {
+  private List<String> getAuthorities(String clientId, AuthTokenParam param) {
     if (param == null) {
       return authorityRepository.selectClientRoleByApp(clientId);
     }
