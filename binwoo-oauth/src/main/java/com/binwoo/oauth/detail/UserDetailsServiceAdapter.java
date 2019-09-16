@@ -4,7 +4,7 @@ import com.binwoo.oauth.entity.User;
 import com.binwoo.oauth.exception.AuthException;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.integrate.AuthTokenParam;
-import com.binwoo.oauth.repository.RoleRepository;
+import com.binwoo.oauth.repository.AuthorityRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ import org.springframework.util.StringUtils;
 @Component
 public class UserDetailsServiceAdapter {
 
-  private final RoleRepository roleRepository;
+  private final AuthorityRepository authorityRepository;
 
   @Autowired
-  public UserDetailsServiceAdapter(RoleRepository roleRepository) {
-    this.roleRepository = roleRepository;
+  public UserDetailsServiceAdapter(AuthorityRepository authorityRepository) {
+    this.authorityRepository = authorityRepository;
   }
 
   /**
@@ -75,17 +75,18 @@ public class UserDetailsServiceAdapter {
    */
   private List<String> getRoles(String username, AuthTokenParam param) {
     if (param == null) {
-      return roleRepository.selectUserRole(username);
+      return authorityRepository.selectUserRoleByApp(username);
     }
-    if (StringUtils.isEmpty(param.getDomain()) && StringUtils.isEmpty(param.getPlatform())) {
-      return roleRepository.selectUserRole(username);
+    if (StringUtils.isEmpty(param.getAppCode()) && StringUtils.isEmpty(param.getAppType())) {
+      return authorityRepository.selectUserRoleByApp(username);
     } else {
-      if (StringUtils.isEmpty(param.getDomain())) {
-        return roleRepository.selectUserRoleByPlatform(username, param.getPlatform());
-      } else if (StringUtils.isEmpty(param.getPlatform())) {
-        return roleRepository.selectUserRoleByDomain(username, param.getDomain());
+      if (StringUtils.isEmpty(param.getAppCode())) {
+        return authorityRepository.selectUserRoleByAppType(username, param.getAppType());
+      } else if (StringUtils.isEmpty(param.getAppType())) {
+        return authorityRepository.selectUserRoleByAppCode(username, param.getAppCode());
       } else {
-        return roleRepository.selectUserRole(username, param.getDomain(), param.getPlatform());
+        return authorityRepository
+            .selectUserRoleByApp(username, param.getAppCode(), param.getAppType());
       }
     }
   }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+  <changeSet author="luojia" id="0.1.3 create table t_group">
+
+    <!-- 组信息 -->
+    <createTable tableName="t_group" remarks="组信息表">
+      <column name="id" type="VARCHAR(36)" remarks="主键">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="server_id" type="VARCHAR(36)" remarks="服务id"/>
+      <column name="name" type="VARCHAR(200)" remarks="名称"/>
+      <column name="description" type="TEXT" remarks="描述"/>
+      <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
+      <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+    </createTable>
+    <createIndex tableName="t_group" indexName="t_group_index_server_id">
+      <column name="server_id" type="VARCHAR(36)" remarks="服务id"/>
+    </createIndex>
+
+    <!-- API信息 -->
+    <createTable tableName="t_api" remarks="API信息表">
+      <column name="id" type="VARCHAR(36)" remarks="主键">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="server_id" type="VARCHAR(36)" remarks="服务id"/>
+      <column name="name" type="VARCHAR(200)" remarks="名称"/>
+      <column name="url" type="TEXT" remarks="地址"/>
+      <column name="parent_id" type="VARCHAR(36)" remarks="父节点"/>
+      <column name="description" type="TEXT" remarks="描述"/>
+      <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
+      <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+    </createTable>
+    <createIndex tableName="t_api" indexName="t_api_index_server_id">
+      <column name="server_id" type="VARCHAR(36)" remarks="服务id"/>
+    </createIndex>
+
+    <!-- 组API信息 -->
+    <createTable tableName="t_group_api" remarks="组API信息表">
+      <column name="group_id" type="VARCHAR(36)" remarks="组id"/>
+      <column name="api_id" type="VARCHAR(36)" remarks="接口id"/>
+    </createTable>
+    <addPrimaryKey tableName="t_group_api" constraintName="t_group_api_primary"
+      columnNames="group_id,api_id"/>
+
+    <rollback>
+      <dropPrimaryKey tableName="t_group_api" constraintName="t_group_api_primary"/>
+      <dropTable tableName="t_group_api"/>
+
+      <dropIndex tableName="t_api" indexName="t_api_index_server_id"/>
+      <dropTable tableName="t_api"/>
+
+      <dropIndex tableName="t_group" indexName="t_group_index_server_id"/>
+      <dropTable tableName="t_group"/>
+    </rollback>
+
+  </changeSet>
+
+</databaseChangeLog>

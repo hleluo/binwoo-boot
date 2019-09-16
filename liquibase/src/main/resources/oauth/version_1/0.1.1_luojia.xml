@@ -41,36 +41,38 @@
       <column name="update_time" value="now()"/>
     </insert>
 
-    <!-- 资源信息 -->
-    <createTable tableName="t_resource" remarks="资源信息表">
+    <!-- 服务信息 -->
+    <createTable tableName="t_server" remarks="服务信息表">
       <column name="id" type="VARCHAR(36)" remarks="主键">
         <constraints primaryKey="true"/>
       </column>
+      <column name="code" type="VARCHAR(50)" remarks="标识"/>
       <column name="name" type="VARCHAR(200)" remarks="名称"/>
-      <column name="code" type="VARCHAR(50)" remarks="资源标识"/>
+      <column name="host" type="VARCHAR(50)" remarks="主机名"/>
+      <column name="port" type="INTEGER" remarks="端口号"/>
       <column name="description" type="TEXT" remarks="描述"/>
       <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
       <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
     </createTable>
-    <createIndex tableName="t_resource" indexName="t_resource_index_code">
+    <createIndex tableName="t_server" indexName="t_server_index_code">
       <column name="code" type="VARCHAR(50)" remarks="资源标识"/>
     </createIndex>
-    <!-- 新增资源信息 -->
-    <insert tableName="t_resource">
+    <!-- 新增服务信息 -->
+    <insert tableName="t_server">
       <column name="id" value="bacaf8bf-f02b-40e7-aedb-1ccae57ab2bf"/>
-      <column name="name" value="用户资源"/>
+      <column name="name" value="用户服务"/>
       <column name="code" value="res-oauth-DmAzd"/>
       <column name="create_time" value="now()"/>
       <column name="update_time" value="now()"/>
     </insert>
 
-    <!-- 客户端资源信息 -->
-    <createTable tableName="t_client_resource" remarks="客户端资源信息表">
+    <!-- 客户端服务信息 -->
+    <createTable tableName="t_client_server" remarks="客户端资源信息表">
       <column name="client_id" type="VARCHAR(36)" remarks="客户端id"/>
-      <column name="resource_id" type="VARCHAR(36)" remarks="资源id"/>
+      <column name="server_id" type="VARCHAR(36)" remarks="服务id"/>
     </createTable>
-    <addPrimaryKey tableName="t_client_resource" constraintName="t_client_resource_primary"
-      columnNames="client_id,resource_id"/>
+    <addPrimaryKey tableName="t_client_server" constraintName="t_client_server_primary"
+      columnNames="client_id,server_id"/>
 
     <!-- 用户信息表 -->
     <createTable tableName="t_user" remarks="用户信息表">
@@ -107,12 +109,13 @@
       <column name="update_time" value="now()"/>
     </insert>
 
-    <!-- 系统信息 -->
-    <createTable tableName="t_domain" remarks="系统信息表">
+    <!-- 应用信息 -->
+    <createTable tableName="t_app" remarks="应用信息表">
       <column name="id" type="VARCHAR(36)" remarks="主键">
         <constraints primaryKey="true"/>
       </column>
       <column name="code" type="VARCHAR(50)" remarks="标识"/>
+      <column name="type" type="VARCHAR(50)" remarks="类型，如WEB、ANDROID等"/>
       <column name="name" type="VARCHAR(200)" remarks="名称"/>
       <column name="host" type="VARCHAR(50)" remarks="主机名"/>
       <column name="port" type="INTEGER" remarks="端口号"/>
@@ -121,91 +124,69 @@
       <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
       <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
     </createTable>
-    <createIndex tableName="t_domain" indexName="t_domain_index_code">
+    <createIndex tableName="t_app" indexName="t_app_index_code_type">
       <column name="code" type="VARCHAR(50)" remarks="标识"/>
+      <column name="type" type="VARCHAR(50)" remarks="类型，如WEB、ANDROID等"/>
     </createIndex>
 
-    <!-- 平台信息 -->
-    <createTable tableName="t_platform" remarks="系统信息表">
+    <!-- 职权信息 -->
+    <createTable tableName="t_authority" remarks="职权信息表">
       <column name="id" type="VARCHAR(36)" remarks="主键">
         <constraints primaryKey="true"/>
       </column>
+      <column name="app_id" type="VARCHAR(36)" remarks="应用id"/>
       <column name="code" type="VARCHAR(50)" remarks="标识"/>
       <column name="name" type="VARCHAR(200)" remarks="名称"/>
       <column name="description" type="TEXT" remarks="描述"/>
       <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
       <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
     </createTable>
-    <createIndex tableName="t_platform" indexName="t_platform_index_code">
+    <createIndex tableName="t_authority" indexName="t_authority_index_app_id">
+      <column name="app_id" type="VARCHAR(36)" remarks="应用id"/>
+    </createIndex>
+    <createIndex tableName="t_authority" indexName="t_authority_index_code">
       <column name="code" type="VARCHAR(50)" remarks="标识"/>
     </createIndex>
 
-    <!-- 角色信息 -->
-    <createTable tableName="t_role" remarks="角色信息表">
-      <column name="id" type="VARCHAR(36)" remarks="主键">
-        <constraints primaryKey="true"/>
-      </column>
-      <column name="domain_id" type="VARCHAR(36)" remarks="系统id"/>
-      <column name="platform_id" type="VARCHAR(36)" remarks="平台id"/>
-      <column name="code" type="VARCHAR(50)" remarks="标识"/>
-      <column name="name" type="VARCHAR(200)" remarks="名称"/>
-      <column name="description" type="TEXT" remarks="描述"/>
-      <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
-      <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
-    </createTable>
-    <createIndex tableName="t_role" indexName="t_role_index_domain_id">
-      <column name="domain_id" type="VARCHAR(36)" remarks="系统id"/>
-    </createIndex>
-    <createIndex tableName="t_role" indexName="t_role_index_platform_id">
-      <column name="platform_id" type="VARCHAR(36)" remarks="平台id"/>
-    </createIndex>
-    <createIndex tableName="t_role" indexName="t_role_index_code">
-      <column name="code" type="VARCHAR(50)" remarks="标识"/>
-    </createIndex>
-
-    <!-- 客户端角色信息 -->
-    <createTable tableName="t_client_role" remarks="客户端角色信息表">
+    <!-- 客户端职权信息 -->
+    <createTable tableName="t_client_authority" remarks="客户端职权信息表">
       <column name="client_id" type="VARCHAR(36)" remarks="客户端id"/>
-      <column name="role_id" type="VARCHAR(36)" remarks="角色id"/>
+      <column name="authority_id" type="VARCHAR(36)" remarks="职权id"/>
     </createTable>
-    <addPrimaryKey tableName="t_client_role" constraintName="t_client_role_primary"
-      columnNames="client_id,role_id"/>
+    <addPrimaryKey tableName="t_client_authority" constraintName="t_client_authority_primary"
+      columnNames="client_id,authority_id"/>
 
-    <!-- 用户角色信息 -->
-    <createTable tableName="t_user_role" remarks="用户角色信息表">
+    <!-- 用户职权信息 -->
+    <createTable tableName="t_user_authority" remarks="用户职权信息表">
       <column name="user_id" type="VARCHAR(36)" remarks="用户id"/>
-      <column name="role_id" type="VARCHAR(36)" remarks="角色id"/>
+      <column name="authority_id" type="VARCHAR(36)" remarks="职权id"/>
     </createTable>
-    <addPrimaryKey tableName="t_user_role" constraintName="t_user_role_primary"
-      columnNames="user_id,role_id"/>
+    <addPrimaryKey tableName="t_user_authority" constraintName="t_user_authority_primary"
+      columnNames="user_id,authority_id"/>
 
     <rollback>
-      <dropPrimaryKey tableName="t_user_role" constraintName="t_user_role_primary"/>
-      <dropTable tableName="t_user_role"/>
+      <dropPrimaryKey tableName="t_user_authority" constraintName="t_user_authority_primary"/>
+      <dropTable tableName="t_user_authority"/>
 
-      <dropPrimaryKey tableName="t_client_role" constraintName="t_client_role_primary"/>
-      <dropTable tableName="t_client_role"/>
+      <dropPrimaryKey tableName="t_client_authority" constraintName="t_client_authority_primary"/>
+      <dropTable tableName="t_client_authority"/>
 
-      <dropIndex tableName="t_platform" indexName="t_platform_index_code"/>
-      <dropTable tableName="t_platform"/>
+      <dropIndex tableName="t_authority" indexName="t_authority_index_code"/>
+      <dropIndex tableName="t_authority" indexName="t_authority_index_app_id"/>
+      <dropTable tableName="t_authority"/>
 
-      <dropIndex tableName="t_domain" indexName="t_domain_index_code"/>
-      <dropTable tableName="t_domain"/>
-
-      <dropIndex tableName="t_role" indexName="t_role_index_code"/>
-      <dropIndex tableName="t_role" indexName="t_role_index_platform_id"/>
-      <dropIndex tableName="t_role" indexName="t_role_index_domain_id"/>
-      <dropTable tableName="t_role"/>
+      <dropIndex tableName="t_app" indexName="t_app_index_code"/>
+      <dropTable tableName="t_app"/>
 
       <dropIndex tableName="t_user" indexName="t_user_index_mobile"/>
       <dropIndex tableName="t_user" indexName="t_user_index_username"/>
       <dropTable tableName="t_user"/>
 
-      <dropPrimaryKey tableName="t_client_resource" constraintName="t_client_resource_primary"/>
-      <dropTable tableName="t_client_resource"/>
+      <dropPrimaryKey tableName="t_client_server" constraintName="t_client_server_primary"/>
+      <dropTable tableName="t_client_server"/>
 
-      <dropIndex tableName="t_resource" indexName="t_resource_index_code"/>
-      <dropTable tableName="t_resource"/>
+      <dropIndex tableName="t_server" indexName="t_server_index_code"/>
+      <dropTable tableName="t_server"/>
 
       <dropIndex tableName="t_client" indexName="t_client_index_code"/>
       <dropTable tableName="t_client"/>

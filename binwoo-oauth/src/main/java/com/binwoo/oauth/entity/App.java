@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,40 +12,39 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * 菜单信息.
+ * 应用信息.
  *
  * @author hleluo
  * @date 2019/9/7 21:06
  */
-@ApiModel(value = "菜单信息")
+@ApiModel(value = "应用信息")
 @Data
 @Entity
-@Table(name = "t_menu")
-public class Menu implements Serializable {
+@Table(name = "t_app")
+public class App implements Serializable {
 
   @Id
   @GenericGenerator(name = "uid", strategy = "uuid2")
   @GeneratedValue(generator = "uid")
   private String id;
-  @ApiModelProperty(value = "应用id")
-  private String appId;
-  @ApiModelProperty(value = "优先级，越小越在前")
-  private Integer priority = 0;
+  @ApiModelProperty(value = "标识")
+  private String code;
+  @ApiModelProperty(value = "类型，如WEB、ANDROID等")
+  private String type;
   @ApiModelProperty(value = "名称")
   private String name;
-  @ApiModelProperty(value = "地址")
-  private String url;
-  @ApiModelProperty(value = "域，如id、class等，可为空")
-  private String scope;
-  @ApiModelProperty(value = "父节点")
-  private String parentId;
+  @ApiModelProperty(value = "主机")
+  private String host;
+  @ApiModelProperty(value = "端口号")
+  private Integer port;
+  @ApiModelProperty(value = "访问入口")
+  private String entrance;
   @ApiModelProperty(value = "描述")
   private String description;
   @ApiModelProperty(value = "创建时间：yyyy-MM-dd HH:mm:ss")
@@ -60,9 +58,5 @@ public class Menu implements Serializable {
   @UpdateTimestamp
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date updateTime;
-
-  @ApiModelProperty(value = "子节点，可为空")
-  @Transient
-  private Set<Menu> children;
 
 }

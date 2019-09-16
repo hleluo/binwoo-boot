@@ -3,41 +3,48 @@ package com.binwoo.oauth.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * 组信息.
+ * API信息.
  *
  * @author hleluo
  * @date 2019/9/7 21:06
  */
 @ApiModel(value = "API信息")
 @Data
-//@Entity
-//@Table(name = "t_api")
-public class Api {
+@Entity
+@Table(name = "t_api")
+public class Api implements Serializable {
 
   @Id
   @GenericGenerator(name = "uid", strategy = "uuid2")
   @GeneratedValue(generator = "uid")
   private String id;
-  @ApiModelProperty(value = "系统类型，如A系统，B系统")
-  private String domain;
-  @ApiModelProperty(value = "平台类型：如WEB端、手机端等")
-  private String platform;
+  @ApiModelProperty(value = "服务id")
+  private String serverId;
+  @ApiModelProperty(value = "地址")
+  private String url;
   @ApiModelProperty(value = "名称")
   private String name;
   @ApiModelProperty(value = "描述")
   private String description;
+  @ApiModelProperty(value = "父节点")
+  private String parentId;
   @ApiModelProperty(value = "创建时间：yyyy-MM-dd HH:mm:ss")
   @Column(updatable = false)
   @Temporal(value = TemporalType.TIMESTAMP)
@@ -49,5 +56,9 @@ public class Api {
   @UpdateTimestamp
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date updateTime;
+
+  @ApiModelProperty(value = "子节点，可为空")
+  @Transient
+  private Set<Api> children;
 
 }

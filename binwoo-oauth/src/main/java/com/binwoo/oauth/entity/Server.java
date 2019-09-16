@@ -3,6 +3,7 @@ package com.binwoo.oauth.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,25 +18,29 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * 客户端信息.
+ * 服务信息.
  *
  * @author hleluo
  * @date 2019/9/3 21:14
  */
-@ApiModel(value = "资源信息")
+@ApiModel(value = "服务信息")
 @Data
 @Entity
-@Table(name = "t_resource")
-public class Resource {
+@Table(name = "t_server")
+public class Server implements Serializable {
 
   @Id
   @GenericGenerator(name = "uid", strategy = "uuid2")
   @GeneratedValue(generator = "uid")
   private String id;
-  @ApiModelProperty(value = "资源名称")
-  private String name;
-  @ApiModelProperty(value = "资源标识")
+  @ApiModelProperty(value = "标识")
   private String code;
+  @ApiModelProperty(value = "名称")
+  private String name;
+  @ApiModelProperty(value = "主机")
+  private String host;
+  @ApiModelProperty(value = "端口号")
+  private Integer port;
   @ApiModelProperty(value = "描述")
   private String description;
 

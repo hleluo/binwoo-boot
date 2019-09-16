@@ -6,9 +6,9 @@ import com.binwoo.oauth.entity.Client;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.integrate.AuthTokenParam;
 import com.binwoo.oauth.integrate.AuthTokenParamContext;
+import com.binwoo.oauth.repository.AuthorityRepository;
 import com.binwoo.oauth.repository.ClientRepository;
-import com.binwoo.oauth.repository.ResourceRepository;
-import com.binwoo.oauth.repository.RoleRepository;
+import com.binwoo.oauth.repository.ServerRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,9 +35,9 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
   @Autowired
   private ClientRepository clientRepository;
   @Autowired
-  private RoleRepository roleRepository;
+  private AuthorityRepository authorityRepository;
   @Autowired
-  private ResourceRepository resourceRepository;
+  private ServerRepository serverRepository;
 
   @Override
   public ClientDetails loadClientByClientId(String s) throws ClientRegistrationException {
@@ -102,33 +102,34 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
   /**
    * 获取客户端资源列表.
    *
-   * @param code 客户端标识
+   * @param clientId 客户端标识
    * @return 资源id列表
    */
-  private List<String> getResourceIds(String code) {
-    return resourceRepository.selectClientResourceIds(code);
+  private List<String> getResourceIds(String clientId) {
+    return serverRepository.selectClientResourceIds(clientId);
   }
 
   /**
    * 获取客户端角色列表.
    *
-   * @param code 客户端id
+   * @param clientId 客户端id
    * @param param 参数
    * @return 角色列表
    */
-  private List<String> getRoles(String code, AuthTokenParam param) {
+  private List<String> getRoles(String clientId, AuthTokenParam param) {
     if (param == null) {
-      return roleRepository.selectClientRole(code);
+      return authorityRepository.selectClientRoleByApp(clientId);
     }
-    if (StringUtils.isEmpty(param.getDomain()) && StringUtils.isEmpty(param.getPlatform())) {
-      return roleRepository.selectClientRole(code);
+    if (StringUtils.isEmpty(param.getAppCode()) && StringUtils.isEmpty(param.getAppType())) {
+      return authorityRepository.selectClientRoleByApp(clientId);
     } else {
-      if (StringUtils.isEmpty(param.getDomain())) {
-        return roleRepository.selectClientRoleByPlatform(code, param.getPlatform());
-      } else if (StringUtils.isEmpty(param.getPlatform())) {
-        return roleRepository.selectClientRoleByDomain(code, param.getDomain());
+      if (StringUtils.isEmpty(param.getAppCode())) {
+        return authorityRepository.selectClientRoleByAppType(clientId, param.getAppType());
+      } else if (StringUtils.isEmpty(param.getAppType())) {
+        return authorityRepository.selectClientRoleByAppCode(clientId, param.getAppCode());
       } else {
-        return roleRepository.selectClientRole(code, param.getDomain(), param.getPlatform());
+        return authorityRepository
+            .selectClientRoleByApp(clientId, param.getAppCode(), param.getAppType());
       }
     }
   }

@@ -8,8 +8,8 @@ client_secret:aaa
 username:root
 password:U9yK%K
 grant_type:password #登录认证方式，可选参数，默认为用户密码认证方式，如需扩展，参考AuthTokenPasswordIntegrator
-domain:OA           #系统类型，可选参数，如OA、ACCIDENT等不同系统
-platform:WEB        #平台类型，可选参数，如WEB、ANDROID等不同运行平台
+app_code:OA         #应用代码，可选参数，如OA、ACCIDENT等不同系统
+app_type:WEB        #应用类型，可选参数，如WEB、ANDROID等不同运行平台
 
 参数domain和platform用于控制不同系统、不同平台的角色、菜单和权限
 

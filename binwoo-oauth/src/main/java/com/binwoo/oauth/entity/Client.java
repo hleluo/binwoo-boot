@@ -3,6 +3,7 @@ package com.binwoo.oauth.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +27,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Data
 @Entity
 @Table(name = "t_client")
-public class Client {
+public class Client implements Serializable {
 
   @Id
   @GenericGenerator(name = "uid", strategy = "uuid2")

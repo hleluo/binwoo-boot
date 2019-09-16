@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+  <changeSet author="luojia" id="0.1.2 create table t_role">
+
+    <!-- 角色信息 -->
+    <createTable tableName="t_role" remarks="角色信息表">
+      <column name="id" type="VARCHAR(36)" remarks="主键">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="app_id" type="VARCHAR(36)" remarks="应用id"/>
+      <column name="name" type="VARCHAR(200)" remarks="名称"/>
+      <column name="description" type="TEXT" remarks="描述"/>
+      <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
+      <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+    </createTable>
+    <createIndex tableName="t_role" indexName="t_role_index_app_id">
+      <column name="app_id" type="VARCHAR(36)" remarks="应用id"/>
+    </createIndex>
+
+    <!-- 菜单信息 -->
+    <createTable tableName="t_menu" remarks="菜单信息表">
+      <column name="id" type="VARCHAR(36)" remarks="主键">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="app_id" type="VARCHAR(36)" remarks="应用id"/>
+      <column name="priority" type="Integer" remarks="优先级，越小越在前"/>
+      <column name="name" type="VARCHAR(200)" remarks="名称"/>
+      <column name="url" type="TEXT" remarks="地址"/>
+      <column name="scope" type="TEXT" remarks="域，如id、class等，可为空"/>
+      <column name="parent_id" type="VARCHAR(36)" remarks="父节点"/>
+      <column name="description" type="TEXT" remarks="描述"/>
+      <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
+      <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+    </createTable>
+    <createIndex tableName="t_menu" indexName="t_menu_index_app_id">
+      <column name="app_id" type="VARCHAR(36)" remarks="应用id"/>
+    </createIndex>
+
+    <!-- 角色菜单信息 -->
+    <createTable tableName="t_role_menu" remarks="角色菜单信息表">
+      <column name="role_id" type="VARCHAR(36)" remarks="角色id"/>
+      <column name="menu_id" type="VARCHAR(36)" remarks="菜单id"/>
+    </createTable>
+    <addPrimaryKey tableName="t_role_menu" constraintName="t_role_menu_primary"
+      columnNames="role_id,menu_id"/>
+
+    <rollback>
+      <dropPrimaryKey tableName="t_role_menu" constraintName="t_role_menu_primary"/>
+      <dropTable tableName="t_role_menu"/>
+
+      <dropIndex tableName="t_menu" indexName="t_menu_index_app_id"/>
+      <dropTable tableName="t_menu"/>
+
+      <dropIndex tableName="t_role" indexName="t_role_index_app_id"/>
+      <dropTable tableName="t_role"/>
+    </rollback>
+
+  </changeSet>
+
+</databaseChangeLog>

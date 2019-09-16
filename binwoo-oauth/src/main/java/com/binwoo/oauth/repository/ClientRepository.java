@@ -4,7 +4,7 @@ import com.binwoo.oauth.entity.Client;
 import org.springframework.stereotype.Repository;
 
 /**
- * 用户仓库.
+ * 客户端仓库.
  *
  * @author admin
  * @date 2019/9/5 16:56

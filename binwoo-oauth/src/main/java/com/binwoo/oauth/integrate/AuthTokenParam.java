@@ -21,13 +21,13 @@ public class AuthTokenParam {
    */
   private static final String PARAM_KEY_GRANT_TYPE = "grant_type";
   /**
-   * 系统类型参数.
+   * 应用标识参数.
    */
-  private static final String PARAM_KEY_DOMAIN = "domain";
+  private static final String PARAM_KEY_APP_CODE = "app_code";
   /**
-   * 平台类型参数.
+   * 应用类型参数.
    */
-  private static final String PARAM_KEY_PLATFORM = "platform";
+  private static final String PARAM_KEY_APP_TYPE = "app_type";
 
   /**
    * 权限验证方式.
@@ -69,21 +69,21 @@ public class AuthTokenParam {
   }
 
   /**
-   * 获取系统类型.
+   * 获取应用标识.
    *
-   * @return 系统类型
+   * @return 应用标识
    */
-  public String getDomain() {
-    return getParameterValue(PARAM_KEY_DOMAIN);
+  public String getAppCode() {
+    return getParameterValue(PARAM_KEY_APP_CODE);
   }
 
   /**
-   * 获取平台类型.
+   * 获取应用类型.
    *
-   * @return 平台类型
+   * @return 应用类型
    */
-  public String getPlatform() {
-    return getParameterValue(PARAM_KEY_PLATFORM);
+  public String getAppType() {
+    return getParameterValue(PARAM_KEY_APP_TYPE);
   }
 
 }
