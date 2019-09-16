@@ -10,8 +10,10 @@ import java.io.Serializable;
  */
 public class HttpResponse<T> implements Serializable {
 
+  private static final String MSG_SUCCESS = "SUCCESS";
+
   private Integer ret = 0;
-  private String msg;
+  private String msg = MSG_SUCCESS;
   private T body;
 
   private HttpResponse() {
@@ -55,7 +57,7 @@ public class HttpResponse<T> implements Serializable {
    * @return 结果
    */
   public static <T> HttpResponse<T> success(T body) {
-    return new HttpResponse<T>(0, null, body);
+    return new HttpResponse<T>(0, MSG_SUCCESS, body);
   }
 
   /**
@@ -67,7 +69,7 @@ public class HttpResponse<T> implements Serializable {
    * @return 结果
    */
   public static <T> HttpResponse<T> success(int ret, T body) {
-    return new HttpResponse<T>(ret, null, body);
+    return new HttpResponse<T>(ret, MSG_SUCCESS, body);
   }
 
   /**
