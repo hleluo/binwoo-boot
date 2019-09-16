@@ -1,12 +1,14 @@
 package com.binwoo.framework.http.response;
 
+import java.io.Serializable;
+
 /**
  * com.code.framework.http.
  *
  * @author luoj
  * @date 2019/8/5 17:12
  */
-public class HttpResponse<T> {
+public class HttpResponse<T> implements Serializable {
 
   private Integer ret = 0;
   private String msg;
