@@ -1,6 +1,8 @@
 package com.binwoo.oauth.service.impl;
 
+import com.binwoo.framework.http.exception.HttpException;
 import com.binwoo.oauth.entity.User;
+import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.repository.UserRepository;
 import com.binwoo.oauth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,11 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User save() {
-    return null;
+  public User save(User user) throws HttpException {
+    User source = userRepository.findByUsername(user.getUsername());
+    if (source != null && !source.getId().equals(user.getId())) {
+      throw new HttpException(HttpAuthExceptionCode.USERNAME_EXIST);
+    }
+    return userRepository.save(user);
   }
 }

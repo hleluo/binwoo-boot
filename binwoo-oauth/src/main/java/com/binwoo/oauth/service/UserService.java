@@ -1,5 +1,6 @@
 package com.binwoo.oauth.service;
 
+import com.binwoo.framework.http.exception.HttpException;
 import com.binwoo.oauth.entity.User;
 
 /**
@@ -10,6 +11,6 @@ import com.binwoo.oauth.entity.User;
  */
 public interface UserService {
 
-  User save();
+  User save(User user) throws HttpException;
 
 }

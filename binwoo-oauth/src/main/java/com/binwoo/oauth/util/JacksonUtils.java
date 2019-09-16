@@ -1,10 +1,15 @@
 package com.binwoo.oauth.util;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Jackson工具类.
@@ -23,10 +28,32 @@ public class JacksonUtils {
   public static String toJsonString(Object obj) {
     ObjectMapper mapper = new ObjectMapper();
     try {
+      mapper.getSerializerProvider().setNullValueSerializer(getNullValueSerializer());
       return mapper.writeValueAsString(obj);
     } catch (JsonProcessingException e) {
       return null;
     }
+  }
+
+  /**
+   * 空值序列化处理.
+   *
+   * @return 序列化
+   */
+  public static JsonSerializer<Object> getNullValueSerializer() {
+    return new JsonSerializer<Object>() {
+      @Override
+      public void serialize(Object o, JsonGenerator jsonGenerator,
+          SerializerProvider serializerProvider) throws IOException {
+        if (o instanceof List || o instanceof Set) {
+          jsonGenerator.writeString("[]");
+        } else if (o instanceof Optional) {
+          jsonGenerator.writeString("{}");
+        } else {
+          jsonGenerator.writeString("");
+        }
+      }
+    };
   }
 
   /**
