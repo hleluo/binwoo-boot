@@ -149,7 +149,7 @@ public class SqlRepository {
    * @param objects 值列表
    * @return 参数列表
    */
-  public Map<Integer, Object> buildParam(Object... objects) {
+  public Map<Integer, Object> buildParams(Object... objects) {
     Map<Integer, Object> params = new HashMap<>();
     for (int i = 1; i < objects.length; i++) {
       params.put(i, objects[i]);

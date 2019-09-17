@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
       String sql = "INSERT INTO t_user_role (user_id,role_id) VALUES (?,?)";
       List<Map<Integer, Object>> parameters = new ArrayList<>();
       for (String roleId : roleIds) {
-        parameters.add(sqlRepository.buildParam(id, roleId));
+        parameters.add(sqlRepository.buildParams(id, roleId));
       }
       sqlRepository.batch(sql, parameters);
     }
@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
       String sql = "INSERT INTO t_user_authority (user_id,authority_id) VALUES (?,?)";
       List<Map<Integer, Object>> parameters = new ArrayList<>();
       for (String authorityId : authorityIds) {
-        parameters.add(sqlRepository.buildParam(id, authorityId));
+        parameters.add(sqlRepository.buildParams(id, authorityId));
       }
       sqlRepository.batch(sql, parameters);
     }
@@ -142,7 +142,7 @@ public class UserServiceImpl implements UserService {
       String sql = "INSERT INTO t_user_group (user_id,group_id) VALUES (?,?)";
       List<Map<Integer, Object>> parameters = new ArrayList<>();
       for (String groupId : groupIds) {
-        parameters.add(sqlRepository.buildParam(id, groupId));
+        parameters.add(sqlRepository.buildParams(id, groupId));
       }
       sqlRepository.batch(sql, parameters);
     }
