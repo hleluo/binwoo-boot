@@ -14,9 +14,9 @@ import lombok.EqualsAndHashCode;
 @ApiModel(value = "用户查询参数")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class UserQueryReq extends BasePagerReq {
+public class UserPagerReq extends BasePagerReq {
 
-  @ApiModelProperty(value = "用户名，模糊查询")
+  @ApiModelProperty(value = "用户名")
   private String username;
 
 }

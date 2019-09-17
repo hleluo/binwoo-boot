@@ -27,24 +27,62 @@ public interface UserRepository extends BaseRepository<User> {
   User findByUsername(String username);
 
   /**
-   * 根据ID删除信息.
+   * 通过id或用户名查询用户信息.
+   *
+   * @param id id
+   * @param username 用户名
+   * @return 用户信息
+   */
+  User findFirstByIdOrUsername(String id, String username);
+
+  /**
+   * 根据ID更新删除状态.
    *
    * @param id id
    */
   @Transactional(rollbackFor = SqlException.class)
   @Modifying
-  @Query("delete from User where id = :id")
-  @Override
-  void deleteById(@Param("id") String id);
+  @Query("update User u set u.deleted = true where id = :id")
+  void updateDeletedById(@Param("id") String id);
 
   /**
-   * 根据ID列表删除信息.
+   * 根据ID列表更新删除状态.
    *
    * @param ids id列表
    */
   @Transactional(rollbackFor = SqlException.class)
   @Modifying
-  @Query("delete from User where id in (:ids)")
-  void deleteByIdIn(@Param("ids") List<String> ids);
+  @Query("update User u set u.deleted = true where id in (:ids)")
+  void updateDeletedByIdIn(@Param("ids") List<String> ids);
+
+  /**
+   * 根据id删除用户角色.
+   *
+   * @param id 用户id
+   */
+  @Transactional(rollbackFor = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_user_role tur where user_id = :id", nativeQuery = true)
+  void deleteRoleById(@Param("id") String id);
+
+  /**
+   * 根据用户id删除用户权职.
+   *
+   * @param id 用户id
+   */
+  @Transactional(rollbackFor = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_user_authority tua where user_id = :id", nativeQuery = true)
+  void deleteAuthorityById(@Param("id") String id);
+
+  /**
+   * 根据用户id删除用户组.
+   *
+   * @param id 用户id
+   */
+  @Transactional(rollbackFor = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_user_group tug where user_id = :id", nativeQuery = true)
+  void deleteGroupById(@Param("id") String id);
 
 }

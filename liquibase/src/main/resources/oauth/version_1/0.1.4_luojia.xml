@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+  <changeSet author="luojia" id="0.1.4 create table t_user_role">
+
+    <!-- 用户角色信息 -->
+    <createTable tableName="t_user_role" remarks="用户角色信息表">
+      <column name="user_id" type="VARCHAR(36)" remarks="用户id"/>
+      <column name="role_id" type="VARCHAR(36)" remarks="角色id"/>
+    </createTable>
+    <addPrimaryKey tableName="t_user_role" constraintName="t_user_role_primary"
+      columnNames="user_id,role_id"/>
+
+    <!-- 用户组信息 -->
+    <createTable tableName="t_user_group" remarks="用户组信息表">
+      <column name="user_id" type="VARCHAR(36)" remarks="用户id"/>
+      <column name="group_id" type="VARCHAR(36)" remarks="组id"/>
+    </createTable>
+    <addPrimaryKey tableName="t_user_group" constraintName="t_user_group_primary"
+      columnNames="user_id,group_id"/>
+
+    <!-- 客户端组信息 -->
+    <createTable tableName="t_client_group" remarks="客户端组信息表">
+      <column name="client_id" type="VARCHAR(36)" remarks="客户端id"/>
+      <column name="group_id" type="VARCHAR(36)" remarks="组id"/>
+    </createTable>
+    <addPrimaryKey tableName="t_client_group" constraintName="t_client_group_primary"
+      columnNames="client_id,group_id"/>
+
+    <rollback>
+      <dropPrimaryKey tableName="t_client_group" constraintName="t_client_group_primary"/>
+      <dropTable tableName="t_client_group"/>
+
+      <dropPrimaryKey tableName="t_user_group" constraintName="t_user_group_primary"/>
+      <dropTable tableName="t_user_group"/>
+
+      <dropPrimaryKey tableName="t_user_role" constraintName="t_user_role_primary"/>
+      <dropTable tableName="t_user_role"/>
+    </rollback>
+
+  </changeSet>
+
+</databaseChangeLog>
