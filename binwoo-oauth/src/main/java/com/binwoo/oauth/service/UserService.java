@@ -30,7 +30,7 @@ public interface UserService {
    * @param req 查询参数
    * @return 用户分页列表
    */
-  PageList<User> query(UserPagerReq req);
+  PageList<User> getByPager(UserPagerReq req);
 
   /**
    * 删除用户信息.

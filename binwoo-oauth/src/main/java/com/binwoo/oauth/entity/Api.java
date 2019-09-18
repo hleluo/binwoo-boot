@@ -41,6 +41,8 @@ public class Api implements Serializable {
   private String url;
   @ApiModelProperty(value = "名称")
   private String name;
+  @ApiModelProperty(value = "请求方式")
+  private String method;
   @ApiModelProperty(value = "描述")
   private String description;
   @ApiModelProperty(value = "父节点")

@@ -8,6 +8,7 @@ import com.binwoo.oauth.repository.SqlRepository;
 import com.binwoo.oauth.repository.UserRepository;
 import com.binwoo.oauth.req.UserPagerReq;
 import com.binwoo.oauth.service.UserService;
+import com.binwoo.oauth.util.PageListUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +74,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public PageList<User> query(UserPagerReq req) {
+  public PageList<User> getByPager(UserPagerReq req) {
     Page<User> page = userRepository.findAll(new Specification<User>() {
       @Override
       public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery,
@@ -81,8 +82,7 @@ public class UserServiceImpl implements UserService {
         return criteriaQuery.getRestriction();
       }
     }, req.getPageRequest());
-    return new PageList<>(page.getNumber(), page.getSize(), page.getTotalPages(),
-        page.getTotalElements(), page.getContent());
+    return PageListUtils.convert(page);
   }
 
   @Override

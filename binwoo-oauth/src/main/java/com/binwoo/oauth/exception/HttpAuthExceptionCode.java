@@ -47,6 +47,10 @@ public enum HttpAuthExceptionCode implements HttpExceptionCode {
    */
   CLIENT_INVALID(10204),
   /**
+   * 客户端已存在.
+   */
+  CLIENT_EXIST(10205),
+  /**
    * 用户不存在.
    */
   USER_NOT_EXIST(10300),

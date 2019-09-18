@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
@@ -38,6 +39,8 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
   private AuthorityRepository authorityRepository;
   @Autowired
   private ServerRepository serverRepository;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @Override
   public ClientDetails loadClientByClientId(String s) throws ClientRegistrationException {
@@ -72,7 +75,7 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
     }
     BaseClientDetails details = new BaseClientDetails();
     details.setClientId(client.getCode());
-    details.setClientSecret(client.getSecret());
+    details.setClientSecret(passwordEncoder.encode(client.getSecret()));
     if (!StringUtils.isEmpty(client.getScope())) {
       details.setScope(Arrays.asList(client.getScope().trim().split(",")));
     }

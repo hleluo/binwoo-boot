@@ -67,7 +67,7 @@ public class UserController {
   @GetMapping
   public HttpResponse<PageList<User>> getByPager(@RequestBody UserPagerReq req) {
     log.info("getByPager param = {}", req);
-    PageList<User> pageList = userService.query(req);
+    PageList<User> pageList = userService.getByPager(req);
     log.info("getByPager response = {}", pageList);
     return HttpResponse.success(pageList);
   }
@@ -110,10 +110,10 @@ public class UserController {
    */
   @ApiOperation("根据id或用户名查询用户信息")
   @GetMapping("/{key}")
-  public HttpResponse<User> getByUsername(@PathVariable String key) {
-    log.info("getByUsername param = {}", key);
+  public HttpResponse<User> getByIdOrUsername(@PathVariable String key) {
+    log.info("getByIdOrUsername param = {}", key);
     User user = userService.getByIdOrUsername(key);
-    log.info("getByPager response = {}", user);
+    log.info("getByIdOrUsername response = {}", user);
     return HttpResponse.success(user);
   }
 

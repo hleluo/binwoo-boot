@@ -27,6 +27,7 @@
       <column name="server_id" type="VARCHAR(36)" remarks="服务id"/>
       <column name="name" type="VARCHAR(200)" remarks="名称"/>
       <column name="url" type="TEXT" remarks="地址"/>
+      <column name="method" type="VARCHAR(50)" remarks="请求方式"/>
       <column name="parent_id" type="VARCHAR(36)" remarks="父节点"/>
       <column name="description" type="TEXT" remarks="描述"/>
       <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>

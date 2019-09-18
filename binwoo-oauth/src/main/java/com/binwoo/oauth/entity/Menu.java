@@ -41,8 +41,18 @@ public class Menu implements Serializable {
   private Integer priority = 0;
   @ApiModelProperty(value = "名称")
   private String name;
+  @ApiModelProperty(value = "图标")
+  private String icon;
   @ApiModelProperty(value = "地址")
   private String url;
+  @ApiModelProperty(value = "组件名称")
+  private String component;
+  @ApiModelProperty(value = "组件路径")
+  private String path;
+  @ApiModelProperty(value = "是否外部菜单")
+  private boolean external = false;
+  @ApiModelProperty(value = "是否为元素")
+  private boolean elemental = false;
   @ApiModelProperty(value = "域，如id、class等，可为空")
   private String scope;
   @ApiModelProperty(value = "父节点")
