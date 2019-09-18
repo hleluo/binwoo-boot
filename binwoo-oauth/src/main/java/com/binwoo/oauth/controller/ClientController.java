@@ -8,6 +8,7 @@ import com.binwoo.oauth.req.BaseDeleteReq;
 import com.binwoo.oauth.req.ClientAuthorityReq;
 import com.binwoo.oauth.req.ClientGroupReq;
 import com.binwoo.oauth.req.ClientPagerReq;
+import com.binwoo.oauth.req.ClientResourceReq;
 import com.binwoo.oauth.service.ClientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -143,6 +144,21 @@ public class ClientController {
     log.info("updateGroups param = {}", req);
     boolean success = clientService.updateGroups(req.getId(), req.getGroupIds());
     log.info("updateGroups response = {}", success);
+    return HttpResponse.success(success);
+  }
+
+  /**
+   * 更新客户端资源.
+   *
+   * @param req 客户端资源设置参数
+   * @return 是否成功
+   */
+  @ApiOperation("更新资源")
+  @PutMapping("/group")
+  public HttpResponse<Boolean> updateResources(@RequestBody ClientResourceReq req) {
+    log.info("updateResources param = {}", req);
+    boolean success = clientService.updateResources(req.getId(), req.getResourceIds());
+    log.info("updateResources response = {}", success);
     return HttpResponse.success(success);
   }
 }

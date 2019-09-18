@@ -57,6 +57,16 @@ public interface ClientRepository extends BaseRepository<Client> {
   void deleteAuthorityById(@Param("id") String id);
 
   /**
+   * 根据id列表删除客户端权职.
+   *
+   * @param ids id列表
+   */
+  @Transactional(rollbackFor = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_client_authority tca where client_id in (:ids)", nativeQuery = true)
+  void deleteAuthorityByIdIn(@Param("ids") List<String> ids);
+
+  /**
    * 根据id删除客户端组.
    *
    * @param id id
@@ -65,5 +75,35 @@ public interface ClientRepository extends BaseRepository<Client> {
   @Modifying
   @Query(value = "delete from t_client_group tcg where client_id = :id", nativeQuery = true)
   void deleteGroupById(@Param("id") String id);
+
+  /**
+   * 根据id列表删除客户端组.
+   *
+   * @param ids id列表
+   */
+  @Transactional(rollbackFor = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_client_group tcg where client_id in (:ids)", nativeQuery = true)
+  void deleteGroupByIdIn(@Param("ids") List<String> ids);
+
+  /**
+   * 根据id删除客户端资源.
+   *
+   * @param id id
+   */
+  @Transactional(rollbackFor = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_client_resource tcr where client_id = :id", nativeQuery = true)
+  void deleteResourceById(@Param("id") String id);
+
+  /**
+   * 根据id列表删除客户端资源.
+   *
+   * @param ids id列表
+   */
+  @Transactional(rollbackFor = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_client_resource tcr where client_id in (:ids)", nativeQuery = true)
+  void deleteResourceByIdIn(@Param("ids") List<String> ids);
 
 }

@@ -66,6 +66,16 @@ public interface UserRepository extends BaseRepository<User> {
   void deleteRoleById(@Param("id") String id);
 
   /**
+   * 根据id列表删除用户角色.
+   *
+   * @param ids id列表
+   */
+  @Transactional(rollbackFor = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_user_role tur where user_id in (:ids)", nativeQuery = true)
+  void deleteRoleByIdIn(@Param("ids") List<String> ids);
+
+  /**
    * 根据用户id删除用户权职.
    *
    * @param id 用户id
@@ -76,6 +86,16 @@ public interface UserRepository extends BaseRepository<User> {
   void deleteAuthorityById(@Param("id") String id);
 
   /**
+   * 根据用户id列表删除用户权职.
+   *
+   * @param ids id列表
+   */
+  @Transactional(rollbackFor = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_user_authority tua where user_id in (:ids)", nativeQuery = true)
+  void deleteAuthorityByIdIn(@Param("ids") List<String> ids);
+
+  /**
    * 根据用户id删除用户组.
    *
    * @param id 用户id
@@ -84,5 +104,15 @@ public interface UserRepository extends BaseRepository<User> {
   @Modifying
   @Query(value = "delete from t_user_group tug where user_id = :id", nativeQuery = true)
   void deleteGroupById(@Param("id") String id);
+
+  /**
+   * 根据用户id列表删除用户组.
+   *
+   * @param ids id列表
+   */
+  @Transactional(rollbackFor = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_user_group tug where user_id in (:ids)", nativeQuery = true)
+  void deleteGroupByIdIn(@Param("ids") List<String> ids);
 
 }

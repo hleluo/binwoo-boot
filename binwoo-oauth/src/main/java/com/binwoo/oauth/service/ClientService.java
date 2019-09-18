@@ -74,4 +74,13 @@ public interface ClientService {
    */
   boolean updateGroups(String id, Set<String> groupIds);
 
+  /**
+   * 更新客户端资源.
+   *
+   * @param id 客户端id
+   * @param resourceIds 资源id列表
+   * @return 是否成功
+   */
+  boolean updateResources(String id, Set<String> resourceIds);
+
 }
