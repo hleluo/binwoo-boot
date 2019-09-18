@@ -151,8 +151,8 @@ public class SqlRepository {
    */
   public Map<Integer, Object> buildParams(Object... objects) {
     Map<Integer, Object> params = new HashMap<>();
-    for (int i = 1; i < objects.length; i++) {
-      params.put(i, objects[i]);
+    for (int i = 0; i < objects.length; i++) {
+      params.put(i + 1, objects[i]);
     }
     return params;
   }

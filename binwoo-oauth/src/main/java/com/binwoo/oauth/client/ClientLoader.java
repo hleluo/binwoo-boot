@@ -3,7 +3,6 @@ package com.binwoo.oauth.client;
 import com.binwoo.oauth.entity.Client;
 import com.binwoo.oauth.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,13 +15,10 @@ import org.springframework.stereotype.Component;
 public class ClientLoader {
 
   private final ClientRepository clientRepository;
-  private final PasswordEncoder passwordEncoder;
 
   @Autowired
-  public ClientLoader(ClientRepository clientRepository,
-      PasswordEncoder passwordEncoder) {
+  public ClientLoader(ClientRepository clientRepository) {
     this.clientRepository = clientRepository;
-    this.passwordEncoder = passwordEncoder;
   }
 
   /**
@@ -33,20 +29,6 @@ public class ClientLoader {
    */
   public Client load(String clientId) {
     return clientRepository.findByCode(clientId);
-  }
-
-  /**
-   * 验证客户端密码.
-   *
-   * @param client 客户端信息
-   * @param secret 密码
-   * @return 是否匹配
-   */
-  public boolean isMatched(Client client, String secret) {
-    if (client == null) {
-      return false;
-    }
-    return passwordEncoder.matches(secret, client.getSecret());
   }
 
 }

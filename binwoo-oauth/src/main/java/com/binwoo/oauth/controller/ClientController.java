@@ -123,11 +123,10 @@ public class ClientController {
    * @return 是否成功
    */
   @ApiOperation("更新权职")
-  @PutMapping("/{id}/authorities")
-  public HttpResponse<Boolean> updateAuthorities(@PathVariable String id,
-      @RequestBody ClientAuthorityReq req) {
+  @PutMapping("/authority")
+  public HttpResponse<Boolean> updateAuthorities(@RequestBody ClientAuthorityReq req) {
     log.info("updateAuthorities param = {}", req);
-    boolean success = clientService.updateAuthorities(id, req.getAuthorityIds());
+    boolean success = clientService.updateAuthorities(req.getId(), req.getAuthorityIds());
     log.info("updateAuthorities response = {}", success);
     return HttpResponse.success(success);
   }
@@ -139,11 +138,10 @@ public class ClientController {
    * @return 是否成功
    */
   @ApiOperation("更新组")
-  @PutMapping("/{id}/groups")
-  public HttpResponse<Boolean> updateGroups(@PathVariable String id,
-      @RequestBody ClientGroupReq req) {
+  @PutMapping("/group")
+  public HttpResponse<Boolean> updateGroups(@RequestBody ClientGroupReq req) {
     log.info("updateGroups param = {}", req);
-    boolean success = clientService.updateGroups(id, req.getGroupIds());
+    boolean success = clientService.updateGroups(req.getId(), req.getGroupIds());
     log.info("updateGroups response = {}", success);
     return HttpResponse.success(success);
   }

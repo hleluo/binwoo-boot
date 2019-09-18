@@ -8,7 +8,7 @@ import com.binwoo.oauth.integrate.AuthTokenParam;
 import com.binwoo.oauth.integrate.AuthTokenParamContext;
 import com.binwoo.oauth.repository.AuthorityRepository;
 import com.binwoo.oauth.repository.ClientRepository;
-import com.binwoo.oauth.repository.ServerRepository;
+import com.binwoo.oauth.repository.ResourceRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +38,7 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
   @Autowired
   private AuthorityRepository authorityRepository;
   @Autowired
-  private ServerRepository serverRepository;
+  private ResourceRepository resourceRepository;
   @Autowired
   private PasswordEncoder passwordEncoder;
 
@@ -109,7 +109,7 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
    * @return 资源id列表
    */
   private List<String> getResourceIds(String clientId) {
-    return serverRepository.selectClientResourceIds(clientId);
+    return resourceRepository.selectClientResourceIds(clientId);
   }
 
   /**

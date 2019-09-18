@@ -124,10 +124,10 @@ public class UserController {
    * @return 是否成功
    */
   @ApiOperation("更新角色")
-  @PutMapping("/{id}/roles")
-  public HttpResponse<Boolean> updateRoles(@PathVariable String id, @RequestBody UserRoleReq req) {
+  @PutMapping("/role")
+  public HttpResponse<Boolean> updateRoles(@RequestBody UserRoleReq req) {
     log.info("updateRoles param = {}", req);
-    boolean success = userService.updateRoles(id, req.getRoleIds());
+    boolean success = userService.updateRoles(req.getId(), req.getRoleIds());
     log.info("updateRoles response = {}", success);
     return HttpResponse.success(success);
   }
@@ -139,11 +139,10 @@ public class UserController {
    * @return 是否成功
    */
   @ApiOperation("更新权职")
-  @PutMapping("/{id}/authorities")
-  public HttpResponse<Boolean> updateAuthorities(@PathVariable String id,
-      @RequestBody UserAuthorityReq req) {
+  @PutMapping("/authority")
+  public HttpResponse<Boolean> updateAuthorities(@RequestBody UserAuthorityReq req) {
     log.info("updateAuthorities param = {}", req);
-    boolean success = userService.updateAuthorities(id, req.getAuthorityIds());
+    boolean success = userService.updateAuthorities(req.getId(), req.getAuthorityIds());
     log.info("updateAuthorities response = {}", success);
     return HttpResponse.success(success);
   }
@@ -155,11 +154,10 @@ public class UserController {
    * @return 是否成功
    */
   @ApiOperation("更新组")
-  @PutMapping("/{id}/groups")
-  public HttpResponse<Boolean> updateGroups(@PathVariable String id,
-      @RequestBody UserGroupReq req) {
+  @PutMapping("/group")
+  public HttpResponse<Boolean> updateGroups(@RequestBody UserGroupReq req) {
     log.info("updateGroups param = {}", req);
-    boolean success = userService.updateGroups(id, req.getGroupIds());
+    boolean success = userService.updateGroups(req.getId(), req.getGroupIds());
     log.info("updateGroups response = {}", success);
     return HttpResponse.success(success);
   }

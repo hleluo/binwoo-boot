@@ -18,16 +18,16 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * 服务信息.
+ * 资源信息.
  *
  * @author hleluo
  * @date 2019/9/3 21:14
  */
-@ApiModel(value = "服务信息")
+@ApiModel(value = "资源信息")
 @Data
 @Entity
-@Table(name = "t_server")
-public class Server implements Serializable {
+@Table(name = "t_resource")
+public class Resource implements Serializable {
 
   @Id
   @GenericGenerator(name = "uid", strategy = "uuid2")

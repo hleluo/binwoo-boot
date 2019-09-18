@@ -33,8 +33,8 @@ public class Group implements Serializable {
   @GenericGenerator(name = "uid", strategy = "uuid2")
   @GeneratedValue(generator = "uid")
   private String id;
-  @ApiModelProperty(value = "服务id")
-  private String serverId;
+  @ApiModelProperty(value = "资源id")
+  private String resourceId;
   @ApiModelProperty(value = "名称")
   private String name;
   @ApiModelProperty(value = "描述")

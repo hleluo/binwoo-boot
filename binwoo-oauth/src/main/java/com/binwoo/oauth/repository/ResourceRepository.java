@@ -1,6 +1,6 @@
 package com.binwoo.oauth.repository;
 
-import com.binwoo.oauth.entity.Server;
+import com.binwoo.oauth.entity.Resource;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Repository;
  * @date 2019/9/5 16:56
  */
 @Repository
-public interface ServerRepository extends BaseRepository<Server> {
+public interface ResourceRepository extends BaseRepository<Resource> {
 
   @Query(value = "SELECT DISTINCT tc.code FROM t_client tc "
-      + "RIGHT JOIN t_client_server tcs ON tc.id = tcs.client_id "
-      + "LEFT JOIN t_server ts ON tcs.server_id = ts.id "
+      + "RIGHT JOIN t_client_resource tcr ON tc.id = tcr.client_id "
+      + "LEFT JOIN t_resource tr ON tcr.resource_id = tr.id "
       + "WHERE tc.code = :clientId", nativeQuery = true)
   List<String> selectClientResourceIds(@Param("clientId") String clientId);
 

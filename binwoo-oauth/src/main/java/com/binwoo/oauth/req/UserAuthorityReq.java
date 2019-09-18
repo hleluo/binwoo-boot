@@ -16,6 +16,8 @@ import lombok.Data;
 @Data
 public class UserAuthorityReq implements Serializable {
 
+  @ApiModelProperty(value = "用户id")
+  private String id;
   @ApiModelProperty(value = "权职id列表")
   private Set<String> authorityIds;
 

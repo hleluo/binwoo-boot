@@ -33,7 +33,7 @@
       <column name="id" value="8f03cf12-d431-46e0-9a22-cd641ccd88d8"/>
       <column name="name" value="初始化客户端"/>
       <column name="code" value="client"/>
-      <column name="secret" value="$2a$10$nWNgfKNNxQbIo9XevDTN.exWVyHSpMPxZMsWF7cGI7.yKIfjGjWUm"/>
+      <column name="secret" value="9Jv$P1"/>
       <column name="grant_type"
         value="authorization_code,password,client_credentials,refresh_token"/>
       <column name="scope" value="all"/>
@@ -41,8 +41,8 @@
       <column name="update_time" value="now()"/>
     </insert>
 
-    <!-- 服务信息 -->
-    <createTable tableName="t_server" remarks="服务信息表">
+    <!-- 资源信息 -->
+    <createTable tableName="t_resource" remarks="资源信息表">
       <column name="id" type="VARCHAR(36)" remarks="主键">
         <constraints primaryKey="true"/>
       </column>
@@ -54,25 +54,25 @@
       <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
       <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
     </createTable>
-    <createIndex tableName="t_server" indexName="t_server_index_code">
+    <createIndex tableName="t_resource" indexName="t_resource_index_code">
       <column name="code" type="VARCHAR(50)" remarks="资源标识"/>
     </createIndex>
-    <!-- 新增服务信息 -->
-    <insert tableName="t_server">
+    <!-- 新增资源信息 -->
+    <insert tableName="t_resource">
       <column name="id" value="bacaf8bf-f02b-40e7-aedb-1ccae57ab2bf"/>
-      <column name="name" value="用户服务"/>
+      <column name="name" value="用户资源"/>
       <column name="code" value="res-oauth-DmAzd"/>
       <column name="create_time" value="now()"/>
       <column name="update_time" value="now()"/>
     </insert>
 
-    <!-- 客户端服务信息 -->
-    <createTable tableName="t_client_server" remarks="客户端资源信息表">
+    <!-- 客户端资源信息 -->
+    <createTable tableName="t_client_resource" remarks="客户端资源信息表">
       <column name="client_id" type="VARCHAR(36)" remarks="客户端id"/>
-      <column name="server_id" type="VARCHAR(36)" remarks="服务id"/>
+      <column name="resource_id" type="VARCHAR(36)" remarks="资源id"/>
     </createTable>
-    <addPrimaryKey tableName="t_client_server" constraintName="t_client_server_primary"
-      columnNames="client_id,server_id"/>
+    <addPrimaryKey tableName="t_client_resource" constraintName="t_client_resource_primary"
+      columnNames="client_id,resource_id"/>
 
     <!-- 用户信息表 -->
     <createTable tableName="t_user" remarks="用户信息表">
@@ -182,11 +182,11 @@
       <dropIndex tableName="t_user" indexName="t_user_index_username"/>
       <dropTable tableName="t_user"/>
 
-      <dropPrimaryKey tableName="t_client_server" constraintName="t_client_server_primary"/>
-      <dropTable tableName="t_client_server"/>
+      <dropPrimaryKey tableName="t_client_resource" constraintName="t_client_resource_primary"/>
+      <dropTable tableName="t_client_resource"/>
 
-      <dropIndex tableName="t_server" indexName="t_server_index_code"/>
-      <dropTable tableName="t_server"/>
+      <dropIndex tableName="t_resource" indexName="t_resource_index_code"/>
+      <dropTable tableName="t_resource"/>
 
       <dropIndex tableName="t_client" indexName="t_client_index_code"/>
       <dropTable tableName="t_client"/>

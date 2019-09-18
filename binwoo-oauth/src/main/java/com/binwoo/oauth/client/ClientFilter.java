@@ -70,7 +70,7 @@ public class ClientFilter implements Filter {
       return;
     }
     String clientSecret = request.getParameter(PARAM_KEY_CLIENT_SECRET);
-    if (!clientLoader.isMatched(client, clientSecret)) {
+    if (!clientSecret.equals(client.getSecret())) {
       write(servletResponse, HttpAuthExceptionCode.CLIENT_INVALID);
       return;
     }

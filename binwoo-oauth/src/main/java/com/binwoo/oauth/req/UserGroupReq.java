@@ -16,6 +16,8 @@ import lombok.Data;
 @Data
 public class UserGroupReq implements Serializable {
 
+  @ApiModelProperty(value = "用户id")
+  private String id;
   @ApiModelProperty(value = "组id列表")
   private Set<String> groupIds;
 
