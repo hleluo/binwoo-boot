@@ -3,10 +3,10 @@ package com.binwoo.oauth.controller;
 import com.binwoo.framework.http.exception.HttpException;
 import com.binwoo.framework.http.response.HttpResponse;
 import com.binwoo.framework.http.response.PageList;
-import com.binwoo.oauth.entity.App;
-import com.binwoo.oauth.req.AppPagerReq;
+import com.binwoo.oauth.entity.Resource;
 import com.binwoo.oauth.req.BaseDeleteReq;
-import com.binwoo.oauth.service.AppService;
+import com.binwoo.oauth.req.ResourcePagerReq;
+import com.binwoo.oauth.service.ResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -20,80 +20,80 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 应用模块.
+ * 资源模块.
  *
  * @author hleluo
  * @date 2019/8/29 21:01
  */
-@Api(tags = {"应用模块"})
+@Api(tags = {"资源模块"})
 @Slf4j
 @RestController
-@RequestMapping("/api/apps")
-public class AppController {
+@RequestMapping("/api/resources")
+public class ResourceController {
 
-  private final AppService appService;
+  private final ResourceService resourceService;
 
   @Autowired
-  public AppController(AppService appService) {
-    this.appService = appService;
+  public ResourceController(ResourceService resourceService) {
+    this.resourceService = resourceService;
   }
 
   /**
-   * 保存应用信息.
+   * 保存资源信息.
    *
-   * @param app 应用信息
-   * @return 应用信息
+   * @param resource 资源信息
+   * @return 资源信息
    */
-  @ApiOperation("保存应用信息")
+  @ApiOperation("保存资源信息")
   @PostMapping
-  public HttpResponse<App> save(@RequestBody App app) throws HttpException {
-    log.info("save param = {}", app);
-    app = appService.save(app);
-    log.info("save response = {}", app);
-    return HttpResponse.success(app);
+  public HttpResponse<Resource> save(@RequestBody Resource resource) throws HttpException {
+    log.info("save param = {}", resource);
+    resource = resourceService.save(resource);
+    log.info("save response = {}", resource);
+    return HttpResponse.success(resource);
   }
 
   /**
-   * 查询应用信息.
+   * 查询资源信息.
    *
    * @param req 查询参数
-   * @return 应用信息列表
+   * @return 资源信息列表
    */
-  @ApiOperation("查询应用信息")
+  @ApiOperation("查询资源信息")
   @GetMapping
-  public HttpResponse<PageList<App>> getByPager(@RequestBody AppPagerReq req) {
+  public HttpResponse<PageList<Resource>> getByPager(@RequestBody ResourcePagerReq req) {
     log.info("getByPager param = {}", req);
-    PageList<App> pageList = appService.getByPager(req);
+    PageList<Resource> pageList = resourceService.getByPager(req);
     log.info("getByPager response = {}", pageList);
     return HttpResponse.success(pageList);
   }
 
   /**
-   * 删除应用信息.
+   * 删除资源信息.
    *
-   * @param id 应用id
+   * @param id 资源id
    * @return 是否成功
    */
-  @ApiOperation("删除应用信息")
+  @ApiOperation("删除资源信息")
   @DeleteMapping("/{id}")
   public HttpResponse<Boolean> delete(@PathVariable String id) {
     log.info("delete id = {}", id);
-    boolean success = appService.delete(id);
+    boolean success = resourceService.delete(id);
     log.info("delete response = {}", success);
     return HttpResponse.success(success);
   }
 
   /**
-   * 批量删除应用信息.
+   * 批量删除资源信息.
    *
-   * @param req 应用ID列表
+   * @param req 资源ID列表
    * @return 是否成功
    */
-  @ApiOperation("批量删除应用信息")
+  @ApiOperation("批量删除资源信息")
   @DeleteMapping
   public HttpResponse<Boolean> delete(@RequestBody BaseDeleteReq req) {
     log.info("delete param = {}", req);
-    boolean success = appService.delete(req.getIds());
+    boolean success = resourceService.delete(req.getIds());
     log.info("delete response = {}", success);
     return HttpResponse.success(success);
   }

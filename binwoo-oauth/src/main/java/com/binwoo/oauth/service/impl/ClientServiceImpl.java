@@ -4,7 +4,6 @@ import com.binwoo.framework.http.exception.HttpException;
 import com.binwoo.framework.http.response.PageList;
 import com.binwoo.oauth.entity.Client;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
-import com.binwoo.oauth.exception.SqlException;
 import com.binwoo.oauth.repository.ClientRepository;
 import com.binwoo.oauth.repository.SqlRepository;
 import com.binwoo.oauth.req.ClientPagerReq;
@@ -18,12 +17,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 /**
  * 客户端服务实现.
@@ -44,7 +43,6 @@ public class ClientServiceImpl implements ClientService {
     this.sqlRepository = sqlRepository;
   }
 
-  @Transactional(rollbackOn = SqlException.class)
   @Override
   public Client save(Client client) throws HttpException {
     Client source = clientRepository.findByCode(client.getCode());
@@ -66,26 +64,24 @@ public class ClientServiceImpl implements ClientService {
     return PageListUtils.convert(page);
   }
 
-  @Transactional(rollbackOn = SqlException.class)
   @Override
   public boolean delete(String id) {
-    if (id != null) {
-      clientRepository.updateDeletedById(id);
+    if (!StringUtils.isEmpty(id)) {
       clientRepository.deleteResourceById(id);
       clientRepository.deleteGroupById(id);
       clientRepository.deleteAuthorityById(id);
+      clientRepository.updateDeletedById(id);
     }
     return true;
   }
 
-  @Transactional(rollbackOn = SqlException.class)
   @Override
   public boolean delete(List<String> ids) {
     if (!CollectionUtils.isEmpty(ids)) {
-      clientRepository.updateDeletedByIdIn(ids);
       clientRepository.deleteResourceByIdIn(ids);
       clientRepository.deleteGroupByIdIn(ids);
       clientRepository.deleteAuthorityByIdIn(ids);
+      clientRepository.updateDeletedByIdIn(ids);
     }
     return true;
   }
@@ -95,7 +91,6 @@ public class ClientServiceImpl implements ClientService {
     return clientRepository.findById(id).orElse(null);
   }
 
-  @Transactional(rollbackOn = SqlException.class)
   @Override
   public boolean updateAuthorities(String id, Set<String> authorityIds) {
     clientRepository.deleteAuthorityById(id);
@@ -110,7 +105,6 @@ public class ClientServiceImpl implements ClientService {
     return true;
   }
 
-  @Transactional(rollbackOn = SqlException.class)
   @Override
   public boolean updateGroups(String id, Set<String> groupIds) {
     clientRepository.deleteGroupById(id);
@@ -125,7 +119,6 @@ public class ClientServiceImpl implements ClientService {
     return true;
   }
 
-  @Transactional(rollbackOn = SqlException.class)
   @Override
   public boolean updateResources(String id, Set<String> resourceIds) {
     clientRepository.deleteResourceById(id);

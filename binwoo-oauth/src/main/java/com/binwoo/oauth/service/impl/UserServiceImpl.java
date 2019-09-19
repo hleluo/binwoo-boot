@@ -4,7 +4,6 @@ import com.binwoo.framework.http.exception.HttpException;
 import com.binwoo.framework.http.response.PageList;
 import com.binwoo.oauth.entity.User;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
-import com.binwoo.oauth.exception.SqlException;
 import com.binwoo.oauth.repository.SqlRepository;
 import com.binwoo.oauth.repository.UserRepository;
 import com.binwoo.oauth.req.UserPagerReq;
@@ -18,7 +17,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -55,7 +53,6 @@ public class UserServiceImpl implements UserService {
     this.sqlRepository = sqlRepository;
   }
 
-  @Transactional(rollbackOn = SqlException.class)
   @Override
   public User save(User user) throws HttpException {
     User source = userRepository.findByUsername(user.getUsername());
@@ -87,26 +84,24 @@ public class UserServiceImpl implements UserService {
     return PageListUtils.convert(page);
   }
 
-  @Transactional(rollbackOn = SqlException.class)
   @Override
   public boolean delete(String id) {
-    if (id != null) {
-      userRepository.updateDeletedById(id);
+    if (!StringUtils.isEmpty(id)) {
       userRepository.deleteRoleById(id);
       userRepository.deleteGroupById(id);
       userRepository.deleteAuthorityById(id);
+      userRepository.updateDeletedById(id);
     }
     return true;
   }
 
-  @Transactional(rollbackOn = SqlException.class)
   @Override
   public boolean delete(List<String> ids) {
     if (!CollectionUtils.isEmpty(ids)) {
-      userRepository.updateDeletedByIdIn(ids);
       userRepository.deleteRoleByIdIn(ids);
       userRepository.deleteGroupByIdIn(ids);
       userRepository.deleteAuthorityByIdIn(ids);
+      userRepository.updateDeletedByIdIn(ids);
     }
     return true;
   }
@@ -116,7 +111,6 @@ public class UserServiceImpl implements UserService {
     return userRepository.findFirstByIdOrUsername(key, key);
   }
 
-  @Transactional(rollbackOn = SqlException.class)
   @Override
   public boolean updateRoles(String id, Set<String> roleIds) {
     userRepository.deleteRoleById(id);
@@ -131,7 +125,6 @@ public class UserServiceImpl implements UserService {
     return true;
   }
 
-  @Transactional(rollbackOn = SqlException.class)
   @Override
   public boolean updateAuthorities(String id, Set<String> authorityIds) {
     userRepository.deleteAuthorityById(id);
@@ -146,7 +139,6 @@ public class UserServiceImpl implements UserService {
     return true;
   }
 
-  @Transactional(rollbackOn = SqlException.class)
   @Override
   public boolean updateGroups(String id, Set<String> groupIds) {
     userRepository.deleteGroupById(id);

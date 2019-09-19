@@ -154,7 +154,7 @@ public class ClientController {
    * @return 是否成功
    */
   @ApiOperation("更新资源")
-  @PutMapping("/group")
+  @PutMapping("/resource")
   public HttpResponse<Boolean> updateResources(@RequestBody ClientResourceReq req) {
     log.info("updateResources param = {}", req);
     boolean success = clientService.updateResources(req.getId(), req.getResourceIds());

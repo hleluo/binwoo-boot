@@ -45,7 +45,6 @@ public class SqlRepository {
    * @param <T> 泛型
    * @return 数据集
    */
-  @Transactional(rollbackOn = SqlException.class)
   public <T> List<T> queryAll(String sql, Map<String, Object> params, Class<T> cls) {
     log.info("Custom sql = {}", sql);
     Query query = manager.createNativeQuery(sql, cls);
@@ -106,7 +105,6 @@ public class SqlRepository {
    * @param sql SQL,参数用?表示
    * @param parameters 参数列表，索引从1开始
    */
-  @Transactional(rollbackOn = SqlException.class)
   public void batch(String sql, List<Map<Integer, Object>> parameters) {
     log.info("Custom sql = {}", sql);
     Session session = manager.unwrap(Session.class);

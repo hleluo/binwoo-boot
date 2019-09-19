@@ -1,7 +1,10 @@
 package com.binwoo.oauth.repository;
 
 import com.binwoo.oauth.entity.Authority;
+import com.binwoo.oauth.exception.SqlException;
 import java.util.List;
+import javax.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -126,5 +129,69 @@ public interface AuthorityRepository extends BaseRepository<Authority> {
       nativeQuery = true)
   List<String> selectClientRoleByAppType(@Param("clientId") String clientId,
       @Param("type") String type);
+
+  /**
+   * 根据应用id删除权职信息.
+   *
+   * @param appId 应用id
+   */
+  @Transactional(rollbackOn = SqlException.class)
+  @Modifying
+  @Query("delete from Authority a where a.appId = :appId")
+  void deleteByAppId(@Param("appId") String appId);
+
+  /**
+   * 根据应用id列表删除权职信息.
+   *
+   * @param appIds 应用id列表
+   */
+  @Transactional(rollbackOn = SqlException.class)
+  @Modifying
+  @Query("delete from Authority a where a.appId in (:appIds)")
+  void deleteByAppIdIn(@Param("appIds") List<String> appIds);
+
+  /**
+   * 根据应用id删除用户权职信息.
+   *
+   * @param appId 应用id
+   */
+  @Transactional(rollbackOn = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_user_authority tua where tua.authority_id in "
+      + "(select id from t_authority where app_id = :appId)", nativeQuery = true)
+  void deleteUserByAppId(@Param("appId") String appId);
+
+  /**
+   * 根据应用id列表删除用户权职信息.
+   *
+   * @param appIds 应用id列表
+   */
+  @Transactional(rollbackOn = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_user_authority tua where tua.authority_id in "
+      + "(select id from t_authority where app_id in (:appId))", nativeQuery = true)
+  void deleteUserByAppIdIn(@Param("appIds") List<String> appIds);
+
+  /**
+   * 根据应用id删除客户端权职信息.
+   *
+   * @param appId 应用id
+   */
+  @Transactional(rollbackOn = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_client_authority tca where tca.authority_id in "
+      + "(select id from t_authority where app_id = :appId)", nativeQuery = true)
+  void deleteClientByAppId(@Param("appId") String appId);
+
+  /**
+   * 根据应用id列表删除客户端权职信息.
+   *
+   * @param appIds 应用id列表
+   */
+  @Transactional(rollbackOn = SqlException.class)
+  @Modifying
+  @Query(value = "delete from t_client_authority tca where tca.authority_id in "
+      + "(select id from t_authority where app_id in (:appId))", nativeQuery = true)
+  void deleteClientByAppIdIn(@Param("appIds") List<String> appIds);
 
 }

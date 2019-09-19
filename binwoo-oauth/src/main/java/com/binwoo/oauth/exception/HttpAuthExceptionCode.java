@@ -89,7 +89,19 @@ public enum HttpAuthExceptionCode implements HttpExceptionCode {
   /**
    * 服务器内部错误.
    */
-  INTERNAL_SERVER_ERROR(10001);
+  INTERNAL_SERVER_ERROR(10001),
+  /**
+   * 应用已存在.
+   */
+  APP_EXIST(11000),
+  /**
+   * 资源已存在.
+   */
+  RESOURCE_EXIST(11010),
+  /**
+   * 权职已存在.
+   */
+  AUTHORITY_EXIST(11020);
 
   private int ret;
 

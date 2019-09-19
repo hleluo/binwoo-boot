@@ -1,6 +1,12 @@
 package com.binwoo.oauth.repository;
 
 import com.binwoo.oauth.entity.App;
+import com.binwoo.oauth.exception.SqlException;
+import java.util.List;
+import javax.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -20,5 +26,25 @@ public interface AppRepository extends BaseRepository<App> {
    * @return 应用信息
    */
   App findByCodeAndType(String code, String type);
+
+  /**
+   * 根据id删除应用信息.
+   *
+   * @param id id
+   */
+  @Transactional(rollbackOn = SqlException.class)
+  @Modifying
+  @Query("delete from App a where a.id = :id")
+  void deleteById(@Param("id") String id);
+
+  /**
+   * 根据id列表删除应用信息.
+   *
+   * @param ids id列表
+   */
+  @Transactional(rollbackOn = SqlException.class)
+  @Modifying
+  @Query("delete from App a where a.id in (:ids)")
+  void deleteByIdIn(@Param("ids") List<String> ids);
 
 }
