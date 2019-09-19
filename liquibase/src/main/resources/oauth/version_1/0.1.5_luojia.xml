@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+  <changeSet author="luojia" id="0.1.5 create table t_dictionary">
+
+    <!-- 字典信息 -->
+    <createTable tableName="t_dictionary" remarks="字典信息表">
+      <column name="id" type="VARCHAR(36)" remarks="主键">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="code" type="VARCHAR(100)" remarks="标识，唯一"/>
+      <column name="key" type="VARCHAR(50)" remarks="键，如MALE、FEMALE等"/>
+      <column name="value" type="TEXT" remarks="值，如男、女等"/>
+      <column name="priority" type="INTEGER" defaultValue="0" remarks="优先级，越小越在前"/>
+      <column name="description" type="TEXT" remarks="描述"/>
+      <column name="optional" type="BOOLEAN" defaultValue="false"
+        remarks="是否为选项，TRUE 字典选项；FALSE 字典类型"/>
+      <column name="type_id" type="VARCHAR(36)" remarks="字典类型id，可为空"/>
+      <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
+      <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>
+    </createTable>
+    <createIndex tableName="t_dictionary" indexName="t_dictionary_index_code">
+      <column name="code" type="VARCHAR(100)" remarks="标识，唯一"/>
+    </createIndex>
+
+    <rollback>
+      <dropIndex tableName="t_dictionary" indexName="t_dictionary_index_code"/>
+      <dropTable tableName="t_dictionary"/>
+    </rollback>
+
+  </changeSet>
+
+</databaseChangeLog>

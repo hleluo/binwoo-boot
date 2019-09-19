@@ -1,6 +1,5 @@
 package com.binwoo.oauth.controller;
 
-import com.binwoo.framework.http.exception.HttpException;
 import com.binwoo.framework.http.response.HttpResponse;
 import com.binwoo.framework.http.response.PageList;
 import com.binwoo.oauth.entity.Menu;
@@ -46,7 +45,7 @@ public class MenuController {
    */
   @ApiOperation("保存菜单信息")
   @PostMapping
-  public HttpResponse<Menu> save(@RequestBody Menu menu) throws HttpException {
+  public HttpResponse<Menu> save(@RequestBody Menu menu) {
     log.info("save param = {}", menu);
     menu = menuService.save(menu);
     log.info("save response = {}", menu);

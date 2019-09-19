@@ -1,6 +1,5 @@
 package com.binwoo.oauth.controller;
 
-import com.binwoo.framework.http.exception.HttpException;
 import com.binwoo.framework.http.response.HttpResponse;
 import com.binwoo.framework.http.response.PageList;
 import com.binwoo.oauth.entity.Role;
@@ -46,7 +45,7 @@ public class RoleController {
    */
   @ApiOperation("保存角色信息")
   @PostMapping
-  public HttpResponse<Role> save(@RequestBody Role role) throws HttpException {
+  public HttpResponse<Role> save(@RequestBody Role role) {
     log.info("save param = {}", role);
     role = roleService.save(role);
     log.info("save response = {}", role);

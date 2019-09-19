@@ -101,7 +101,11 @@ public enum HttpAuthExceptionCode implements HttpExceptionCode {
   /**
    * 权职已存在.
    */
-  AUTHORITY_EXIST(11020);
+  AUTHORITY_EXIST(11020),
+  /**
+   * 字典已存在.
+   */
+  DICTIONARY_EXIST(11030);
 
   private int ret;
 

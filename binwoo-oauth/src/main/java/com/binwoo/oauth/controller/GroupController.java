@@ -1,6 +1,5 @@
 package com.binwoo.oauth.controller;
 
-import com.binwoo.framework.http.exception.HttpException;
 import com.binwoo.framework.http.response.HttpResponse;
 import com.binwoo.framework.http.response.PageList;
 import com.binwoo.oauth.entity.Group;
@@ -46,7 +45,7 @@ public class GroupController {
    */
   @ApiOperation("保存组信息")
   @PostMapping
-  public HttpResponse<Group> save(@RequestBody Group group) throws HttpException {
+  public HttpResponse<Group> save(@RequestBody Group group) {
     log.info("save param = {}", group);
     group = groupService.save(group);
     log.info("save response = {}", group);

@@ -8,5 +8,6 @@
   <include file="./0.1.2_luojia.xml" relativeToChangelogFile="true"/>
   <include file="./0.1.3_luojia.xml" relativeToChangelogFile="true"/>
   <include file="./0.1.4_luojia.xml" relativeToChangelogFile="true"/>
+  <include file="./0.1.5_luojia.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
