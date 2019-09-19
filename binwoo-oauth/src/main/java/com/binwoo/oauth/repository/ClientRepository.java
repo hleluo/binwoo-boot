@@ -1,13 +1,11 @@
 package com.binwoo.oauth.repository;
 
 import com.binwoo.oauth.entity.Client;
-import com.binwoo.oauth.exception.SqlException;
 import java.util.List;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 客户端仓库.
@@ -31,7 +29,6 @@ public interface ClientRepository extends BaseRepository<Client> {
    *
    * @param id id
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query("update Client c set c.deleted = true where id = :id")
   void updateDeletedById(@Param("id") String id);
@@ -41,7 +38,6 @@ public interface ClientRepository extends BaseRepository<Client> {
    *
    * @param ids id列表
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query("update Client c set c.deleted = true where id in (:ids)")
   void updateDeletedByIdIn(@Param("ids") List<String> ids);
@@ -51,7 +47,6 @@ public interface ClientRepository extends BaseRepository<Client> {
    *
    * @param id id
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query(value = "delete from t_client_authority tca where client_id = :id", nativeQuery = true)
   void deleteAuthorityById(@Param("id") String id);
@@ -61,7 +56,6 @@ public interface ClientRepository extends BaseRepository<Client> {
    *
    * @param ids id列表
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query(value = "delete from t_client_authority tca where client_id in (:ids)", nativeQuery = true)
   void deleteAuthorityByIdIn(@Param("ids") List<String> ids);
@@ -71,7 +65,6 @@ public interface ClientRepository extends BaseRepository<Client> {
    *
    * @param id id
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query(value = "delete from t_client_group tcg where client_id = :id", nativeQuery = true)
   void deleteGroupById(@Param("id") String id);
@@ -81,7 +74,6 @@ public interface ClientRepository extends BaseRepository<Client> {
    *
    * @param ids id列表
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query(value = "delete from t_client_group tcg where client_id in (:ids)", nativeQuery = true)
   void deleteGroupByIdIn(@Param("ids") List<String> ids);
@@ -91,7 +83,6 @@ public interface ClientRepository extends BaseRepository<Client> {
    *
    * @param id id
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query(value = "delete from t_client_resource tcr where client_id = :id", nativeQuery = true)
   void deleteResourceById(@Param("id") String id);
@@ -101,7 +92,6 @@ public interface ClientRepository extends BaseRepository<Client> {
    *
    * @param ids id列表
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query(value = "delete from t_client_resource tcr where client_id in (:ids)", nativeQuery = true)
   void deleteResourceByIdIn(@Param("ids") List<String> ids);

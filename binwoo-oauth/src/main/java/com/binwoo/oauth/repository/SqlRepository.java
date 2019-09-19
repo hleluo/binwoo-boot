@@ -1,6 +1,5 @@
 package com.binwoo.oauth.repository;
 
-import com.binwoo.oauth.exception.SqlException;
 import java.sql.PreparedStatement;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +62,6 @@ public class SqlRepository {
    * @param <T> 泛型
    * @return 数据集
    */
-  @Transactional(rollbackOn = SqlException.class)
   public <T> Page<T> queryPager(String sql, String sqlCount, int pageOffset, int pageSize,
       Map<String, Object> params, Class<T> cls) {
     log.info("Custom sql = {}", sql);

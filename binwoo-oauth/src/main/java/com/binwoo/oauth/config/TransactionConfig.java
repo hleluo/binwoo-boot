@@ -29,7 +29,7 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 @Configuration
 public class TransactionConfig {
 
-  private static final String AOP_POINTCUT_EXPRESSION = "execution (* com.***.service.*.*(..))";
+  private static final String AOP_POINTCUT_EXPRESSION = "execution (* com..*.service..*.*(..))";
 
   private final PlatformTransactionManager manager;
 

@@ -1,9 +1,7 @@
 package com.binwoo.oauth.repository;
 
 import com.binwoo.oauth.entity.App;
-import com.binwoo.oauth.exception.SqlException;
 import java.util.List;
-import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,7 +30,6 @@ public interface AppRepository extends BaseRepository<App> {
    *
    * @param id id
    */
-  @Transactional(rollbackOn = SqlException.class)
   @Modifying
   @Query("delete from App a where a.id = :id")
   void deleteById(@Param("id") String id);
@@ -42,7 +39,6 @@ public interface AppRepository extends BaseRepository<App> {
    *
    * @param ids id列表
    */
-  @Transactional(rollbackOn = SqlException.class)
   @Modifying
   @Query("delete from App a where a.id in (:ids)")
   void deleteByIdIn(@Param("ids") List<String> ids);

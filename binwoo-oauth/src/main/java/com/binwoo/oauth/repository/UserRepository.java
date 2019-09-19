@@ -1,13 +1,11 @@
 package com.binwoo.oauth.repository;
 
 import com.binwoo.oauth.entity.User;
-import com.binwoo.oauth.exception.SqlException;
 import java.util.List;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 用户仓库.
@@ -40,7 +38,6 @@ public interface UserRepository extends BaseRepository<User> {
    *
    * @param id id
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query("update User u set u.deleted = true where id = :id")
   void updateDeletedById(@Param("id") String id);
@@ -50,7 +47,6 @@ public interface UserRepository extends BaseRepository<User> {
    *
    * @param ids id列表
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query("update User u set u.deleted = true where id in (:ids)")
   void updateDeletedByIdIn(@Param("ids") List<String> ids);
@@ -60,7 +56,7 @@ public interface UserRepository extends BaseRepository<User> {
    *
    * @param id 用户id
    */
-  @Transactional(rollbackFor = SqlException.class)
+
   @Modifying
   @Query(value = "delete from t_user_role tur where user_id = :id", nativeQuery = true)
   void deleteRoleById(@Param("id") String id);
@@ -70,7 +66,6 @@ public interface UserRepository extends BaseRepository<User> {
    *
    * @param ids id列表
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query(value = "delete from t_user_role tur where user_id in (:ids)", nativeQuery = true)
   void deleteRoleByIdIn(@Param("ids") List<String> ids);
@@ -80,7 +75,6 @@ public interface UserRepository extends BaseRepository<User> {
    *
    * @param id 用户id
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query(value = "delete from t_user_authority tua where user_id = :id", nativeQuery = true)
   void deleteAuthorityById(@Param("id") String id);
@@ -90,7 +84,6 @@ public interface UserRepository extends BaseRepository<User> {
    *
    * @param ids id列表
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query(value = "delete from t_user_authority tua where user_id in (:ids)", nativeQuery = true)
   void deleteAuthorityByIdIn(@Param("ids") List<String> ids);
@@ -100,7 +93,6 @@ public interface UserRepository extends BaseRepository<User> {
    *
    * @param id 用户id
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query(value = "delete from t_user_group tug where user_id = :id", nativeQuery = true)
   void deleteGroupById(@Param("id") String id);
@@ -110,7 +102,6 @@ public interface UserRepository extends BaseRepository<User> {
    *
    * @param ids id列表
    */
-  @Transactional(rollbackFor = SqlException.class)
   @Modifying
   @Query(value = "delete from t_user_group tug where user_id in (:ids)", nativeQuery = true)
   void deleteGroupByIdIn(@Param("ids") List<String> ids);
