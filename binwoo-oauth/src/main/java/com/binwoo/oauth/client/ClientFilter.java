@@ -1,6 +1,6 @@
 package com.binwoo.oauth.client;
 
-import com.binwoo.framework.http.response.HttpResponseBuilder;
+import com.binwoo.common.http.response.HttpResponseBuilder;
 import com.binwoo.oauth.entity.Client;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.util.JacksonUtils;

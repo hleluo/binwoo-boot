@@ -1,4 +1,4 @@
-package com.binwoo.framework.http.exception;
+package com.binwoo.common.http.exception;
 
 /**
  * HTTP异常代码.

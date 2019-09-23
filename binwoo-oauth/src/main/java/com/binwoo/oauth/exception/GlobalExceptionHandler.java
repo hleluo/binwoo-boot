@@ -1,8 +1,8 @@
 package com.binwoo.oauth.exception;
 
-import com.binwoo.framework.http.exception.HttpException;
-import com.binwoo.framework.http.response.HttpResponse;
-import com.binwoo.framework.http.response.HttpResponseBuilder;
+import com.binwoo.common.http.exception.HttpException;
+import com.binwoo.common.http.response.HttpResponse;
+import com.binwoo.common.http.response.HttpResponseBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

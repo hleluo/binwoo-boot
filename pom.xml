@@ -17,7 +17,7 @@
   </parent>
 
   <modules>
-    <module>binwoo-framework</module>
+    <module>binwoo-common</module>
     <module>binwoo-test</module>
     <module>binwoo-oauth</module>
     <module>binwoo-poi</module>

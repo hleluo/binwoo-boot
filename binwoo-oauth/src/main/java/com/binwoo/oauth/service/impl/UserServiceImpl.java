@@ -1,7 +1,7 @@
 package com.binwoo.oauth.service.impl;
 
-import com.binwoo.framework.http.exception.HttpException;
-import com.binwoo.framework.http.response.PageList;
+import com.binwoo.common.http.exception.HttpException;
+import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.User;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.repository.SqlRepository;

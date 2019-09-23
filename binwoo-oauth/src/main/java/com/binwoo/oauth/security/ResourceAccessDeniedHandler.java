@@ -1,7 +1,7 @@
 package com.binwoo.oauth.security;
 
-import com.binwoo.framework.http.response.HttpResponse;
-import com.binwoo.framework.http.response.HttpResponseBuilder;
+import com.binwoo.common.http.response.HttpResponse;
+import com.binwoo.common.http.response.HttpResponseBuilder;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.util.JacksonUtils;
 import java.io.IOException;

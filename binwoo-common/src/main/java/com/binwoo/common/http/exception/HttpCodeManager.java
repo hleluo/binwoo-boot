@@ -1,6 +1,6 @@
-package com.binwoo.framework.http.exception;
+package com.binwoo.common.http.exception;
 
-import com.binwoo.framework.util.PropertyUtils;
+import com.binwoo.common.util.PropertyUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;

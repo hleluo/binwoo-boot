@@ -1,4 +1,4 @@
-package com.binwoo.framework.util;
+package com.binwoo.common.util;
 
 import javax.servlet.http.HttpServletRequest;
 

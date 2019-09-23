@@ -1,6 +1,6 @@
 package com.binwoo.oauth.util;
 
-import com.binwoo.framework.http.response.PageList;
+import com.binwoo.common.http.response.PageList;
 import org.springframework.data.domain.Page;
 
 /**

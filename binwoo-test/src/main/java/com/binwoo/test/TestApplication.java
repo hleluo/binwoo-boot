@@ -11,7 +11,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
  * @date 2019/8/16 15:10
  */
 @SpringBootApplication
-@ServletComponentScan("com.binwoo.framework")
+@ServletComponentScan("com.binwoo.common")
 public class TestApplication {
 
   /**

@@ -1,7 +1,7 @@
 package com.binwoo.oauth.controller;
 
-import com.binwoo.framework.http.response.HttpResponse;
-import com.binwoo.framework.http.response.PageList;
+import com.binwoo.common.http.response.HttpResponse;
+import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.Menu;
 import com.binwoo.oauth.req.BaseDeleteReq;
 import com.binwoo.oauth.req.MenuPagerReq;

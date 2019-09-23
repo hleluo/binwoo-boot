@@ -1,6 +1,6 @@
 package com.binwoo.oauth.exception;
 
-import com.binwoo.framework.http.exception.HttpExceptionCode;
+import com.binwoo.common.http.exception.HttpExceptionCode;
 
 /**
  * 自定义异常标识枚举.

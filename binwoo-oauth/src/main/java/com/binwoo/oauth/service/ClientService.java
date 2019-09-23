@@ -1,7 +1,7 @@
 package com.binwoo.oauth.service;
 
-import com.binwoo.framework.http.exception.HttpException;
-import com.binwoo.framework.http.response.PageList;
+import com.binwoo.common.http.exception.HttpException;
+import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.Client;
 import com.binwoo.oauth.req.ClientPagerReq;
 import java.util.List;

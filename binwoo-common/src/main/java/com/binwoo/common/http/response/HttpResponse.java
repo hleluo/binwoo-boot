@@ -1,9 +1,9 @@
-package com.binwoo.framework.http.response;
+package com.binwoo.common.http.response;
 
 import java.io.Serializable;
 
 /**
- * com.code.framework.http.
+ * com.code.common.http.
  *
  * @author luoj
  * @date 2019/8/5 17:12

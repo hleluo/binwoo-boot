@@ -35,7 +35,7 @@
 
 		<dependency>
 			<groupId>com.binwoo</groupId>
-			<artifactId>binwoo-framework</artifactId>
+			<artifactId>binwoo-common</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 

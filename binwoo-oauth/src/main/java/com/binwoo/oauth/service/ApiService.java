@@ -1,6 +1,6 @@
 package com.binwoo.oauth.service;
 
-import com.binwoo.framework.http.response.PageList;
+import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.Api;
 import com.binwoo.oauth.req.ApiPagerReq;
 import java.util.List;

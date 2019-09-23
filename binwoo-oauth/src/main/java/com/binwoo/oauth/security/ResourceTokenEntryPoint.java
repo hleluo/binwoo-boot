@@ -1,9 +1,9 @@
 package com.binwoo.oauth.security;
 
-import com.binwoo.framework.http.exception.HttpExceptionCode;
-import com.binwoo.framework.http.response.HttpResponse;
-import com.binwoo.framework.http.response.HttpResponseBuilder;
-import com.binwoo.framework.util.JwtUtils;
+import com.binwoo.common.http.exception.HttpExceptionCode;
+import com.binwoo.common.http.response.HttpResponse;
+import com.binwoo.common.http.response.HttpResponseBuilder;
+import com.binwoo.common.util.JwtUtils;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;

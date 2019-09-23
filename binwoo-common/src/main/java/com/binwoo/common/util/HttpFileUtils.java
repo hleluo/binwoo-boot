@@ -1,4 +1,4 @@
-package com.binwoo.framework.util;
+package com.binwoo.common.util;
 
 import java.io.BufferedInputStream;
 import java.io.File;

@@ -1,13 +1,13 @@
-package com.binwoo.framework.http.response;
+package com.binwoo.common.http.response;
 
-import com.binwoo.framework.http.exception.HttpCodeManager;
-import com.binwoo.framework.http.exception.HttpExceptionCode;
+import com.binwoo.common.http.exception.HttpCodeManager;
+import com.binwoo.common.http.exception.HttpExceptionCode;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * com.code.framework.http.
+ * com.code.common.http.
  *
  * @author luoj
  * @date 2019/8/5 17:12

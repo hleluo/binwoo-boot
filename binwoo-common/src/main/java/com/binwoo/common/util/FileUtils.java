@@ -1,4 +1,4 @@
-package com.binwoo.framework.util;
+package com.binwoo.common.util;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * com.binwoo.framework.util.
+ * com.binwoo.common.util.
  *
  * @author luoj
  * @date 2019/8/19 17:40

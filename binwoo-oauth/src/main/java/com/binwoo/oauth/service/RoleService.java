@@ -1,6 +1,6 @@
 package com.binwoo.oauth.service;
 
-import com.binwoo.framework.http.response.PageList;
+import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.Role;
 import com.binwoo.oauth.req.RolePagerReq;
 import java.util.List;

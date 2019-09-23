@@ -1,4 +1,4 @@
-package com.binwoo.framework.http.response;
+package com.binwoo.common.http.response;
 
 import java.io.Serializable;
 import java.util.List;
