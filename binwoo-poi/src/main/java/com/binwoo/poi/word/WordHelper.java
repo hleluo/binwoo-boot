@@ -1,5 +1,6 @@
 package com.binwoo.poi.word;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,6 +19,8 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRPr;
 
 /**
+ * Word帮助类.
+ *
  * @author admin
  * @date 2019/9/23 15:19
  */
@@ -31,6 +34,14 @@ public class WordHelper {
   private static final String PARAM_END = String.valueOf(CHAR_END);
   private static final String TABLE_ROW_REPEAT = "ROW_REPEAT#";
 
+  /**
+   * 导出Word.
+   *
+   * @param template 模板地址
+   * @param dest 目标地址
+   * @param params 参数
+   * @throws IOException 异常
+   */
   public static void export(String template, String dest, Map<String, Object> params)
       throws IOException {
     File file = new File(dest);
@@ -39,15 +50,23 @@ public class WordHelper {
     }
     try (InputStream input = new FileInputStream(template);
         OutputStream out = new FileOutputStream(dest)) {
-      EXWPFDocument document = new EXWPFDocument(input);
+      WordDocument document = new WordDocument(input);
       replaceForParagraphs(document, params);
-      replaceForRows(document, params);
+      repeatForRows(document, params);
       replaceForTables(document, params);
       document.write(out);
     }
   }
 
-  private static void replaceForParagraph(XWPFParagraph paragraph, Map<String, Object> params) {
+  /**
+   * 替换段落信息.
+   *
+   * @param document 文档
+   * @param paragraph 段落
+   * @param params 参数
+   */
+  private static void replaceForParagraph(WordDocument document, XWPFParagraph paragraph,
+      Map<String, Object> params) {
     List<XWPFRun> runs = paragraph.getRuns();
     List<XWPFRun> items = new ArrayList<>();
     StringBuilder sb = new StringBuilder();
@@ -115,7 +134,7 @@ public class WordHelper {
         //文本
         XWPFRun runValue = paragraph.insertNewRun(i++);
         runValue.getCTR().setRPr(style);
-        runValue.setText((String) params.get(key));
+        buildValue(document, paragraph, run, params.get(key), null);
         //后缀文本
         XWPFRun last = items.get(items.size() - 1);
         String suffix = last.toString()
@@ -141,18 +160,30 @@ public class WordHelper {
     }
   }
 
-  private static void replaceForParagraphs(EXWPFDocument document, Map<String, Object> params) {
+  /**
+   * 替换段落列表信息.
+   *
+   * @param document 文档
+   * @param params 参数
+   */
+  private static void replaceForParagraphs(WordDocument document, Map<String, Object> params) {
     Iterator<XWPFParagraph> iterator = document.getParagraphsIterator();
     if (iterator == null) {
       return;
     }
     while (iterator.hasNext()) {
       XWPFParagraph paragraph = iterator.next();
-      replaceForParagraph(paragraph, params);
+      replaceForParagraph(document, paragraph, params);
     }
   }
 
-  private static void replaceForTables(EXWPFDocument document, Map<String, Object> params) {
+  /**
+   * 替换表单列表信息.
+   *
+   * @param document 文档
+   * @param params 参数
+   */
+  private static void replaceForTables(WordDocument document, Map<String, Object> params) {
     Iterator<XWPFTable> iterator = document.getTablesIterator();
     while (iterator.hasNext()) {
       XWPFTable table = iterator.next();
@@ -162,14 +193,20 @@ public class WordHelper {
         for (XWPFTableCell cell : cells) {
           List<XWPFParagraph> paragraphs = cell.getParagraphs();
           for (XWPFParagraph paragraph : paragraphs) {
-            replaceForParagraph(paragraph, params);
+            replaceForParagraph(document, paragraph, params);
           }
         }
       }
     }
   }
 
-  private static void replaceForRows(EXWPFDocument document, Map<String, Object> params) {
+  /**
+   * 替换多行数据.
+   *
+   * @param document 文档
+   * @param params 参数
+   */
+  private static void repeatForRows(WordDocument document, Map<String, Object> params) {
     Iterator<XWPFTable> iterator = document.getTablesIterator();
     while (iterator.hasNext()) {
       XWPFTable table = iterator.next();
@@ -178,12 +215,17 @@ public class WordHelper {
       String key = null;
       for (int i = 0; i < rows.size(); i++) {
         XWPFTableRow row = rows.get(i);
-        if (found) {
-          List<Map<String, Object>> sources = (List<Map<String, Object>>) params.get(key);
-          for (Map<String, Object> source : sources) {
-            XWPFTableRow target = table.createRow();
-            copyRowStyle(row, target);
+        if (found && params.get(key) instanceof WordRow) {
+          table.removeRow(i - 1);
+          i--;
+          WordRow wordRow = (WordRow) params.get(key);
+          for (Map<String, Object> values : wordRow.getRows()) {
+            XWPFTableRow target = table.insertNewTableRow(i + 1);
+            copyRowStyle(document, row, target, values);
           }
+          table.removeRow(i);
+          i--;
+          i += wordRow.getRows().size();
         }
         List<XWPFTableCell> cells = row.getTableCells();
         String text = cells.size() == 1 ? cells.get(0).getText() : null;
@@ -197,35 +239,107 @@ public class WordHelper {
     }
   }
 
-  private static void copyRowStyle(XWPFTableRow source, XWPFTableRow target) {
+  /**
+   * 拷贝样式.
+   *
+   * @param document 文档
+   * @param source 源样式
+   * @param target 目标样式
+   * @param params 参数
+   */
+  private static void copyRowStyle(WordDocument document, XWPFTableRow source, XWPFTableRow target,
+      Map<String, Object> params) {
     target.getCtRow().setTrPr(source.getCtRow().getTrPr());
-    List<XWPFTableCell> cells = source.getTableCells();
-    if (null == cells) {
+    List<XWPFTableCell> sourceCells = source.getTableCells();
+    if (null == sourceCells) {
       return;
     }
-    XWPFTableCell targetCell = null;
-    for (XWPFTableCell cell : cells) {
-      targetCell = target.addNewTableCell();
-      targetCell.setText("5476");
-      targetCell.getCTTc().setTcPr(cell.getCTTc().getTcPr());
-      targetCell.getParagraphs().get(0).getCTP()
-          .setPPr(cell.getParagraphs().get(0).getCTP().getPPr());
+    for (XWPFTableCell sourceCell : sourceCells) {
+      XWPFTableCell targetCell = target.addNewTableCell();
+      targetCell.getCTTc().setTcPr(sourceCell.getCTTc().getTcPr());
+      String defaultText = sourceCell.getText();
+      Object value = null;
+      //获取KEY对应的值
+      if (defaultText.startsWith(String.valueOf(CHAR_START)) && defaultText
+          .endsWith(String.valueOf(CHAR_END))) {
+        int startIndex = defaultText.indexOf(CHAR_START) + String.valueOf(CHAR_START).length();
+        int endIndex = defaultText.lastIndexOf(CHAR_END);
+        String key = defaultText.substring(startIndex, endIndex);
+        value = params.getOrDefault(key, null);
+      }
+      if (targetCell.getParagraphs() == null || targetCell.getParagraphs().size() == 0) {
+        targetCell.addParagraph();
+      }
+      XWPFParagraph paragraph = targetCell.getParagraphs().get(0);
+      if (paragraph.getRuns() == null || paragraph.getRuns().size() == 0) {
+        paragraph.createRun();
+      }
+      XWPFRun run = paragraph.getRuns().get(0);
+      if (sourceCell.getParagraphs() != null && sourceCell.getParagraphs().size() > 0) {
+        paragraph.getCTP().setPPr(sourceCell.getParagraphs().get(0).getCTP().getPPr());
+        if (sourceCell.getParagraphs().get(0).getRuns() != null
+            && sourceCell.getParagraphs().get(0).getRuns().size() > 0) {
+          XWPFRun template = sourceCell.getParagraphs().get(0).getRuns().get(0);
+          run.setBold(template.isBold());
+          run.setColor(template.getColor());
+          run.setFontFamily(template.getFontFamily());
+          run.setFontSize(template.getFontSize());
+          run.getCTR().setRPr(template.getCTR().getRPr());
+        }
+      }
+      buildValue(document, paragraph, run, value, defaultText);
     }
   }
 
-  private static int getPictureType(String type) {
-    int res = EXWPFDocument.PICTURE_TYPE_PICT;
-    if (type != null) {
-      if (type.equalsIgnoreCase("png")) {
-        res = EXWPFDocument.PICTURE_TYPE_PNG;
-      } else if (type.equalsIgnoreCase("dib")) {
-        res = EXWPFDocument.PICTURE_TYPE_DIB;
-      } else if (type.equalsIgnoreCase("emf")) {
-        res = EXWPFDocument.PICTURE_TYPE_EMF;
-      } else if (type.equalsIgnoreCase("jpg") || type.equalsIgnoreCase("jpeg")) {
-        res = EXWPFDocument.PICTURE_TYPE_JPEG;
-      } else if (type.equalsIgnoreCase("wmf")) {
-        res = EXWPFDocument.PICTURE_TYPE_WMF;
+  /**
+   * 构建值.
+   *
+   * @param document 文档
+   * @param paragraph 段落
+   * @param run 小段
+   * @param value 值
+   * @param defaultText 默认值
+   */
+  private static void buildValue(WordDocument document, XWPFParagraph paragraph, XWPFRun run,
+      Object value, String defaultText) {
+    defaultText = defaultText == null ? "" : defaultText;
+    if (value == null) {
+      run.setText(defaultText);
+    } else {
+      if (value instanceof WordPicture) {
+        WordPicture picture = (WordPicture) value;
+        try (ByteArrayInputStream input = new ByteArrayInputStream(picture.getContent())) {
+          document.addPictureData(input, getPictureType(picture.getExtension()));
+          document.buildPicture(document.getAllPictures().size() - 1, picture.getWidth(),
+              picture.getHeight(), paragraph);
+        } catch (Exception e) {
+          run.setText(defaultText);
+        }
+      } else {
+        run.setText((String) value);
+      }
+    }
+  }
+
+  /**
+   * 获取图片类型.
+   *
+   * @param extension 后缀
+   * @return 类型
+   */
+  private static int getPictureType(String extension) {
+    int res = WordDocument.PICTURE_TYPE_PICT;
+    if (extension != null) {
+      if (extension.equalsIgnoreCase("png")) {
+        res = WordDocument.PICTURE_TYPE_PNG;
+      } else if (extension.equalsIgnoreCase("dib")) {
+        res = WordDocument.PICTURE_TYPE_DIB;
+      } else if (extension.equalsIgnoreCase("emf")) {
+        res = WordDocument.PICTURE_TYPE_EMF;
+      } else if (extension.equalsIgnoreCase("jpg") || extension.equalsIgnoreCase("jpeg")) {
+        res = WordDocument.PICTURE_TYPE_JPEG;
+      } else if (extension.equalsIgnoreCase("wmf")) {
+        res = WordDocument.PICTURE_TYPE_WMF;
       }
     }
     return res;

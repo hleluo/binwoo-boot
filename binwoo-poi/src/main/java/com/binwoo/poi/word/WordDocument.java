@@ -17,17 +17,17 @@ import org.openxmlformats.schemas.drawingml.x2006.wordprocessingDrawing.CTInline
  * @author admin
  * @date 2019/9/23 17:28
  */
-public class EXWPFDocument extends XWPFDocument {
+public class WordDocument extends XWPFDocument {
 
-  public EXWPFDocument(InputStream in) throws IOException {
+  public WordDocument(InputStream in) throws IOException {
     super(in);
   }
 
-  public EXWPFDocument() {
+  public WordDocument() {
     super();
   }
 
-  public EXWPFDocument(OPCPackage pkg) throws IOException {
+  public WordDocument(OPCPackage pkg) throws IOException {
     super(pkg);
   }
 
