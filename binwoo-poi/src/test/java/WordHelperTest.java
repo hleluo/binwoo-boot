@@ -1,4 +1,4 @@
-import com.binwoo.poi.word.WordHelper;
+import com.binwoo.poi.word.WordExporter;
 import com.binwoo.poi.word.WordPicture;
 import com.binwoo.poi.word.WordRow;
 import java.io.FileInputStream;
@@ -30,9 +30,9 @@ public class WordHelperTest {
       WordRow wordRow = new WordRow();
       wordRow.add(buildUser());
       wordRow.add(buildUser());
-
+      WordExporter exporter = new WordExporter("D:\\ttt.docx");
       params.put("users", wordRow);
-      WordHelper.export("D:\\ttt.docx", "D:\\123.docx", params);
+      exporter.export("D:\\123.docx", params);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -52,7 +52,7 @@ public class WordHelperTest {
     WordPicture picture = new WordPicture();
     picture.setWidth(200);
     picture.setHeight(200);
-    picture.setExtension("png");
+    picture.setFilename("440300000000.png");
     try (InputStream input = new FileInputStream("D:\\440300000000.png")) {
       byte[] content = new byte[input.available()];
       int length = input.read(content);

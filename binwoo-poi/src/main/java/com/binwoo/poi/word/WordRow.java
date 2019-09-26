@@ -12,6 +12,9 @@ import java.util.Map;
  */
 public class WordRow {
 
+  /**
+   * 行数据.
+   */
   private List<Map<String, Object>> rows;
 
   public WordRow() {
@@ -26,6 +29,11 @@ public class WordRow {
     this.rows = rows == null ? new ArrayList<>() : rows;
   }
 
+  /**
+   * 添加行数据参数.
+   *
+   * @param params 参数
+   */
   public void add(Map<String, Object> params) {
     rows.add(params);
   }

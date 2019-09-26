@@ -8,9 +8,21 @@ package com.binwoo.poi.word;
  */
 public class WordPicture {
 
+  /**
+   * 图片宽度.
+   */
   private int width;
+  /**
+   * 图片高度.
+   */
   private int height;
-  private String extension;
+  /**
+   * 图片文件名.
+   */
+  private String filename;
+  /**
+   * 图片字节.
+   */
   private byte[] content;
 
   public int getWidth() {
@@ -29,12 +41,12 @@ public class WordPicture {
     this.height = height;
   }
 
-  public String getExtension() {
-    return extension;
+  public String getFilename() {
+    return filename;
   }
 
-  public void setExtension(String extension) {
-    this.extension = extension;
+  public void setFilename(String filename) {
+    this.filename = filename;
   }
 
   public byte[] getContent() {
