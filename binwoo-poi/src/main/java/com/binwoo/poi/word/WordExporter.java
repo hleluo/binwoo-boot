@@ -95,6 +95,19 @@ public class WordExporter {
     document.write(out);
   }
 
+  /**
+   * 关闭文档.
+   */
+  public void close() {
+    if (document != null) {
+      try {
+        document.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
 
   /**
    * 替换段落信息.
@@ -170,7 +183,7 @@ public class WordExporter {
         XWPFRun runValue = paragraph.insertNewRun(i++);
         copyRunStyle(runValue, first);
         //设置值
-        buildValue(runValue, params.get(key), null);
+        buildValue(runValue, params.get(key), sb.toString());
         //后缀文本
         XWPFRun last = items.get(items.size() - 1);
         String suffix = last.toString()

@@ -33,7 +33,7 @@ public class ExcelWriterTest {
       rows.add(row);
     }
     try {
-      writer.write("Test", rows, null, "D:\\write.xlsx");
+      writer.write("Test", rows, null, "D:\\test\\write.xlsx");
     } catch (IOException e) {
       e.printStackTrace();
     }

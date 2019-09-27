@@ -13,7 +13,7 @@ import java.util.Map;
  * @author admin
  * @date 2019/9/23 15:54
  */
-public class WordHelperTest {
+public class WordExporterTest {
 
   /**
    * Word测试.
@@ -30,9 +30,10 @@ public class WordHelperTest {
       WordRow wordRow = new WordRow();
       wordRow.add(buildUser());
       wordRow.add(buildUser());
-      WordExporter exporter = new WordExporter("D:\\ttt.docx");
+      WordExporter exporter = new WordExporter("D:\\test\\template.docx");
       params.put("users", wordRow);
-      exporter.export("D:\\123.docx", params);
+      exporter.export("D:\\test\\export.docx", params);
+      exporter.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -53,7 +54,7 @@ public class WordHelperTest {
     picture.setWidth(200);
     picture.setHeight(200);
     picture.setFilename("440300000000.png");
-    try (InputStream input = new FileInputStream("D:\\440300000000.png")) {
+    try (InputStream input = new FileInputStream("D:\\test\\440300000000.png")) {
       byte[] content = new byte[input.available()];
       int length = input.read(content);
       picture.setContent(content);

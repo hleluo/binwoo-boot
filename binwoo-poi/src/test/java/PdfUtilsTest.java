@@ -15,7 +15,7 @@ public class PdfUtilsTest {
    */
   public static void main(String[] args) {
     try {
-      PdfUtils.fromWord("D:\\1234.doc", "D:\\12345.pdf");
+      PdfUtils.fromWord("D:\\test\\export.docx", "D:\\test\\docx_pdf.pdf");
     } catch (Exception e) {
       e.printStackTrace();
     }

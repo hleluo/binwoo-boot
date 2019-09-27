@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -45,14 +44,30 @@ public class ExcelReader {
   private Workbook workbook;
 
   /**
-   * 文件流.
+   * 构造函数.
+   *
+   * @param filepath 文件路径
+   * @throws IOException 异常
    */
-  private InputStream input;
+  public ExcelReader(String filepath) throws IOException {
+    try (InputStream input = new FileInputStream(filepath)) {
+      workbook = WorkbookFactory.create(input);
+    }
+  }
+
+  /**
+   * 构造函数.
+   *
+   * @param input 文件流
+   * @throws IOException 异常
+   */
+  public ExcelReader(InputStream input) throws IOException {
+    workbook = WorkbookFactory.create(input);
+  }
 
   /**
    * 读取数据.
    *
-   * @param filepath 文件地址
    * @param sheetIndex Sheet索引，从0开始
    * @param startRowIndex 起始行索引，从0开始，如为NULL，则自动获取
    * @param endRowIndex 结束行索引，从0开始，如为NULL，则自动获取
@@ -61,54 +76,17 @@ public class ExcelReader {
    * @param parser 数据回调
    * @param <T> 泛型
    * @return 数据集
-   * @throws IOException 异常
-   * @throws InvalidFormatException 格式异常
    */
-  public <T> List<T> readByIndex(String filepath, Integer sheetIndex, Integer startRowIndex,
-      Integer endRowIndex, Class<T> cls, Integer keyIndex, CellParser<T> parser)
-      throws IOException, InvalidFormatException {
-    buildWorkbook(filepath);
+  public <T> List<T> readByIndex(Integer sheetIndex, Integer startRowIndex,
+      Integer endRowIndex, Class<T> cls, Integer keyIndex, CellParser<T> parser) {
     sheetIndex = sheetIndex == null ? 0 : sheetIndex;
     Sheet sheet = workbook.getSheetAt(sheetIndex);
-    try {
-      return read(sheet, startRowIndex, endRowIndex, cls, keyIndex, parser);
-    } finally {
-      close();
-    }
-  }
-
-  /**
-   * 读取数据，文件流不会关闭.
-   *
-   * @param input 文件流
-   * @param sheetIndex Sheet索引，从0开始
-   * @param startRowIndex 起始行索引，从0开始，如为NULL，则自动获取
-   * @param endRowIndex 结束行索引，从0开始，如为NULL，则自动获取
-   * @param cls 泛型
-   * @param keyIndex 键所在行索引，为空，则随机生成唯一key
-   * @param parser 数据回调
-   * @param <T> 泛型
-   * @return 数据集
-   * @throws IOException 异常
-   * @throws InvalidFormatException 格式异常
-   */
-  public <T> List<T> readByIndex(InputStream input, Integer sheetIndex, Integer startRowIndex,
-      Integer endRowIndex, Class<T> cls, Integer keyIndex, CellParser<T> parser)
-      throws IOException, InvalidFormatException {
-    buildWorkbook(input);
-    sheetIndex = sheetIndex == null ? 0 : sheetIndex;
-    Sheet sheet = workbook.getSheetAt(sheetIndex);
-    try {
-      return read(sheet, startRowIndex, endRowIndex, cls, keyIndex, parser);
-    } finally {
-      close();
-    }
+    return read(sheet, startRowIndex, endRowIndex, cls, keyIndex, parser);
   }
 
   /**
    * 读取数据.
    *
-   * @param filepath 文件地址
    * @param sheetName Sheet名称
    * @param startRowIndex 起始行索引，从0开始，如为NULL，则自动获取
    * @param endRowIndex 结束行索引，从0开始，如为NULL，则自动获取
@@ -117,46 +95,11 @@ public class ExcelReader {
    * @param parser 数据回调
    * @param <T> 泛型
    * @return 数据集
-   * @throws IOException 异常
-   * @throws InvalidFormatException 格式异常
    */
-  public <T> List<T> readByName(String filepath, String sheetName, Integer startRowIndex,
-      Integer endRowIndex, Class<T> cls, Integer keyIndex, CellParser<T> parser)
-      throws IOException, InvalidFormatException {
-    buildWorkbook(filepath);
+  public <T> List<T> readByName(String sheetName, Integer startRowIndex,
+      Integer endRowIndex, Class<T> cls, Integer keyIndex, CellParser<T> parser) {
     Sheet sheet = workbook.getSheet(sheetName);
-    try {
-      return read(sheet, startRowIndex, endRowIndex, cls, keyIndex, parser);
-    } finally {
-      close();
-    }
-  }
-
-  /**
-   * 读取数据，文件流不会被关闭.
-   *
-   * @param input 文件流
-   * @param sheetName Sheet名称
-   * @param startRowIndex 起始行索引，从0开始，如为NULL，则自动获取
-   * @param endRowIndex 结束行索引，从0开始，如为NULL，则自动获取
-   * @param cls 泛型
-   * @param keyIndex 键所在行索引，为空，则随机生成唯一key
-   * @param parser 数据回调
-   * @param <T> 泛型
-   * @return 数据集
-   * @throws IOException 异常
-   * @throws InvalidFormatException 格式异常
-   */
-  public <T> List<T> readByName(InputStream input, String sheetName, Integer startRowIndex,
-      Integer endRowIndex, Class<T> cls, Integer keyIndex, CellParser<T> parser)
-      throws IOException, InvalidFormatException {
-    buildWorkbook(input);
-    Sheet sheet = workbook.getSheet(sheetName);
-    try {
-      return read(sheet, startRowIndex, endRowIndex, cls, keyIndex, parser);
-    } finally {
-      close();
-    }
+    return read(sheet, startRowIndex, endRowIndex, cls, keyIndex, parser);
   }
 
   /**
@@ -221,36 +164,12 @@ public class ExcelReader {
   }
 
   /**
-   * 构建Workbook.
-   *
-   * @param filepath 文件路径
-   * @throws IOException IO异常
-   * @throws InvalidFormatException 格式异常
+   * 关闭资源.
    */
-  private void buildWorkbook(String filepath) throws IOException, InvalidFormatException {
-    this.input = new FileInputStream(filepath);
-    this.workbook = WorkbookFactory.create(input);
-  }
-
-  /**
-   * 构建Workbook.
-   *
-   * @param input 文件流
-   * @throws IOException IO异常
-   * @throws InvalidFormatException 格式异常
-   */
-  private void buildWorkbook(InputStream input) throws IOException, InvalidFormatException {
-    this.input = input;
-    this.workbook = WorkbookFactory.create(input);
-  }
-
-  /**
-   * 关闭输入流.
-   */
-  private void close() {
-    if (input != null) {
+  public void close() {
+    if (workbook != null) {
       try {
-        input.close();
+        workbook.close();
       } catch (IOException e) {
         e.printStackTrace();
       }

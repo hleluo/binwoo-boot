@@ -16,13 +16,14 @@ public class PdfHelperTest {
    */
   public static void main(String[] args) {
     try {
-      PdfHelper helper = new PdfHelper("D:\\123.pdf");
+      PdfHelper helper = new PdfHelper("D:\\test\\docx_pdf.pdf");
       PdfPicture picture = new PdfPicture();
       picture.setAxisX(10);
       picture.setAxisX(10);
-      picture.setFilepath("D:\\440300000000.png");
+      picture.setFilepath("D:\\test\\440300000000.png");
       picture.setOriginal(true);
-      helper.addPicture(1, picture, "D:\\1234.pdf");
+      helper.addPicture(1, picture, "D:\\test\\pdf_picture.pdf");
+      helper.close();
     } catch (Exception e) {
       e.printStackTrace();
     }

@@ -3,7 +3,6 @@ package com.binwoo.poi.word;
 import fr.opensagres.poi.xwpf.converter.core.ImageManager;
 import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLConverter;
 import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLOptions;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +13,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -26,8 +26,13 @@ import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.converter.PicturesManager;
 import org.apache.poi.hwpf.converter.WordToHtmlConverter;
 import org.apache.poi.hwpf.usermodel.PictureType;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.docx4j.Docx4J;
+import org.docx4j.XmlUtils;
+import org.docx4j.convert.in.xhtml.XHTMLImporterImpl;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.NumberingDefinitionsPart;
 import org.w3c.dom.Document;
 import sun.misc.BASE64Encoder;
 
@@ -39,24 +44,88 @@ import sun.misc.BASE64Encoder;
  */
 public class WordUtils {
 
+
+  /**
+   * Docx转Doc.
+   *
+   * @param filepath docx文件路径
+   * @param dest doc文件路径
+   * @throws IOException 异常
+   * @throws Docx4JException 异常
+   */
+  public static void docxToDoc(String filepath, String dest) throws IOException, Docx4JException {
+    //将docx转换为符合doc格式规范的xml文档，再由xml更改后缀名为doc的方式达到docx转换doc格式的目的
+    File file = new File(dest);
+    if (!file.getParentFile().exists()) {
+      boolean b = file.getParentFile().mkdirs();
+    }
+    try (InputStream input = new FileInputStream(filepath)) {
+      WordprocessingMLPackage pkg = WordprocessingMLPackage.load(input);
+      String filename = UUID.randomUUID().toString() + ".xml";
+      File fileXml = new File(file.getParent() + File.separator + filename);
+      Docx4J.save(pkg, fileXml, Docx4J.FLAG_SAVE_FLAT_XML);
+      boolean b = fileXml.renameTo(file);
+    }
+  }
+
+  /**
+   * Doc转Docs.
+   *
+   * @param filepath doc文件路径
+   * @param dest docx文件路径
+   * @throws IOException 异常
+   * @throws Docx4JException 异常
+   */
+  public static void docToDocx(String filepath, String dest) throws IOException, Docx4JException {
+    File file = new File(dest);
+    if (!file.getParentFile().exists()) {
+      boolean b = file.getParentFile().mkdirs();
+    }
+    try (InputStream input = new FileInputStream(filepath)) {
+      WordprocessingMLPackage pkg = WordprocessingMLPackage.load(input);
+      Docx4J.save(pkg, new File(dest));
+    }
+  }
+
   /**
    * HTML内容转Word.
    *
    * @param html html内容
    * @param dest 目标地址
    * @throws IOException 异常
+   * @throws Docx4JException 异常
+   * @throws JAXBException 异常
    */
-  public static void fromHtml(String html, String dest) throws IOException {
+  public static void fromHtml(String html, String dest)
+      throws IOException, Docx4JException, JAXBException {
     File file = new File(dest);
     if (!file.getParentFile().exists()) {
       boolean b = file.getParentFile().mkdirs();
     }
-    try (InputStream input = new ByteArrayInputStream(html.getBytes(StandardCharsets.UTF_8));
-        OutputStream out = new FileOutputStream(file);
-        POIFSFileSystem fs = new POIFSFileSystem()) {
-      fs.createDocument(input, "WordDocument");
-      fs.writeFilesystem(out);
+    try (OutputStream out = new FileOutputStream(file)) {
+      fromHtml(html, out);
     }
+  }
+
+  /**
+   * HTML内容转Word.
+   *
+   * @param html html内容
+   * @param out 输出流
+   * @throws Docx4JException 异常
+   * @throws JAXBException 异常
+   */
+  public static void fromHtml(String html, OutputStream out) throws Docx4JException, JAXBException {
+    html = html.replaceAll("&nbsp;", "");
+    WordprocessingMLPackage pkg = WordprocessingMLPackage.createPackage();
+    NumberingDefinitionsPart ndp = new NumberingDefinitionsPart();
+    pkg.getMainDocumentPart().addTargetPart(ndp);
+    ndp.unmarshalDefaultNumbering();
+    XHTMLImporterImpl importer = new XHTMLImporterImpl(pkg);
+    importer.setHyperlinkStyle("Hyperlink");
+    pkg.getMainDocumentPart().getContent().addAll(importer.convert(html, null));
+    XmlUtils.marshaltoString(pkg.getMainDocumentPart().getJaxbElement(), true, true);
+    pkg.save(out);
   }
 
   /**
@@ -141,10 +210,10 @@ public class WordUtils {
         File[] fileImages = fileImageDir.listFiles();
         if (fileImages != null) {
           for (int i = fileImages.length - 1; i >= 0; i--) {
-            fileImages[i].deleteOnExit();
+            boolean b = fileImages[i].delete();
           }
-          fileImageDir.deleteOnExit();
         }
+        fileImageDir.deleteOnExit();
       }
     }
   }

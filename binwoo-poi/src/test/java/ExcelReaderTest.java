@@ -3,7 +3,6 @@ import com.binwoo.poi.excel.ExcelReader.CellParser;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 
 /**
@@ -20,8 +19,8 @@ public class ExcelReaderTest {
    * @param args 参数
    */
   public static void main(String[] args) {
-    ExcelReader reader = new ExcelReader();
     try {
+      ExcelReader reader = new ExcelReader("D:\\test\\write.xlsx");
       CellParser<HashMap> parser = new CellParser<HashMap>() {
         @Override
         public void parse(HashMap object, int index, String key, Cell cell) {
@@ -29,10 +28,11 @@ public class ExcelReaderTest {
           System.out.println("56756");
         }
       };
-      List<HashMap> data = reader.readByIndex("D:\\write.xlsx", null,
+      List<HashMap> data = reader.readByIndex(null,
           0, null, HashMap.class, null, parser);
+      reader.close();
       System.out.println("success");
-    } catch (IOException | InvalidFormatException e) {
+    } catch (IOException e) {
       e.printStackTrace();
     }
   }

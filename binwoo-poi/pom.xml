@@ -14,6 +14,8 @@
   <properties>
     <poi.version>4.0.1</poi.version>
     <poi.converter.version>2.0.2</poi.converter.version>
+    <docx4j.version>6.1.2</docx4j.version>
+    <docx4j.ImportXHTML.version>8.0.0</docx4j.ImportXHTML.version>
   </properties>
 
   <dependencies>
@@ -41,6 +43,16 @@
       <groupId>fr.opensagres.xdocreport</groupId>
       <artifactId>fr.opensagres.poi.xwpf.converter.xhtml</artifactId>
       <version>${poi.converter.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.docx4j</groupId>
+      <artifactId>docx4j</artifactId>
+      <version>${docx4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.docx4j</groupId>
+      <artifactId>docx4j-ImportXHTML</artifactId>
+      <version>${docx4j.ImportXHTML.version}</version>
     </dependency>
   </dependencies>
 

@@ -88,7 +88,7 @@ public class ExcelWriter {
       }
     }
     workbook.write(out);
-    dispose();
+    close();
   }
 
   /**
@@ -98,12 +98,8 @@ public class ExcelWriter {
    * @param filepath 文件路径，如/a/b.xls
    */
   public void write(List<ExcelPage> pages, String filepath) throws IOException {
-    OutputStream out = null;
-    try {
-      out = buildOutput(filepath);
+    try (OutputStream out = buildOutput(filepath)) {
       write(pages, out);
-    } finally {
-      closeStream(out);
     }
   }
 
@@ -123,7 +119,7 @@ public class ExcelWriter {
     append(sheet, 0, sources);
     merge(sheet, merges);
     workbook.write(out);
-    dispose();
+    close();
   }
 
   /**
@@ -137,12 +133,8 @@ public class ExcelWriter {
    */
   public void write(String sheetName, List<ExcelRow> sources, List<ExcelMerge> merges,
       String filepath) throws IOException {
-    OutputStream out = null;
-    try {
-      out = buildOutput(filepath);
+    try (OutputStream out = buildOutput(filepath)) {
       write(sheetName, sources, merges, out);
-    } finally {
-      closeStream(out);
     }
   }
 
@@ -164,7 +156,7 @@ public class ExcelWriter {
     }
     merge(sheet, merges);
     workbook.write(out);
-    dispose();
+    close();
   }
 
   /**
@@ -178,12 +170,8 @@ public class ExcelWriter {
    */
   public void write(String sheetName, ExcelRowLoader loader, List<ExcelMerge> merges,
       String filepath) throws IOException {
-    OutputStream out = null;
-    try {
-      out = buildOutput(filepath);
+    try (OutputStream out = buildOutput(filepath)) {
       write(sheetName, loader, merges, out);
-    } finally {
-      closeStream(out);
     }
   }
 
@@ -294,26 +282,18 @@ public class ExcelWriter {
   }
 
   /**
-   * 关闭文件流.
-   *
-   * @param out 文件流
+   * 关闭.
    */
-  private void closeStream(OutputStream out) {
-    if (out != null) {
+  private void close() {
+    if (massive && workbook != null) {
+      ((SXSSFWorkbook) workbook).dispose();
+    }
+    if (workbook != null) {
       try {
-        out.close();
+        workbook.close();
       } catch (IOException e) {
         e.printStackTrace();
       }
-    }
-  }
-
-  /**
-   * 关闭.
-   */
-  private void dispose() {
-    if (massive && workbook != null) {
-      ((SXSSFWorkbook) workbook).dispose();
     }
   }
 
