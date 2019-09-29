@@ -48,23 +48,13 @@ public class HttpFileUtils {
       String bucket, String savedFilename) throws IOException {
     String extension = getFileExtension(originalFilename);
     String filename = UUID.randomUUID().toString().replaceAll("-", "").toLowerCase() + extension;
-    filename = savedFilename == null ? filename : filename;
+    filename = savedFilename == null ? filename : savedFilename;
     String filepath = File.separator + bucket + File.separator + filename;
     File dest = new File(root + filepath);
     if (!dest.getParentFile().exists()) {
       boolean b = dest.getParentFile().mkdirs();
     }
-    try {
-      FileUtils.save(input, dest);
-    } finally {
-      if (input != null) {
-        try {
-          input.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
-    }
+    FileUtils.save(input, dest);
     return String.format("/%s/%s", bucket, filename);
   }
 
@@ -82,41 +72,21 @@ public class HttpFileUtils {
     return upload(input, originalFilename, root, bucket, null);
   }
 
+  /**
+   * 文件下载.
+   *
+   * @param response 相应
+   * @param filepath 文件路径
+   * @throws IOException 异常
+   */
   private static void download(HttpServletResponse response, String filepath) throws IOException {
-    byte[] buffer = new byte[1024];
-    FileInputStream fis = null;
-    BufferedInputStream bis = null;
-    OutputStream os = null;
-    try {
-      fis = new FileInputStream(filepath);
-      bis = new BufferedInputStream(fis);
-      os = response.getOutputStream();
-      int len = bis.read(buffer);
-      while (len != -1) {
-        os.write(buffer, 0, len);
-        len = bis.read(buffer);
-      }
-    } finally {
-      if (fis != null) {
-        try {
-          fis.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
-      if (bis != null) {
-        try {
-          bis.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
-      if (os != null) {
-        try {
-          os.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+    try (InputStream input = new FileInputStream(filepath);
+        BufferedInputStream bis = new BufferedInputStream(input);
+        OutputStream out = response.getOutputStream()) {
+      int length = 0;
+      byte[] buffer = new byte[1024];
+      while ((length = bis.read(buffer)) != -1) {
+        out.write(buffer, 0, length);
       }
     }
   }
@@ -140,6 +110,14 @@ public class HttpFileUtils {
     download(response, filepath);
   }
 
+  /**
+   * 在线预览.
+   *
+   * @param response 响应
+   * @param filepath 文件名
+   * @param contentType 内容类型
+   * @throws IOException 异常
+   */
   private static void online(HttpServletResponse response, String filepath, String contentType)
       throws IOException {
     response.setContentType(contentType);

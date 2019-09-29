@@ -22,25 +22,15 @@ public class FileUtils {
    * @throws IOException 异常
    */
   public static void save(InputStream input, File dest) throws IOException {
-    OutputStream out = null;
-    int length = 0;
-    try {
-      if (!dest.getParentFile().exists()) {
-        boolean b = dest.getParentFile().mkdirs();
-      }
-      dest.deleteOnExit();
-      out = new FileOutputStream(dest);
+    if (!dest.getParentFile().exists()) {
+      boolean b = dest.getParentFile().mkdirs();
+    }
+    dest.deleteOnExit();
+    try (OutputStream out = new FileOutputStream(dest)) {
+      int length = 0;
       byte[] buffer = new byte[1024];
       while ((length = input.read(buffer)) != -1) {
         out.write(buffer, 0, length);
-      }
-    } finally {
-      if (out != null) {
-        try {
-          out.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
       }
     }
   }
