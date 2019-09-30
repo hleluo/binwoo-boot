@@ -7,7 +7,9 @@ import com.binwoo.oauth.req.BaseDeleteReq;
 import com.binwoo.oauth.req.GroupPagerReq;
 import com.binwoo.oauth.service.GroupService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author hleluo
  * @date 2019/8/29 21:01
  */
-@Api(tags = {"组模块"})
+@Api(tags = {"组模块"}, authorizations = {@Authorization("Authorization")})
 @Slf4j
 @RestController
 @RequestMapping("/api/groups")
@@ -74,6 +76,7 @@ public class GroupController {
    * @return 是否成功
    */
   @ApiOperation("删除组信息")
+  @ApiImplicitParam(name = "id", value = "组id", required = true)
   @DeleteMapping("/{id}")
   public HttpResponse<Boolean> delete(@PathVariable String id) {
     log.info("delete id = {}", id);

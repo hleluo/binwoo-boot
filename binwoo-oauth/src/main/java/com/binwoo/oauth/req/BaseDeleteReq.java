@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 public class BaseDeleteReq implements Serializable {
 
-  @ApiModelProperty(value = "id列表")
+  @ApiModelProperty(value = "id列表", required = true)
   private List<String> ids;
 
 }
