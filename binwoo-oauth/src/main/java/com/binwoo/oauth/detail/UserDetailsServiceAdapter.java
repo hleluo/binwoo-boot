@@ -55,6 +55,10 @@ public class UserDetailsServiceAdapter {
       //用户已过期
       throw new AuthException(HttpAuthExceptionCode.USER_EXPIRED.name());
     }
+    if (!user.isActive()) {
+      //用户未激活
+      throw new AuthException(HttpAuthExceptionCode.USER_UNACTIVATED.name());
+    }
     List<String> roles = getAuthorities(user.getUsername(), param);
     List<GrantedAuthority> authorities = new ArrayList<>();
     if (!CollectionUtils.isEmpty(roles)) {

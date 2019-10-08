@@ -2,6 +2,7 @@ package com.binwoo.oauth.controller;
 
 import com.binwoo.common.http.exception.HttpException;
 import com.binwoo.common.http.response.HttpResponse;
+import com.binwoo.common.http.response.HttpResponseBuilder;
 import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.App;
 import com.binwoo.oauth.req.AppPagerReq;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,7 +54,7 @@ public class AppController {
     log.info("save param = {}", app);
     app = appService.save(app);
     log.info("save response = {}", app);
-    return HttpResponse.success(app);
+    return HttpResponseBuilder.save(app);
   }
 
   /**
@@ -63,11 +65,11 @@ public class AppController {
    */
   @ApiOperation("查询应用信息")
   @GetMapping
-  public HttpResponse<PageList<App>> getByPager(@RequestBody AppPagerReq req) {
+  public HttpResponse<PageList<App>> getByPager(AppPagerReq req) {
     log.info("getByPager param = {}", req);
     PageList<App> pageList = appService.getByPager(req);
     log.info("getByPager response = {}", pageList);
-    return HttpResponse.success(pageList);
+    return HttpResponseBuilder.query(pageList);
   }
 
   /**
@@ -83,7 +85,7 @@ public class AppController {
     log.info("delete id = {}", id);
     boolean success = appService.delete(id);
     log.info("delete response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.delete(success);
   }
 
   /**
@@ -93,11 +95,11 @@ public class AppController {
    * @return 是否成功
    */
   @ApiOperation("批量删除应用信息")
-  @DeleteMapping
+  @PatchMapping
   public HttpResponse<Boolean> delete(@RequestBody BaseDeleteReq req) {
     log.info("delete param = {}", req);
     boolean success = appService.delete(req.getIds());
     log.info("delete response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.delete(success);
   }
 }

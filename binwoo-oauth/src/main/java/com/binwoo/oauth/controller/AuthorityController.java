@@ -2,6 +2,7 @@ package com.binwoo.oauth.controller;
 
 import com.binwoo.common.http.exception.HttpException;
 import com.binwoo.common.http.response.HttpResponse;
+import com.binwoo.common.http.response.HttpResponseBuilder;
 import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.Authority;
 import com.binwoo.oauth.req.AuthorityPagerReq;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,7 +54,7 @@ public class AuthorityController {
     log.info("save param = {}", authority);
     authority = authorityService.save(authority);
     log.info("save response = {}", authority);
-    return HttpResponse.success(authority);
+    return HttpResponseBuilder.save(authority);
   }
 
   /**
@@ -63,11 +65,11 @@ public class AuthorityController {
    */
   @ApiOperation("查询权职信息")
   @GetMapping
-  public HttpResponse<PageList<Authority>> getByPager(@RequestBody AuthorityPagerReq req) {
+  public HttpResponse<PageList<Authority>> getByPager(AuthorityPagerReq req) {
     log.info("getByPager param = {}", req);
     PageList<Authority> pageList = authorityService.getByPager(req);
     log.info("getByPager response = {}", pageList);
-    return HttpResponse.success(pageList);
+    return HttpResponseBuilder.query(pageList);
   }
 
   /**
@@ -83,7 +85,7 @@ public class AuthorityController {
     log.info("delete id = {}", id);
     boolean success = authorityService.delete(id);
     log.info("delete response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.delete(success);
   }
 
   /**
@@ -93,11 +95,11 @@ public class AuthorityController {
    * @return 是否成功
    */
   @ApiOperation("批量删除权职信息")
-  @DeleteMapping
+  @PatchMapping
   public HttpResponse<Boolean> delete(@RequestBody BaseDeleteReq req) {
     log.info("delete param = {}", req);
     boolean success = authorityService.delete(req.getIds());
     log.info("delete response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.delete(success);
   }
 }

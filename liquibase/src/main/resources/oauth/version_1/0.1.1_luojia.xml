@@ -83,6 +83,7 @@
       <column name="mobile" type="VARCHAR(20)" remarks="手机号"/>
       <column name="email" type="VARCHAR(50)" remarks="邮箱"/>
       <column name="password" type="VARCHAR(200)" remarks="密码"/>
+      <column name="active" type="BOOLEAN" defaultValue="false" remarks="是否已激活"/>
       <column name="disable" type="BOOLEAN" defaultValue="false" remarks="是否禁用"/>
       <column name="deleted" type="BOOLEAN" defaultValue="false" remarks="是否删除"/>
       <column name="category" type="VARCHAR(100)" remarks="类别"/>

@@ -1,6 +1,7 @@
 package com.binwoo.oauth.controller;
 
 import com.binwoo.common.http.response.HttpResponse;
+import com.binwoo.common.http.response.HttpResponseBuilder;
 import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.Menu;
 import com.binwoo.oauth.req.BaseDeleteReq;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,7 +53,7 @@ public class MenuController {
     log.info("save param = {}", menu);
     menu = menuService.save(menu);
     log.info("save response = {}", menu);
-    return HttpResponse.success(menu);
+    return HttpResponseBuilder.save(menu);
   }
 
   /**
@@ -62,11 +64,11 @@ public class MenuController {
    */
   @ApiOperation("查询菜单信息")
   @GetMapping
-  public HttpResponse<PageList<Menu>> getByPager(@RequestBody MenuPagerReq req) {
+  public HttpResponse<PageList<Menu>> getByPager(MenuPagerReq req) {
     log.info("getByPager param = {}", req);
     PageList<Menu> pageList = menuService.getByPager(req);
     log.info("getByPager response = {}", pageList);
-    return HttpResponse.success(pageList);
+    return HttpResponseBuilder.query(pageList);
   }
 
   /**
@@ -82,7 +84,7 @@ public class MenuController {
     log.info("delete id = {}", id);
     boolean success = menuService.delete(id);
     log.info("delete response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.delete(success);
   }
 
   /**
@@ -92,11 +94,11 @@ public class MenuController {
    * @return 是否成功
    */
   @ApiOperation("批量删除菜单信息")
-  @DeleteMapping
+  @PatchMapping
   public HttpResponse<Boolean> delete(@RequestBody BaseDeleteReq req) {
     log.info("delete param = {}", req);
     boolean success = menuService.delete(req.getIds());
     log.info("delete response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.delete(success);
   }
 }

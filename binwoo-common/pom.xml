@@ -14,6 +14,7 @@
   <properties>
     <servlet.version>3.1.0</servlet.version>
     <jjwt.version>0.9.1</jjwt.version>
+    <fastjson.version>1.2.61</fastjson.version>
   </properties>
 
   <dependencies>
@@ -28,6 +29,12 @@
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt</artifactId>
       <version>${jjwt.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>${fastjson.version}</version>
     </dependency>
   </dependencies>
 

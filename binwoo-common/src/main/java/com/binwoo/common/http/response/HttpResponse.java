@@ -11,8 +11,9 @@ import java.io.Serializable;
 public class HttpResponse<T> implements Serializable {
 
   private static final String MSG_SUCCESS = "SUCCESS";
+  private static final Integer RET_SUCCESS = 0;
 
-  private Integer ret = 0;
+  private Integer ret = RET_SUCCESS;
   private String msg = MSG_SUCCESS;
   private T body;
 
@@ -57,7 +58,7 @@ public class HttpResponse<T> implements Serializable {
    * @return 结果
    */
   public static <T> HttpResponse<T> success(T body) {
-    return new HttpResponse<T>(0, MSG_SUCCESS, body);
+    return new HttpResponse<T>(RET_SUCCESS, MSG_SUCCESS, body);
   }
 
   /**
@@ -70,6 +71,18 @@ public class HttpResponse<T> implements Serializable {
    */
   public static <T> HttpResponse<T> success(int ret, T body) {
     return new HttpResponse<T>(ret, MSG_SUCCESS, body);
+  }
+
+  /**
+   * 成功.
+   *
+   * @param msg 消息
+   * @param body 数据
+   * @param <T> 实体
+   * @return 结果
+   */
+  public static <T> HttpResponse<T> success(String msg, T body) {
+    return new HttpResponse<T>(RET_SUCCESS, msg, body);
   }
 
   /**

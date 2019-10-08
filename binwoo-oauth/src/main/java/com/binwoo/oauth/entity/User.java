@@ -43,6 +43,8 @@ public class User implements Serializable {
   private String email;
   @ApiModelProperty(value = "密码")
   private String password;
+  @ApiModelProperty(value = "是否已激活")
+  private boolean active = false;
   @ApiModelProperty(value = "是否被禁用")
   private boolean disable = false;
   @ApiModelProperty(value = "是否被删除")

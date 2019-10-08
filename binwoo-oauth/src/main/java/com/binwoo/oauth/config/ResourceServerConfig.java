@@ -68,6 +68,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
   public void configure(HttpSecurity http) throws Exception {
     //忽略验证的URL.
     String[] excludes = exclude.split(",");
+    //所有需要的匹配的URL，包括忽略验证的URL和需要权限验证的URL
     String[] intercepts = new String[excludes.length + 1];
     System.arraycopy(excludes, 0, intercepts, 0, excludes.length);
     intercepts[intercepts.length - 1] = API_REQUEST_INTERCEPT;
@@ -76,6 +77,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         .authorizeRequests()
         //配置忽略验证的URL.
         .antMatchers(excludes).permitAll()
+        //需要权限验证的URL
         .antMatchers(API_REQUEST_INTERCEPT).authenticated();
   }
 }

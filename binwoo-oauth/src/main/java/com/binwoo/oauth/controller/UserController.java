@@ -2,6 +2,7 @@ package com.binwoo.oauth.controller;
 
 import com.binwoo.common.http.exception.HttpException;
 import com.binwoo.common.http.response.HttpResponse;
+import com.binwoo.common.http.response.HttpResponseBuilder;
 import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.User;
 import com.binwoo.oauth.req.BaseDeleteReq;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -56,7 +58,7 @@ public class UserController {
     log.info("save param = {}", user);
     user = userService.save(user);
     log.info("save response = {}", user);
-    return HttpResponse.success(user);
+    return HttpResponseBuilder.save(user);
   }
 
   /**
@@ -67,11 +69,11 @@ public class UserController {
    */
   @ApiOperation("查询用户信息")
   @GetMapping
-  public HttpResponse<PageList<User>> getByPager(@RequestBody UserPagerReq req) {
+  public HttpResponse<PageList<User>> getByPager(UserPagerReq req) {
     log.info("getByPager param = {}", req);
     PageList<User> pageList = userService.getByPager(req);
     log.info("getByPager response = {}", pageList);
-    return HttpResponse.success(pageList);
+    return HttpResponseBuilder.query(pageList);
   }
 
   /**
@@ -87,7 +89,7 @@ public class UserController {
     log.info("delete id = {}", id);
     boolean success = userService.delete(id);
     log.info("delete response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.delete(success);
   }
 
   /**
@@ -97,12 +99,12 @@ public class UserController {
    * @return 是否成功
    */
   @ApiOperation("批量删除用户信息")
-  @DeleteMapping
+  @PatchMapping
   public HttpResponse<Boolean> delete(@RequestBody BaseDeleteReq req) {
     log.info("delete param = {}", req);
     boolean success = userService.delete(req.getIds());
     log.info("delete response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.delete(success);
   }
 
   /**
@@ -118,7 +120,7 @@ public class UserController {
     log.info("getByIdOrUsername param = {}", key);
     User user = userService.getByIdOrUsername(key);
     log.info("getByIdOrUsername response = {}", user);
-    return HttpResponse.success(user);
+    return HttpResponseBuilder.query(user);
   }
 
   /**
@@ -133,7 +135,7 @@ public class UserController {
     log.info("updateRoles param = {}", req);
     boolean success = userService.updateRoles(req.getId(), req.getRoleIds());
     log.info("updateRoles response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.update(success);
   }
 
   /**
@@ -148,7 +150,7 @@ public class UserController {
     log.info("updateAuthorities param = {}", req);
     boolean success = userService.updateAuthorities(req.getId(), req.getAuthorityIds());
     log.info("updateAuthorities response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.update(success);
   }
 
   /**
@@ -163,6 +165,6 @@ public class UserController {
     log.info("updateGroups param = {}", req);
     boolean success = userService.updateGroups(req.getId(), req.getGroupIds());
     log.info("updateGroups response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.update(success);
   }
 }

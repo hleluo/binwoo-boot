@@ -46,6 +46,10 @@ public class Dictionary {
   private boolean optional = false;
   @ApiModelProperty(value = "字典类型id，可为空")
   private String typeId;
+  @ApiModelProperty(value = "是否文本显示，TRUE 显示文本；FALSE 显示标签")
+  private boolean textual = true;
+  @ApiModelProperty(value = "标签类型")
+  private String tag;
   @ApiModelProperty(value = "创建时间：yyyy-MM-dd HH:mm:ss")
   @Column(updatable = false)
   @Temporal(value = TemporalType.TIMESTAMP)

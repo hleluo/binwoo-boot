@@ -64,7 +64,10 @@ public class UserServiceImpl implements UserService {
     } else {
       //修改用户信息，检测密码是有有修改.
       if (StringUtils.isEmpty(user.getPassword())) {
-        user.setPassword(source == null ? null : source.getPassword());
+        if (source == null) {
+          throw new HttpException(HttpAuthExceptionCode.USER_PASSWORD_NULL);
+        }
+        user.setPassword(source.getPassword());
       } else {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
       }

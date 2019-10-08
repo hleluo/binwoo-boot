@@ -2,6 +2,7 @@ package com.binwoo.oauth.controller;
 
 import com.binwoo.common.http.exception.HttpException;
 import com.binwoo.common.http.response.HttpResponse;
+import com.binwoo.common.http.response.HttpResponseBuilder;
 import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.Resource;
 import com.binwoo.oauth.req.BaseDeleteReq;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,7 +54,7 @@ public class ResourceController {
     log.info("save param = {}", resource);
     resource = resourceService.save(resource);
     log.info("save response = {}", resource);
-    return HttpResponse.success(resource);
+    return HttpResponseBuilder.save(resource);
   }
 
   /**
@@ -63,11 +65,11 @@ public class ResourceController {
    */
   @ApiOperation("查询资源信息")
   @GetMapping
-  public HttpResponse<PageList<Resource>> getByPager(@RequestBody ResourcePagerReq req) {
+  public HttpResponse<PageList<Resource>> getByPager(ResourcePagerReq req) {
     log.info("getByPager param = {}", req);
     PageList<Resource> pageList = resourceService.getByPager(req);
     log.info("getByPager response = {}", pageList);
-    return HttpResponse.success(pageList);
+    return HttpResponseBuilder.query(pageList);
   }
 
   /**
@@ -83,7 +85,7 @@ public class ResourceController {
     log.info("delete id = {}", id);
     boolean success = resourceService.delete(id);
     log.info("delete response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.delete(success);
   }
 
   /**
@@ -93,11 +95,11 @@ public class ResourceController {
    * @return 是否成功
    */
   @ApiOperation("批量删除资源信息")
-  @DeleteMapping
+  @PatchMapping
   public HttpResponse<Boolean> delete(@RequestBody BaseDeleteReq req) {
     log.info("delete param = {}", req);
     boolean success = resourceService.delete(req.getIds());
     log.info("delete response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.delete(success);
   }
 }

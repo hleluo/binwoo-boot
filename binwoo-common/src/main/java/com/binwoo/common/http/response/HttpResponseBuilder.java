@@ -14,6 +14,12 @@ import java.util.Map;
  */
 public class HttpResponseBuilder {
 
+  private static final String MSG_SUCCESS_QUERY = "SUCCESS_QUERY";
+  private static final String MSG_SUCCESS_SAVE = "SUCCESS_SAVE";
+  private static final String MSG_SUCCESS_INSERT = "SUCCESS_INSERT";
+  private static final String MSG_SUCCESS_UPDATE = "SUCCESS_UPDATE";
+  private static final String MSG_SUCCESS_DELETE = "SUCCESS_DELETE";
+
   /**
    * 从本地Properties获取消息，如获取失败，返回code码.
    *
@@ -21,12 +27,73 @@ public class HttpResponseBuilder {
    * @return 消息
    */
   private static String getMessage(HttpExceptionCode code) {
-    String msg = HttpCodeManager.getValue(code.getValue());
+    return getMessage(code.getValue());
+  }
+
+  /**
+   * 从本地Properties获取消息，如获取失败，返回code码.
+   *
+   * @param code 异常代码字符串
+   * @return 消息
+   */
+  private static String getMessage(String code) {
+    String msg = HttpCodeManager.getValue(code);
     if (msg == null || "".equals(msg.trim())) {
-      return code.getValue();
+      return code;
     }
     return msg;
   }
+
+  /**
+   * 查询成功.
+   *
+   * @param body 消息体
+   * @return HttpResponse
+   */
+  public static <T> HttpResponse<T> query(T body) {
+    return HttpResponse.success(getMessage(MSG_SUCCESS_QUERY), body);
+  }
+
+  /**
+   * 保存成功.
+   *
+   * @param body 消息体
+   * @return HttpResponse
+   */
+  public static <T> HttpResponse<T> save(T body) {
+    return HttpResponse.success(getMessage(MSG_SUCCESS_SAVE), body);
+  }
+
+  /**
+   * 插入成功.
+   *
+   * @param body 消息体
+   * @return HttpResponse
+   */
+  public static <T> HttpResponse<T> insert(T body) {
+    return HttpResponse.success(getMessage(MSG_SUCCESS_INSERT), body);
+  }
+
+  /**
+   * 更新成功.
+   *
+   * @param body 消息体
+   * @return HttpResponse
+   */
+  public static <T> HttpResponse<T> update(T body) {
+    return HttpResponse.success(getMessage(MSG_SUCCESS_UPDATE), body);
+  }
+
+  /**
+   * 删除成功.
+   *
+   * @param body 消息体
+   * @return HttpResponse
+   */
+  public static <T> HttpResponse<T> delete(T body) {
+    return HttpResponse.success(getMessage(MSG_SUCCESS_DELETE), body);
+  }
+
 
   /**
    * 失败结果.

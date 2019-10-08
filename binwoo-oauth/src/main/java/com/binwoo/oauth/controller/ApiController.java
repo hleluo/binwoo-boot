@@ -1,6 +1,7 @@
 package com.binwoo.oauth.controller;
 
 import com.binwoo.common.http.response.HttpResponse;
+import com.binwoo.common.http.response.HttpResponseBuilder;
 import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.Api;
 import com.binwoo.oauth.req.ApiPagerReq;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,7 +52,7 @@ public class ApiController {
     log.info("save param = {}", api);
     api = apiService.save(api);
     log.info("save response = {}", api);
-    return HttpResponse.success(api);
+    return HttpResponseBuilder.save(api);
   }
 
   /**
@@ -61,11 +63,11 @@ public class ApiController {
    */
   @ApiOperation("查询接口信息")
   @GetMapping
-  public HttpResponse<PageList<Api>> getByPager(@RequestBody ApiPagerReq req) {
+  public HttpResponse<PageList<Api>> getByPager(ApiPagerReq req) {
     log.info("getByPager param = {}", req);
     PageList<Api> pageList = apiService.getByPager(req);
     log.info("getByPager response = {}", pageList);
-    return HttpResponse.success(pageList);
+    return HttpResponseBuilder.query(pageList);
   }
 
   /**
@@ -81,7 +83,7 @@ public class ApiController {
     log.info("delete id = {}", id);
     boolean success = apiService.delete(id);
     log.info("delete response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.delete(success);
   }
 
   /**
@@ -91,11 +93,11 @@ public class ApiController {
    * @return 是否成功
    */
   @ApiOperation("批量删除接口信息")
-  @DeleteMapping
+  @PatchMapping
   public HttpResponse<Boolean> delete(@RequestBody BaseDeleteReq req) {
     log.info("delete param = {}", req);
     boolean success = apiService.delete(req.getIds());
     log.info("delete response = {}", success);
-    return HttpResponse.success(success);
+    return HttpResponseBuilder.delete(success);
   }
 }
