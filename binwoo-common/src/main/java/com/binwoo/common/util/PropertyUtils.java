@@ -21,7 +21,9 @@ public class PropertyUtils {
    * @throws IOException IOException
    */
   public static Properties load(String filepath) throws IOException {
-    return load(new FileInputStream(filepath));
+    try (InputStream input = new FileInputStream(filepath)) {
+      return load(input);
+    }
   }
 
   /**
@@ -33,17 +35,7 @@ public class PropertyUtils {
    */
   public static Properties load(InputStream input) throws IOException {
     Properties props = new Properties();
-    try {
-      props.load(input);
-    } finally {
-      if (input != null) {
-        try {
-          input.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
-    }
+    props.load(input);
     return props;
   }
 

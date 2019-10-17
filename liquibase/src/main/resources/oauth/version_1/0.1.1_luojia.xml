@@ -91,6 +91,7 @@
       <column name="source_id" type="VARCHAR(50)" remarks="来源"/>
       <column name="theme" type="VARCHAR(100)" remarks="主题"/>
       <column name="thumbnail" type="TEXT" remarks="头像"/>
+      <column name="extra" type="TEXT" remarks="额外数据，JSON"/>
       <column name="expire_time" type="TIMESTAMP" remarks="过期时间"/>
       <column name="create_time" type="TIMESTAMP" remarks="创建时间"/>
       <column name="update_time" type="TIMESTAMP" remarks="更新时间"/>

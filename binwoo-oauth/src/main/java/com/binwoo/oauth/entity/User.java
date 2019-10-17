@@ -63,6 +63,8 @@ public class User implements Serializable {
   @Temporal(value = TemporalType.TIMESTAMP)
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date expireTime;
+  @ApiModelProperty(value = "额外数据，JSON")
+  private String extra;
   @ApiModelProperty(value = "创建时间：yyyy-MM-dd HH:mm:ss")
   @Column(updatable = false)
   @Temporal(value = TemporalType.TIMESTAMP)
