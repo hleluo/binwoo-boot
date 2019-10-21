@@ -5,6 +5,7 @@ import com.binwoo.oauth.exception.AuthException;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.integrate.AuthTokenParam;
 import com.binwoo.oauth.repository.AuthorityRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +51,7 @@ public class UserDetailsServiceAdapter {
       //用户被删除
       throw new AuthException(HttpAuthExceptionCode.USER_DELETED.name());
     }
-    if (user.getExpireTime() != null && user.getExpireTime().getTime() > System
-        .currentTimeMillis()) {
+    if (user.getExpireTime() != null && user.getExpireTime().isBefore(LocalDateTime.now())) {
       //用户已过期
       throw new AuthException(HttpAuthExceptionCode.USER_EXPIRED.name());
     }

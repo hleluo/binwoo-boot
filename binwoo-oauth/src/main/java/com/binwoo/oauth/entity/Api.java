@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,12 +52,12 @@ public class Api implements Serializable {
   @Temporal(value = TemporalType.TIMESTAMP)
   @CreationTimestamp
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  private Date createTime;
+  private LocalDateTime createTime;
   @ApiModelProperty(value = "更新时间：yyyy-MM-dd HH:mm:ss")
   @Temporal(value = TemporalType.TIMESTAMP)
   @UpdateTimestamp
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  private Date updateTime;
+  private LocalDateTime updateTime;
 
   @ApiModelProperty(value = "子节点，可为空")
   @Transient

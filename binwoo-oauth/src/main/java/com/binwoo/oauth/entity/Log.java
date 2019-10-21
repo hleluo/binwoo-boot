@@ -3,7 +3,7 @@ package com.binwoo.oauth.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -58,6 +58,6 @@ public class Log {
   @Temporal(value = TemporalType.TIMESTAMP)
   @CreationTimestamp
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  private Date createTime;
+  private LocalDateTime createTime;
 
 }

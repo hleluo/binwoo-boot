@@ -9,6 +9,7 @@ import com.binwoo.oauth.integrate.AuthTokenParamContext;
 import com.binwoo.oauth.repository.AuthorityRepository;
 import com.binwoo.oauth.repository.ClientRepository;
 import com.binwoo.oauth.repository.ResourceRepository;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,8 +69,7 @@ public class ClientDetailsServiceImpl extends InMemoryClientDetailsService {
       //客户端被删除
       throw new ClientRegistrationException(HttpAuthExceptionCode.CLIENT_DELETED.name());
     }
-    if (client.getExpireTime() != null && client.getExpireTime().getTime() > System
-        .currentTimeMillis()) {
+    if (client.getExpireTime() != null && client.getExpireTime().isBefore(LocalDateTime.now())) {
       //客户端已过期
       throw new ClientRegistrationException(HttpAuthExceptionCode.CLIENT_EXPIRED.name());
     }
