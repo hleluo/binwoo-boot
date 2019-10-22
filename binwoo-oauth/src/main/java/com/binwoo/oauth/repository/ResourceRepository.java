@@ -41,6 +41,7 @@ public interface ResourceRepository extends BaseRepository<Resource> {
    *
    * @param id id
    */
+  @Override
   @Modifying
   @Query("delete from Resource r where r.id = :id")
   void deleteById(@Param("id") String id);
@@ -50,6 +51,7 @@ public interface ResourceRepository extends BaseRepository<Resource> {
    *
    * @param ids id列表
    */
+  @Override
   @Modifying
   @Query("delete from Resource r where r.id in (:ids)")
   void deleteByIdIn(@Param("ids") List<String> ids);

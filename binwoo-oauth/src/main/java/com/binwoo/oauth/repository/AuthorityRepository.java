@@ -150,6 +150,7 @@ public interface AuthorityRepository extends BaseRepository<Authority> {
    *
    * @param id id
    */
+  @Override
   @Modifying
   @Query("delete from Authority a where a.id = :id")
   void deleteById(@Param("id") String id);
@@ -159,6 +160,7 @@ public interface AuthorityRepository extends BaseRepository<Authority> {
    *
    * @param ids id列表
    */
+  @Override
   @Modifying
   @Query("delete from Authority a where a.id in (:ids)")
   void deleteByIdIn(@Param("ids") List<String> ids);

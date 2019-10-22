@@ -21,6 +21,7 @@ public interface RoleRepository extends BaseRepository<Role> {
    *
    * @param id id
    */
+  @Override
   @Modifying
   @Query("delete from Role r where r.id = :id")
   void deleteById(@Param("id") String id);
@@ -30,6 +31,7 @@ public interface RoleRepository extends BaseRepository<Role> {
    *
    * @param ids id列表
    */
+  @Override
   @Modifying
   @Query("delete from Role r where r.id in (:ids)")
   void deleteByIdIn(@Param("ids") List<String> ids);
