@@ -5,14 +5,12 @@ import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.Client;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.repository.ClientRepository;
-import com.binwoo.oauth.repository.SqlRepository;
 import com.binwoo.oauth.req.ClientPagerReq;
 import com.binwoo.oauth.service.ClientService;
 import com.binwoo.oauth.util.PageListUtils;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -34,13 +32,13 @@ import org.springframework.util.StringUtils;
 public class ClientServiceImpl implements ClientService {
 
   private final ClientRepository clientRepository;
-  private final SqlRepository sqlRepository;
+  private final EntityManager manager;
 
   @Autowired
   public ClientServiceImpl(ClientRepository clientRepository,
-      SqlRepository sqlRepository) {
+      EntityManager manager) {
     this.clientRepository = clientRepository;
-    this.sqlRepository = sqlRepository;
+    this.manager = manager;
   }
 
   @Override
@@ -93,43 +91,19 @@ public class ClientServiceImpl implements ClientService {
 
   @Override
   public boolean updateAuthorities(String id, Set<String> authorityIds) {
-    clientRepository.deleteAuthorityById(id);
-    if (!CollectionUtils.isEmpty(authorityIds)) {
-      String sql = "INSERT INTO t_client_authority (client_id,authority_id) VALUES (?,?)";
-      List<Map<Integer, Object>> parameters = new ArrayList<>();
-      for (String authorityId : authorityIds) {
-        parameters.add(sqlRepository.buildParams(id, authorityId));
-      }
-      sqlRepository.batch(sql, parameters);
-    }
+    clientRepository.updateAuthorities(manager, id, authorityIds);
     return true;
   }
 
   @Override
   public boolean updateGroups(String id, Set<String> groupIds) {
-    clientRepository.deleteGroupById(id);
-    if (!CollectionUtils.isEmpty(groupIds)) {
-      String sql = "INSERT INTO t_client_group (client_id,group_id) VALUES (?,?)";
-      List<Map<Integer, Object>> parameters = new ArrayList<>();
-      for (String groupId : groupIds) {
-        parameters.add(sqlRepository.buildParams(id, groupId));
-      }
-      sqlRepository.batch(sql, parameters);
-    }
+    clientRepository.updateGroups(manager, id, groupIds);
     return true;
   }
 
   @Override
   public boolean updateResources(String id, Set<String> resourceIds) {
-    clientRepository.deleteResourceById(id);
-    if (!CollectionUtils.isEmpty(resourceIds)) {
-      String sql = "INSERT INTO t_client_resource (client_id,resource_id) VALUES (?,?)";
-      List<Map<Integer, Object>> parameters = new ArrayList<>();
-      for (String resourceId : resourceIds) {
-        parameters.add(sqlRepository.buildParams(id, resourceId));
-      }
-      sqlRepository.batch(sql, parameters);
-    }
+    clientRepository.updateResources(manager, id, resourceIds);
     return true;
   }
 }

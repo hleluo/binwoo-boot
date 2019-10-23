@@ -6,6 +6,7 @@ import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.util.JacksonUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -64,8 +65,7 @@ public class ClientFilter implements Filter {
       write(servletResponse, HttpAuthExceptionCode.CLIENT_DELETED);
       return;
     }
-    if (client.getExpireTime() != null && client.getExpireTime().getTime() > System
-        .currentTimeMillis()) {
+    if (client.getExpireTime() != null && client.getExpireTime().isBefore(LocalDateTime.now())) {
       write(servletResponse, HttpAuthExceptionCode.CLIENT_EXPIRED);
       return;
     }

@@ -107,6 +107,7 @@
       <column name="id" value="6a1ca001-1fa0-451e-b19c-9aa65e6e9c51"/>
       <column name="username" value="root"/>
       <column name="password" value="$2a$10$WnC8IUdCs4c1.aMreXapb.zm94PBGHgGdHIL/qFuy1.i/jGNRzNVi"/>
+      <column name="active" value="true"/>
       <column name="create_time" value="now()"/>
       <column name="update_time" value="now()"/>
     </insert>

@@ -31,7 +31,6 @@ public interface GroupRepository extends BaseRepository<Group> {
    *
    * @param ids id列表
    */
-  @Override
   @Modifying
   @Query("delete from Group g where g.id in (:ids)")
   void deleteByIdIn(@Param("ids") List<String> ids);

@@ -4,15 +4,13 @@ import com.binwoo.common.http.exception.HttpException;
 import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.User;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
-import com.binwoo.oauth.repository.SqlRepository;
 import com.binwoo.oauth.repository.UserRepository;
 import com.binwoo.oauth.req.UserPagerReq;
 import com.binwoo.oauth.service.UserService;
 import com.binwoo.oauth.util.PageListUtils;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -36,21 +34,21 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
-  private final SqlRepository sqlRepository;
+  private final EntityManager manager;
 
   /**
    * 构造函数.
    *
    * @param userRepository 用户仓库
    * @param passwordEncoder 加密方式
-   * @param sqlRepository SQL仓库
+   * @param manager 管理器
    */
   @Autowired
   public UserServiceImpl(UserRepository userRepository,
-      PasswordEncoder passwordEncoder, SqlRepository sqlRepository) {
+      PasswordEncoder passwordEncoder, EntityManager manager) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
-    this.sqlRepository = sqlRepository;
+    this.manager = manager;
   }
 
   @Override
@@ -116,43 +114,19 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public boolean updateRoles(String id, Set<String> roleIds) {
-    userRepository.deleteRoleById(id);
-    if (!CollectionUtils.isEmpty(roleIds)) {
-      String sql = "INSERT INTO t_user_role (user_id,role_id) VALUES (?,?)";
-      List<Map<Integer, Object>> parameters = new ArrayList<>();
-      for (String roleId : roleIds) {
-        parameters.add(sqlRepository.buildParams(id, roleId));
-      }
-      sqlRepository.batch(sql, parameters);
-    }
+    userRepository.updateRoles(manager, id, roleIds);
     return true;
   }
 
   @Override
   public boolean updateAuthorities(String id, Set<String> authorityIds) {
-    userRepository.deleteAuthorityById(id);
-    if (!CollectionUtils.isEmpty(authorityIds)) {
-      String sql = "INSERT INTO t_user_authority (user_id,authority_id) VALUES (?,?)";
-      List<Map<Integer, Object>> parameters = new ArrayList<>();
-      for (String authorityId : authorityIds) {
-        parameters.add(sqlRepository.buildParams(id, authorityId));
-      }
-      sqlRepository.batch(sql, parameters);
-    }
+    userRepository.updateAuthorities(manager, id, authorityIds);
     return true;
   }
 
   @Override
   public boolean updateGroups(String id, Set<String> groupIds) {
-    userRepository.deleteGroupById(id);
-    if (!CollectionUtils.isEmpty(groupIds)) {
-      String sql = "INSERT INTO t_user_group (user_id,group_id) VALUES (?,?)";
-      List<Map<Integer, Object>> parameters = new ArrayList<>();
-      for (String groupId : groupIds) {
-        parameters.add(sqlRepository.buildParams(id, groupId));
-      }
-      sqlRepository.batch(sql, parameters);
-    }
+    userRepository.updateGroups(manager, id, groupIds);
     return true;
   }
 }

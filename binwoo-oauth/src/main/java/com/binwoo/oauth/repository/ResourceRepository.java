@@ -51,7 +51,6 @@ public interface ResourceRepository extends BaseRepository<Resource> {
    *
    * @param ids id列表
    */
-  @Override
   @Modifying
   @Query("delete from Resource r where r.id in (:ids)")
   void deleteByIdIn(@Param("ids") List<String> ids);

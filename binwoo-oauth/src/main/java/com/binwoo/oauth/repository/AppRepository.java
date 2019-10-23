@@ -40,7 +40,6 @@ public interface AppRepository extends BaseRepository<App> {
    *
    * @param ids id列表
    */
-  @Override
   @Modifying
   @Query("delete from App a where a.id in (:ids)")
   void deleteByIdIn(@Param("ids") List<String> ids);

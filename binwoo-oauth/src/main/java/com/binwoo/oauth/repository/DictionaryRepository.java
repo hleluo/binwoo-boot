@@ -39,7 +39,6 @@ public interface DictionaryRepository extends BaseRepository<Dictionary> {
    *
    * @param ids id列表
    */
-  @Override
   @Modifying
   @Query("delete from Dictionary d where d.id in (:ids)")
   void deleteByIdIn(@Param("ids") List<String> ids);

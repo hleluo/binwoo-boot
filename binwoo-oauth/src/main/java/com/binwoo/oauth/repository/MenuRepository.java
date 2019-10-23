@@ -31,7 +31,6 @@ public interface MenuRepository extends BaseRepository<Menu> {
    *
    * @param ids id列表
    */
-  @Override
   @Modifying
   @Query("delete from Menu m where m.id in (:ids)")
   void deleteByIdIn(@Param("ids") List<String> ids);

@@ -11,8 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -49,12 +47,10 @@ public class Api implements Serializable {
   private String parentId;
   @ApiModelProperty(value = "创建时间：yyyy-MM-dd HH:mm:ss")
   @Column(updatable = false)
-  @Temporal(value = TemporalType.TIMESTAMP)
   @CreationTimestamp
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime createTime;
   @ApiModelProperty(value = "更新时间：yyyy-MM-dd HH:mm:ss")
-  @Temporal(value = TemporalType.TIMESTAMP)
   @UpdateTimestamp
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime updateTime;

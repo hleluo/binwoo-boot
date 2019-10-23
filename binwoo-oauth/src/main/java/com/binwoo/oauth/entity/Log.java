@@ -9,8 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -55,7 +53,6 @@ public class Log {
   private String username;
   @ApiModelProperty(value = "创建时间：yyyy-MM-dd HH:mm:ss")
   @Column(updatable = false)
-  @Temporal(value = TemporalType.TIMESTAMP)
   @CreationTimestamp
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime createTime;

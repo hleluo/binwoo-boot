@@ -31,7 +31,6 @@ public interface ApiRepository extends BaseRepository<Api> {
    *
    * @param ids id列表
    */
-  @Override
   @Modifying
   @Query("delete from Api a where a.id in (:ids)")
   void deleteByIdIn(@Param("ids") List<String> ids);

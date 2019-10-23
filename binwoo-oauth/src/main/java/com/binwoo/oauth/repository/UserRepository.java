@@ -1,11 +1,16 @@
 package com.binwoo.oauth.repository;
 
 import com.binwoo.oauth.entity.User;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.persistence.EntityManager;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 用户仓库.
@@ -105,5 +110,62 @@ public interface UserRepository extends BaseRepository<User> {
   @Modifying
   @Query(value = "delete from t_user_group tug where user_id in (:ids)", nativeQuery = true)
   void deleteGroupByIdIn(@Param("ids") List<String> ids);
+
+  /**
+   * 更新用户角色列表.
+   *
+   * @param manager 管理器
+   * @param id 用户id
+   * @param roleIds 角色id列表
+   */
+  default void updateRoles(EntityManager manager, String id, Set<String> roleIds) {
+    deleteRoleById(id);
+    if (!CollectionUtils.isEmpty(roleIds)) {
+      String sql = "INSERT INTO t_user_role (user_id,role_id) VALUES (?,?)";
+      List<Map<Integer, Object>> parameters = new ArrayList<>();
+      for (String roleId : roleIds) {
+        parameters.add(buildParams(id, roleId));
+      }
+      batch(manager, sql, parameters);
+    }
+  }
+
+  /**
+   * 更新用户权职列表.
+   *
+   * @param manager 管理器
+   * @param id 用户id
+   * @param authorityIds 权职id列表
+   */
+  default void updateAuthorities(EntityManager manager, String id, Set<String> authorityIds) {
+    deleteAuthorityById(id);
+    if (!CollectionUtils.isEmpty(authorityIds)) {
+      String sql = "INSERT INTO t_user_authority (user_id,authority_id) VALUES (?,?)";
+      List<Map<Integer, Object>> parameters = new ArrayList<>();
+      for (String authorityId : authorityIds) {
+        parameters.add(buildParams(id, authorityId));
+      }
+      batch(manager, sql, parameters);
+    }
+  }
+
+  /**
+   * 更新用户组列表.
+   *
+   * @param manager 管理器
+   * @param id 用户id
+   * @param groupIds 组id列表
+   */
+  default void updateGroups(EntityManager manager, String id, Set<String> groupIds) {
+    deleteGroupById(id);
+    if (!CollectionUtils.isEmpty(groupIds)) {
+      String sql = "INSERT INTO t_user_group (user_id,group_id) VALUES (?,?)";
+      List<Map<Integer, Object>> parameters = new ArrayList<>();
+      for (String groupId : groupIds) {
+        parameters.add(buildParams(id, groupId));
+      }
+      batch(manager, sql, parameters);
+    }
+  }
 
 }

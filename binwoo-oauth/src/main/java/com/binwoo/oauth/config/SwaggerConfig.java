@@ -3,6 +3,7 @@ package com.binwoo.oauth.config;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,9 @@ public class SwaggerConfig {
   private static final Set<String> DEFAULT_PRODUCES_AND_CONSUMES =
       new HashSet<>(Collections.singletonList("application/json"));
 
+  @Value("${swagger.enable}")
+  private boolean enable;
+
   /**
    * Config swagger docket.
    *
@@ -33,6 +37,7 @@ public class SwaggerConfig {
   @Bean
   public Docket docket() {
     return new Docket(DocumentationType.SWAGGER_2)
+        .enable(enable)
         .select()
         .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
         .paths(PathSelectors.any())
