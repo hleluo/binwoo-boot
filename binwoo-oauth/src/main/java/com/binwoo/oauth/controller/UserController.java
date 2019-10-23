@@ -99,7 +99,7 @@ public class UserController {
    * @return 是否成功
    */
   @ApiOperation("批量删除用户信息")
-  @PatchMapping
+  @PatchMapping("/delete")
   public HttpResponse<Boolean> delete(@RequestBody BaseDeleteReq req) {
     log.info("delete param = {}", req);
     boolean success = userService.delete(req.getIds());

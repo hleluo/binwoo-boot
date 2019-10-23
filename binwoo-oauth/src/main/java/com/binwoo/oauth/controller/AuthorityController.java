@@ -95,7 +95,7 @@ public class AuthorityController {
    * @return 是否成功
    */
   @ApiOperation("批量删除权职信息")
-  @PatchMapping
+  @PatchMapping("/delete")
   public HttpResponse<Boolean> delete(@RequestBody BaseDeleteReq req) {
     log.info("delete param = {}", req);
     boolean success = authorityService.delete(req.getIds());

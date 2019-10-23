@@ -94,7 +94,7 @@ public class RoleController {
    * @return 是否成功
    */
   @ApiOperation("批量删除角色信息")
-  @PatchMapping
+  @PatchMapping("/delete")
   public HttpResponse<Boolean> delete(@RequestBody BaseDeleteReq req) {
     log.info("delete param = {}", req);
     boolean success = roleService.delete(req.getIds());
