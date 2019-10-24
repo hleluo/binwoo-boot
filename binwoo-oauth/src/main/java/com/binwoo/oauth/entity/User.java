@@ -35,6 +35,8 @@ public class User implements Serializable {
   private String id;
   @ApiModelProperty(value = "用户名")
   private String username;
+  @ApiModelProperty(value = "昵称")
+  private String nickname;
   @ApiModelProperty(value = "手机号")
   private String mobile;
   @ApiModelProperty(value = "邮箱")
