@@ -33,7 +33,7 @@
       <column name="id" value="8f03cf12-d431-46e0-9a22-cd641ccd88d8"/>
       <column name="name" value="初始化客户端"/>
       <column name="code" value="client"/>
-      <column name="secret" value="9Jv$P1"/>
+      <column name="secret" value="$2a$10$NMOdATugjeoUR0zIEhfdGuObNmKaobWwb51A7ZtHf8oRAIJ/7qKSe"/>
       <column name="grant_type"
         value="authorization_code,password,client_credentials,refresh_token"/>
       <column name="scope" value="all"/>

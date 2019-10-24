@@ -9,6 +9,7 @@ import com.binwoo.oauth.req.BaseDeleteReq;
 import com.binwoo.oauth.req.UserAuthorityReq;
 import com.binwoo.oauth.req.UserGroupReq;
 import com.binwoo.oauth.req.UserPagerReq;
+import com.binwoo.oauth.req.UserRegisterReq;
 import com.binwoo.oauth.req.UserRoleReq;
 import com.binwoo.oauth.service.UserService;
 import io.swagger.annotations.Api;
@@ -59,6 +60,21 @@ public class UserController {
     user = userService.save(user);
     log.info("save response = {}", user);
     return HttpResponseBuilder.save(user);
+  }
+
+  /**
+   * 保存用户信息.
+   *
+   * @param req 用户信息
+   * @return 用户信息
+   */
+  @ApiOperation("注册用户信息")
+  @PostMapping("/register")
+  public HttpResponse<Boolean> register(@RequestBody UserRegisterReq req) throws HttpException {
+    log.info("register param = {}", req);
+    boolean success = userService.register(req);
+    log.info("register response = {}", success);
+    return HttpResponseBuilder.success(success);
   }
 
   /**

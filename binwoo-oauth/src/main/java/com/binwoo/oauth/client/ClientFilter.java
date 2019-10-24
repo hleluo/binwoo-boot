@@ -14,6 +14,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * 客户端信息验证拦截器.
@@ -70,7 +71,7 @@ public class ClientFilter implements Filter {
       return;
     }
     String clientSecret = request.getParameter(PARAM_KEY_CLIENT_SECRET);
-    if (!clientSecret.equals(client.getSecret())) {
+    if (!new BCryptPasswordEncoder().matches(clientSecret, client.getSecret())) {
       write(servletResponse, HttpAuthExceptionCode.CLIENT_INVALID);
       return;
     }

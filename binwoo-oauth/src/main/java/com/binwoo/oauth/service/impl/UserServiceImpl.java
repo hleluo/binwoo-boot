@@ -6,8 +6,10 @@ import com.binwoo.oauth.entity.User;
 import com.binwoo.oauth.exception.HttpAuthExceptionCode;
 import com.binwoo.oauth.repository.UserRepository;
 import com.binwoo.oauth.req.UserPagerReq;
+import com.binwoo.oauth.req.UserRegisterReq;
 import com.binwoo.oauth.service.UserService;
 import com.binwoo.oauth.util.PageListUtils;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
@@ -60,7 +62,7 @@ public class UserServiceImpl implements UserService {
     if (StringUtils.isEmpty(user.getId())) {
       user.setPassword(passwordEncoder.encode(user.getPassword()));
     } else {
-      //修改用户信息，检测密码是有有修改.
+      //修改用户信息，检测密码是否有修改.
       if (StringUtils.isEmpty(user.getPassword())) {
         if (source == null) {
           throw new HttpException(HttpAuthExceptionCode.USER_PASSWORD_NULL);
@@ -74,11 +76,64 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public boolean register(UserRegisterReq req) throws HttpException {
+    User user = new User();
+    user.setUsername(req.getUsername());
+    if (StringUtils.isEmpty(req.getNickname())) {
+      user.setNickname(req.getUsername());
+    } else {
+      user.setNickname(req.getNickname());
+    }
+    user.setMobile(req.getMobile());
+    user.setPassword(req.getPassword());
+    user.setCategory(req.getCategory());
+    user.setType(req.getType());
+    user.setSourceId(req.getSourceId());
+    user.setActive(req.getActive() == null ? false : req.getActive());
+    user.setThumbnail(req.getThumbnail());
+    save(user);
+    return true;
+  }
+
+  @Override
   public PageList<User> getByPager(UserPagerReq req) {
     Page<User> page = userRepository.findAll(new Specification<User>() {
       @Override
       public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery,
           CriteriaBuilder criteriaBuilder) {
+        List<Predicate> predicates = new ArrayList<>();
+        if (!StringUtils.isEmpty(req.getKeyword())) {
+          String keyword = String.format("%%%s%%", req.getKeyword());
+          predicates.add(criteriaBuilder.or(
+              criteriaBuilder.like(root.get("username").as(String.class), keyword),
+              criteriaBuilder.like(root.get("nickname").as(String.class), keyword),
+              criteriaBuilder.like(root.get("mobile").as(String.class), keyword)));
+        }
+        if (req.getActive() != null) {
+          predicates.add(criteriaBuilder.equal(root.get("active").as(Boolean.class),
+              req.getActive()));
+        }
+        if (req.getDisable() != null) {
+          predicates.add(criteriaBuilder.equal(root.get("disable").as(Boolean.class),
+              req.getDisable()));
+        }
+        if (req.getDeleted() != null) {
+          predicates.add(criteriaBuilder.equal(root.get("deleted").as(Boolean.class),
+              req.getDeleted()));
+        }
+        if (!StringUtils.isEmpty(req.getCategory())) {
+          predicates.add(criteriaBuilder.equal(root.get("category").as(String.class),
+              req.getCategory()));
+        }
+        if (!StringUtils.isEmpty(req.getType())) {
+          predicates.add(criteriaBuilder.equal(root.get("type").as(String.class),
+              req.getType()));
+        }
+        if (!StringUtils.isEmpty(req.getSourceId())) {
+          predicates.add(criteriaBuilder.equal(root.get("sourceId").as(String.class),
+              req.getSourceId()));
+        }
+        criteriaQuery.where(predicates.toArray(new Predicate[]{}));
         return criteriaQuery.getRestriction();
       }
     }, req.getPageRequest());

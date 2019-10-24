@@ -4,6 +4,7 @@ import com.binwoo.common.http.exception.HttpException;
 import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.User;
 import com.binwoo.oauth.req.UserPagerReq;
+import com.binwoo.oauth.req.UserRegisterReq;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +24,15 @@ public interface UserService {
    * @throws HttpException 异常
    */
   User save(User user) throws HttpException;
+
+  /**
+   * 保存用户信息.
+   *
+   * @param req 用户信息
+   * @return 用户信息
+   * @throws HttpException 异常
+   */
+  boolean register(UserRegisterReq req) throws HttpException;
 
   /**
    * 分页查询用户信息.

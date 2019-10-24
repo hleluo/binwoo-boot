@@ -14,6 +14,7 @@ import java.util.Map;
  */
 public class HttpResponseBuilder {
 
+  private static final String MSG_SUCCESS_DEFAULT = "SUCCESS";
   private static final String MSG_SUCCESS_QUERY = "SUCCESS_QUERY";
   private static final String MSG_SUCCESS_SAVE = "SUCCESS_SAVE";
   private static final String MSG_SUCCESS_INSERT = "SUCCESS_INSERT";
@@ -42,6 +43,16 @@ public class HttpResponseBuilder {
       return code;
     }
     return msg;
+  }
+
+  /**
+   * 操作成功.
+   *
+   * @param body 消息体
+   * @return HttpResponse
+   */
+  public static <T> HttpResponse<T> success(T body) {
+    return HttpResponse.success(getMessage(MSG_SUCCESS_DEFAULT), body);
   }
 
   /**

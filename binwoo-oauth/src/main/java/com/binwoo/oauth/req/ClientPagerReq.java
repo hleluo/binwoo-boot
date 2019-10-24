@@ -1,6 +1,7 @@
 package com.binwoo.oauth.req;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,5 +15,12 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Data
 public class ClientPagerReq extends BasePagerReq {
+
+  @ApiModelProperty(value = "模糊搜索：名称、标识")
+  private String keyword;
+  @ApiModelProperty(value = "是否被禁用，可选")
+  private Boolean disable;
+  @ApiModelProperty(value = "是否被删除，可选")
+  private Boolean deleted;
 
 }
