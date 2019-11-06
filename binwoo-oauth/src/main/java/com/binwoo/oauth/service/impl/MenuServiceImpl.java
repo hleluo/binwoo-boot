@@ -2,11 +2,13 @@ package com.binwoo.oauth.service.impl;
 
 import com.binwoo.common.http.response.PageList;
 import com.binwoo.oauth.entity.Menu;
+import com.binwoo.oauth.helper.MenuHelper;
 import com.binwoo.oauth.repository.MenuRepository;
 import com.binwoo.oauth.req.MenuPagerReq;
 import com.binwoo.oauth.service.MenuService;
 import com.binwoo.oauth.util.PageListUtils;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -28,15 +30,18 @@ import org.springframework.util.StringUtils;
 public class MenuServiceImpl implements MenuService {
 
   private final MenuRepository menuRepository;
+  private final MenuHelper menuHelper;
 
   /**
    * 构造函数.
    *
    * @param menuRepository 菜单仓库
+   * @param menuHelper 菜单帮助类
    */
   @Autowired
-  public MenuServiceImpl(MenuRepository menuRepository) {
+  public MenuServiceImpl(MenuRepository menuRepository, MenuHelper menuHelper) {
     this.menuRepository = menuRepository;
+    this.menuHelper = menuHelper;
   }
 
   @Override
@@ -59,8 +64,8 @@ public class MenuServiceImpl implements MenuService {
   @Override
   public boolean delete(String id) {
     if (!StringUtils.isEmpty(id)) {
-      menuRepository.deleteRoleById(id);
-      menuRepository.deleteById(id);
+      List<Menu> menus = menuHelper.getPosterityWithSelfById(id);
+      return deleteMenus(menus);
     }
     return true;
   }
@@ -68,6 +73,21 @@ public class MenuServiceImpl implements MenuService {
   @Override
   public boolean delete(List<String> ids) {
     if (!CollectionUtils.isEmpty(ids)) {
+      List<Menu> menus = menuHelper.getPosterityWithSelfByIds(ids);
+      return deleteMenus(menus);
+    }
+    return true;
+  }
+
+  /**
+   * 删除菜单列表.
+   *
+   * @param menus 菜单列表
+   * @return 是否成功
+   */
+  private boolean deleteMenus(List<Menu> menus) {
+    if (!CollectionUtils.isEmpty(menus)) {
+      List<String> ids = menus.stream().map(Menu::getId).collect(Collectors.toList());
       menuRepository.deleteRoleByIdIn(ids);
       menuRepository.deleteByIdIn(ids);
     }

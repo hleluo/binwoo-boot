@@ -15,16 +15,16 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * 字典信息.
+ * 字典选项信息.
  *
  * @author admin
  * @date 2019/9/19 16:50
  */
-@ApiModel(value = "字典信息")
+@ApiModel(value = "字典选项信息")
 @Data
 @Entity
-@Table(name = "t_dictionary")
-public class Dictionary {
+@Table(name = "t_dict_option")
+public class DictOption {
 
   @Id
   @GenericGenerator(name = "uid", strategy = "uuid2")
@@ -32,17 +32,15 @@ public class Dictionary {
   private String id;
   @ApiModelProperty(value = "标识，唯一")
   private String code;
-  @ApiModelProperty(value = "键，如MALE、FEMALE等")
-  private String key;
-  @ApiModelProperty(value = "值，如男、女等")
+  @ApiModelProperty(value = "字典值，如MALE、FEMALE等")
   private String value;
+  @ApiModelProperty(value = "字典展示名称，如男、女等")
+  private String name;
   @ApiModelProperty(value = "优先级，越小越在前")
   private Integer priority = 0;
   @ApiModelProperty(value = "描述")
   private String description;
-  @ApiModelProperty(value = "是否为选项，TRUE 字典选项；FALSE 字典类型")
-  private boolean optional = false;
-  @ApiModelProperty(value = "字典类型id，可为空")
+  @ApiModelProperty(value = "字典类型id")
   private String typeId;
   @ApiModelProperty(value = "是否文本显示，TRUE 显示文本；FALSE 显示标签")
   private boolean textual = true;

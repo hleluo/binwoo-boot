@@ -17,6 +17,30 @@ import org.springframework.stereotype.Repository;
 public interface MenuRepository extends BaseRepository<Menu> {
 
   /**
+   * 根据id列表获取菜单列表.
+   *
+   * @param ids id列表
+   * @return 菜单列表
+   */
+  List<Menu> findByIdIn(List<String> ids);
+
+  /**
+   * 根据父节点获取子节点列表.
+   *
+   * @param parentId 父节点id
+   * @return 子节点列表
+   */
+  List<Menu> findByParentId(String parentId);
+
+  /**
+   * 根据父节点获取子节点列表.
+   *
+   * @param parentIds 父节点id列表
+   * @return 子节点列表
+   */
+  List<Menu> findByParentIdIn(List<String> parentIds);
+
+  /**
    * 根据id删除菜单信息.
    *
    * @param id id

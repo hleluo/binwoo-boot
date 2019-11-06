@@ -1,7 +1,8 @@
 package com.binwoo.oauth.service;
 
 import com.binwoo.common.http.exception.HttpException;
-import com.binwoo.oauth.entity.Dictionary;
+import com.binwoo.oauth.entity.DictOption;
+import com.binwoo.oauth.entity.DictType;
 import java.util.List;
 
 /**
@@ -13,27 +14,51 @@ import java.util.List;
 public interface DictionaryService {
 
   /**
-   * 保存字典信息.
+   * 保存字典类型信息.
    *
-   * @param dictionary 字典信息
-   * @return 字典信息
+   * @param dictType 字典类型信息
+   * @return 字典类型信息
    */
-  Dictionary save(Dictionary dictionary) throws HttpException;
+  DictType saveType(DictType dictType) throws HttpException;
 
   /**
-   * 删除字典信息.
+   * 保存字典选项信息.
    *
-   * @param id 字典id
-   * @return 是否成功
+   * @param dictOption 字典选项信息
+   * @return 字典选项信息
    */
-  boolean delete(String id);
+  DictOption saveOption(DictOption dictOption) throws HttpException;
 
   /**
-   * 删除字典信息.
+   * 删除字典类型信息.
    *
-   * @param ids 字典id列表
+   * @param id 字典类型id
    * @return 是否成功
    */
-  boolean delete(List<String> ids);
+  boolean deleteType(String id);
+
+  /**
+   * 删除字典类型信息.
+   *
+   * @param ids 字典类型id列表
+   * @return 是否成功
+   */
+  boolean deleteType(List<String> ids);
+
+  /**
+   * 删除字典选项信息.
+   *
+   * @param id 字典选项id
+   * @return 是否成功
+   */
+  boolean deleteOption(String id);
+
+  /**
+   * 删除字典选项信息.
+   *
+   * @param ids 字典选项id列表
+   * @return 是否成功
+   */
+  boolean deleteOption(List<String> ids);
 
 }
