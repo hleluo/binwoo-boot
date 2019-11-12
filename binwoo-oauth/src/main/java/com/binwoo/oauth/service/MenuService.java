@@ -45,4 +45,11 @@ public interface MenuService {
    */
   boolean delete(List<String> ids);
 
+  /**
+   * 查询菜单树形列表.
+   *
+   * @return 菜单树形列表
+   */
+  List<Menu> getTree();
+
 }

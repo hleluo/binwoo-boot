@@ -3,7 +3,9 @@ package com.binwoo.oauth.helper;
 import com.binwoo.oauth.entity.DictType;
 import com.binwoo.oauth.repository.DictTypeRepository;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -97,6 +99,57 @@ public class DictionaryHelper {
       results.addAll(getPosterityWithSelf(children));
     }
     return results;
+  }
+
+  /**
+   * 列表转树形结构.
+   *
+   * @param sources 列表
+   * @return 树形结构
+   */
+  public List<DictType> listToTree(List<DictType> sources) {
+    if (CollectionUtils.isEmpty(sources)) {
+      return new ArrayList<>();
+    }
+    List<DictType> results = new ArrayList<>();
+    Map<String, List<DictType>> mapParentId = new HashMap<>();
+    for (DictType dictType : sources) {
+      if (StringUtils.isEmpty(dictType.getParentId())) {
+        //根节点
+        results.add(dictType);
+      } else {
+        //后代节点
+        if (mapParentId.containsKey(dictType.getParentId())) {
+          mapParentId.get(dictType.getParentId()).add(dictType);
+        } else {
+          List<DictType> values = new ArrayList<>();
+          values.add(dictType);
+          mapParentId.put(dictType.getParentId(), values);
+        }
+      }
+    }
+    results.sort((c1, c2) -> c1.getPriority().compareTo(c2.getPriority()));
+    results.forEach(child -> findPosterity(child, mapParentId));
+    return results;
+  }
+
+  /**
+   * 查找某个节点的子孙点.
+   *
+   * @param node 节点
+   * @param mapParentId 父节id与子节点关系
+   */
+  private void findPosterity(DictType node, Map<String, List<DictType>> mapParentId) {
+    if (node == null) {
+      return;
+    }
+    List<DictType> children = mapParentId.get(node.getId());
+    if (!CollectionUtils.isEmpty(children)) {
+      //排序
+      children.sort((c1, c2) -> c1.getPriority().compareTo(c2.getPriority()));
+      node.setChildren(children);
+      node.getChildren().forEach(child -> findPosterity(child, mapParentId));
+    }
   }
 
 }

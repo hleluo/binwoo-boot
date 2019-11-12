@@ -79,6 +79,12 @@ public class MenuServiceImpl implements MenuService {
     return true;
   }
 
+  @Override
+  public List<Menu> getTree() {
+    List<Menu> menus = (List<Menu>) menuRepository.findAll();
+    return menuHelper.listToTree(menus);
+  }
+
   /**
    * 删除菜单列表.
    *

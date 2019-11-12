@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -69,6 +69,6 @@ public class Menu implements Serializable {
 
   @ApiModelProperty(value = "子节点，可为空")
   @Transient
-  private Set<Menu> children;
+  private List<Menu> children;
 
 }

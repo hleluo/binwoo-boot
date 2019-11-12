@@ -4,11 +4,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -30,10 +34,14 @@ public class DictType {
   @GenericGenerator(name = "uid", strategy = "uuid2")
   @GeneratedValue(generator = "uid")
   private String id;
+  @NotBlank(message = "DictType.code.null")
+  @Max(value = 20, message = "{DictType.code.length}")
   @ApiModelProperty(value = "标识，唯一")
   private String code;
   @ApiModelProperty(value = "优先级，越小越在前")
   private Integer priority = 0;
+  @NotBlank(message = "DictType.name.null")
+  @Max(value = 50, message = "{DictType.name.length}")
   @ApiModelProperty(value = "名称")
   private String name;
   @ApiModelProperty(value = "描述")
@@ -49,5 +57,8 @@ public class DictType {
   @UpdateTimestamp
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime updateTime;
+
+  @Transient
+  private List<DictType> children;
 
 }

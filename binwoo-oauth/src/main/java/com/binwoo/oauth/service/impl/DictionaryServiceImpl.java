@@ -95,6 +95,12 @@ public class DictionaryServiceImpl implements DictionaryService {
     return true;
   }
 
+  @Override
+  public List<DictType> getTypesTree() {
+    List<DictType> dictTypes = (List<DictType>) dictTypeRepository.findAll();
+    return dictionaryHelper.listToTree(dictTypes);
+  }
+
   /**
    * 删除字典类型列表.
    *

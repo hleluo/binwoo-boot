@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -100,5 +101,19 @@ public class MenuController {
     boolean success = menuService.delete(req.getIds());
     log.info("delete response = {}", success);
     return HttpResponseBuilder.delete(success);
+  }
+
+  /**
+   * 查询菜单树形列表.
+   *
+   * @return 菜单树形列表
+   */
+  @ApiOperation("查询菜单树形列表")
+  @GetMapping("/getTree")
+  public HttpResponse<List<Menu>> getTree() {
+    log.info("getTree param is empty");
+    List<Menu> menus = menuService.getTree();
+    log.info("getTree response = {}", menus);
+    return HttpResponseBuilder.query(menus);
   }
 }

@@ -61,4 +61,11 @@ public interface DictionaryService {
    */
   boolean deleteOption(List<String> ids);
 
+  /**
+   * 获取字典类型树形列表.
+   *
+   * @return 字典类型树形列表
+   */
+  List<DictType> getTypesTree();
+
 }
