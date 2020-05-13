@@ -120,8 +120,8 @@ public class PdfHelper {
           // 页面大小
           Rectangle rectangle = reader.getPageSize(page);
           // 添加图片
-          float x = picture.getAxisX();
-          float y = rectangle.getHeight() - picture.getAxisY() - height;
+          float x = picture.getLeft();
+          float y = rectangle.getHeight() - picture.getTop() - height;
           image.setAbsolutePosition(x, y);
           under.addImage(image);
         }

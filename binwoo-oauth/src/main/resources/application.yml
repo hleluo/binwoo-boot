@@ -2,9 +2,6 @@ spring:
   application:
     name: binwoo-oauth
   datasource:
-    url: jdbc:postgresql://10.10.201.50:5432/test
-    username: postgres
-    password: 123456
     driver-class-name: org.postgresql.Driver
     druid:
       validation-query: select 1

@@ -15,11 +15,11 @@ public class PdfPicture {
   /**
    * 坐标，左上角为原点.
    */
-  private float axisX;
+  private float left;
   /**
    * 坐标，左上角为原点.
    */
-  private float axisY;
+  private float top;
   /**
    * 是否使用原始大小，为TRUE时，destWidth和destHeight不生效.
    */
@@ -46,30 +46,30 @@ public class PdfPicture {
     this.filepath = filepath;
   }
 
-  public float getAxisX() {
-    return axisX;
+  public float getLeft() {
+    return left;
   }
 
   /**
    * 设置坐标X，左上角为原点.
    *
-   * @param axisX 坐标X
+   * @param left 坐标X
    */
-  public void setAxisX(float axisX) {
-    this.axisX = axisX;
+  public void setLeft(float left) {
+    this.left = left;
   }
 
-  public float getAxisY() {
-    return axisY;
+  public float getTop() {
+    return top;
   }
 
   /**
    * 设置坐标Y，左上角为原点.
    *
-   * @param axisY 坐标Y
+   * @param top 坐标Y
    */
-  public void setAxisY(float axisY) {
-    this.axisY = axisY;
+  public void setTop(float top) {
+    this.top = top;
   }
 
   public boolean isOriginal() {
