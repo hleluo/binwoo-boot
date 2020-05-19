@@ -1,5 +1,5 @@
-import com.binwoo.poi.pdf.PdfHelper;
-import com.binwoo.poi.pdf.PdfPicture;
+import com.binwoo.poi.pdf.PdfRender;
+import com.binwoo.poi.pdf.bean.PdfPicture;
 
 /**
  * PDF测试.
@@ -7,7 +7,7 @@ import com.binwoo.poi.pdf.PdfPicture;
  * @author admin
  * @date 2019/9/23 15:54
  */
-public class PdfHelperTest {
+public class PdfRenderTest {
 
   /**
    * PDF测试.
@@ -16,14 +16,14 @@ public class PdfHelperTest {
    */
   public static void main(String[] args) {
     try {
-      PdfHelper helper = new PdfHelper("D:\\test\\docx_pdf.pdf");
+      PdfRender render = new PdfRender("D:\\test\\docx_pdf.pdf");
       PdfPicture picture = new PdfPicture();
-      picture.setAxisX(10);
-      picture.setAxisX(10);
+      picture.setLeft(10);
+      picture.setTop(10);
       picture.setFilepath("D:\\test\\440300000000.png");
       picture.setOriginal(true);
-      helper.addPicture(1, picture, "D:\\test\\pdf_picture.pdf");
-      helper.close();
+      render.addPicture(1, picture, "D:\\test\\pdf_picture.pdf");
+      render.close();
     } catch (Exception e) {
       e.printStackTrace();
     }

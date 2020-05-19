@@ -1,5 +1,6 @@
-package com.binwoo.poi.excel;
+package com.binwoo.poi.excel.bean;
 
+import com.binwoo.poi.excel.ExcelRowLoader;
 import java.util.List;
 
 /**

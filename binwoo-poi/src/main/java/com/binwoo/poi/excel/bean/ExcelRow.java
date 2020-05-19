@@ -1,5 +1,6 @@
-package com.binwoo.poi.excel;
+package com.binwoo.poi.excel.bean;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,8 +26,22 @@ public class ExcelRow {
   public ExcelRow() {
   }
 
+  /**
+   * 构建数据行.
+   *
+   * @param cells 单元格列表.
+   */
   public ExcelRow(List<ExcelCell> cells) {
     this.cells = cells;
+  }
+
+  /**
+   * 构建数据行.
+   *
+   * @param cells 单元格列表.
+   */
+  public ExcelRow(ExcelCell... cells) {
+    this.cells = Arrays.asList(cells);
   }
 
   public List<ExcelCell> getCells() {
@@ -37,6 +52,11 @@ public class ExcelRow {
     this.cells = cells;
   }
 
+  /**
+   * 获取行列数.
+   *
+   * @return 列数
+   */
   public Integer getColumnCount() {
     return cells == null ? 0 : cells.size();
   }

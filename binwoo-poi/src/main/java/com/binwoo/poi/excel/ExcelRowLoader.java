@@ -14,9 +14,9 @@ public interface ExcelRowLoader {
   /**
    * 装载数据.
    *
-   * @param helper helper
+   * @param writer writer
    * @param workbook workbook
    * @param sheet sheet
    */
-  void load(ExcelWriter helper, Workbook workbook, Sheet sheet);
+  void load(ExcelWriter writer, Workbook workbook, Sheet sheet);
 }

@@ -1,4 +1,4 @@
-package com.binwoo.poi.pdf;
+package com.binwoo.poi.pdf.bean;
 
 /**
  * PDF图片.

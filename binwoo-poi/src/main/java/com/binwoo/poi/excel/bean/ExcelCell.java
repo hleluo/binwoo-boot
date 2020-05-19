@@ -1,4 +1,6 @@
-package com.binwoo.poi.excel;
+package com.binwoo.poi.excel.bean;
+
+import com.binwoo.poi.excel.ExcelCellDecorator;
 
 /**
  * Excel单元格.
@@ -94,5 +96,16 @@ public class ExcelCell {
 
   public void setDecorator(ExcelCellDecorator decorator) {
     this.decorator = decorator;
+  }
+
+  /**
+   * 加载装饰器.
+   *
+   * @param decorator 装饰器
+   * @return 单元格
+   */
+  public ExcelCell decorate(ExcelCellDecorator decorator) {
+    this.setDecorator(decorator);
+    return this;
   }
 }

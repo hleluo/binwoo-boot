@@ -1,4 +1,4 @@
-package com.binwoo.poi.word;
+package com.binwoo.poi.word.bean;
 
 import java.util.ArrayList;
 import java.util.List;

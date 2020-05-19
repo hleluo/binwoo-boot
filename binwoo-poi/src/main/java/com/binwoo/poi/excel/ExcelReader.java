@@ -6,11 +6,17 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.NumberToTextConverter;
 
 /**
  * Excel读取.
@@ -33,9 +39,10 @@ public class ExcelReader {
      * @param object 行数据对象
      * @param index 列索引，从0开始
      * @param key 列唯一键
+     * @param value 值
      * @param cell 单元格
      */
-    void parse(T object, int index, String key, Cell cell);
+    void parse(T object, int index, String key, Object value, Cell cell);
   }
 
   /**
@@ -152,7 +159,8 @@ public class ExcelReader {
         for (int j = startColumnIndex; j < endColumnIndex; j++) {
           Cell cell = row.getCell(j);
           if (parser != null) {
-            parser.parse(target, j, keys.get(j), cell);
+            Object value = formatCell(cell);
+            parser.parse(target, j, keys.get(j), value, cell);
           }
         }
         targets.add(target);
@@ -161,6 +169,40 @@ public class ExcelReader {
       }
     }
     return targets;
+  }
+
+  /**
+   * 解析单元格数据.
+   *
+   * @param cell 单元格
+   * @return 数据
+   */
+  private Object formatCell(Cell cell) {
+    if (CellType.STRING == cell.getCellType()) {
+      return cell.getStringCellValue();
+    } else if (CellType.FORMULA == cell.getCellType()) {
+      Workbook wb = cell.getSheet().getWorkbook();
+      CreationHelper crateHelper = wb.getCreationHelper();
+      FormulaEvaluator evaluator = crateHelper.createFormulaEvaluator();
+      return formatCell(evaluator.evaluateInCell(cell));
+    } else if (CellType.NUMERIC == cell.getCellType()) {
+      if (HSSFDateUtil.isCellDateFormatted(cell)) {
+        return cell.getDateCellValue();
+      } else if (cell.getCellStyle().getDataFormat() == 58) {
+        double value = cell.getNumericCellValue();
+        return DateUtil.getJavaDate(value);
+      } else {
+        // NumberToTextConverter.toText(cell.getNumericCellValue());
+        return NumberToTextConverter.toText(cell.getNumericCellValue());
+      }
+    } else if (CellType.BLANK == cell.getCellType()) {
+      return null;
+    } else if (CellType.BOOLEAN == cell.getCellType()) {
+      return cell.getBooleanCellValue();
+    } else if (CellType.ERROR == cell.getCellType()) {
+      return null;
+    }
+    return null;
   }
 
   /**

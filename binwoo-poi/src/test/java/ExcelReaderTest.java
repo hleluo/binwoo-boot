@@ -1,7 +1,6 @@
 import com.binwoo.poi.excel.ExcelReader;
 import com.binwoo.poi.excel.ExcelReader.CellParser;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import org.apache.poi.ss.usermodel.Cell;
 
@@ -21,20 +20,33 @@ public class ExcelReaderTest {
   public static void main(String[] args) {
     try {
       ExcelReader reader = new ExcelReader("D:\\test\\write.xlsx");
-      CellParser<HashMap> parser = new CellParser<HashMap>() {
+      CellParser<User> parser = new CellParser<User>() {
         @Override
-        public void parse(HashMap object, int index, String key, Cell cell) {
-          ((HashMap<String, Object>) object).put(index + "", cell.getStringCellValue());
-          System.out.println("56756");
+        public void parse(User object, int index, String key, Object value, Cell cell) {
+          // 根据索引获取值
+          switch (index) {
+            case 0:
+              object.setName((String) value);
+              break;
+            case 1:
+              object.setAge(Integer.parseInt((String) value));
+              break;
+            case 2:
+              object.setMoney(Double.parseDouble((String) value));
+              break;
+          }
+          // 根据key获取值，对应的需要指定keyIndex所在的行
+          if ("tag".equals(key)) {
+            object.setTag((String) value);
+          }
         }
       };
-      List<HashMap> data = reader.readByIndex(null,
-          0, null, HashMap.class, null, parser);
+      List<User> users = reader.readByIndex(null, 1, null, User.class, 0, parser);
       reader.close();
-      System.out.println("success");
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
+
 
 }

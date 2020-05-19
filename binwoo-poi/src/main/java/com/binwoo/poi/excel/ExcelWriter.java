@@ -1,5 +1,9 @@
 package com.binwoo.poi.excel;
 
+import com.binwoo.poi.excel.bean.ExcelCell;
+import com.binwoo.poi.excel.bean.ExcelMerge;
+import com.binwoo.poi.excel.bean.ExcelPage;
+import com.binwoo.poi.excel.bean.ExcelRow;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

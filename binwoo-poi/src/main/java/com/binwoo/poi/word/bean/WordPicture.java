@@ -1,4 +1,4 @@
-package com.binwoo.poi.word;
+package com.binwoo.poi.word.bean;
 
 /**
  * 图片数据.

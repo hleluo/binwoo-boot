@@ -1,5 +1,6 @@
 package com.binwoo.poi.pdf;
 
+import com.binwoo.poi.pdf.bean.PdfPicture;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
 import com.lowagie.text.Rectangle;
@@ -21,14 +22,14 @@ import java.util.List;
  * @author admin
  * @date 2019/9/25 16:04
  */
-public class PdfHelper {
+public class PdfRender {
 
   /**
    * PDF阅读器.
    */
   private PdfReader reader;
 
-  private PdfHelper() {
+  private PdfRender() {
 
   }
 
@@ -38,7 +39,7 @@ public class PdfHelper {
    * @param filepath 文件路径
    * @throws IOException 异常
    */
-  public PdfHelper(String filepath) throws IOException {
+  public PdfRender(String filepath) throws IOException {
     try (InputStream input = new FileInputStream(filepath)) {
       reader = new PdfReader(input);
     }
@@ -50,7 +51,7 @@ public class PdfHelper {
    * @param input 文件流
    * @throws IOException 异常
    */
-  public PdfHelper(InputStream input) throws IOException {
+  public PdfRender(InputStream input) throws IOException {
     reader = new PdfReader(input);
   }
 

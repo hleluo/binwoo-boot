@@ -1,6 +1,6 @@
-import com.binwoo.poi.word.WordExporter;
-import com.binwoo.poi.word.WordPicture;
-import com.binwoo.poi.word.WordRow;
+import com.binwoo.poi.word.bean.WordPicture;
+import com.binwoo.poi.word.WordRender;
+import com.binwoo.poi.word.bean.WordRow;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +13,7 @@ import java.util.Map;
  * @author admin
  * @date 2019/9/23 15:54
  */
-public class WordExporterTest {
+public class WordRenderTest {
 
   /**
    * Word测试.
@@ -24,16 +24,16 @@ public class WordExporterTest {
     try {
       Map<String, Object> params = new HashMap<>();
       params.put("fileNumber_Text", buildPicture());
-      params.put("test-a", "安慰我");
-      params.put("testBen", "反对或法定");
-      params.put("ten", "是的是的哥哥");
+      params.put("test-a", "测试1");
+      params.put("testBen", "测试2");
+      params.put("ten", "测试测试");
       WordRow wordRow = new WordRow();
       wordRow.add(buildUser());
       wordRow.add(buildUser());
-      WordExporter exporter = new WordExporter("D:\\test\\template.docx");
+      WordRender render = new WordRender("D:\\test\\template.docx");
       params.put("users", wordRow);
-      exporter.export("D:\\test\\export.docx", params);
-      exporter.close();
+      render.build("D:\\test\\export.docx", params);
+      render.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -41,10 +41,9 @@ public class WordExporterTest {
 
   private static Map<String, Object> buildUser() {
     Map<String, Object> user = new HashMap<>();
-    user.put("name", "阿萨斯");
+    user.put("name", "张三");
     user.put("sex", "男");
-    user.put("nickname", "色认为");
-
+    user.put("nickname", "图图");
     user.put("project", buildPicture());
     return user;
   }

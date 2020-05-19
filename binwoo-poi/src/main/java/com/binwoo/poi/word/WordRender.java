@@ -1,5 +1,7 @@
 package com.binwoo.poi.word;
 
+import com.binwoo.poi.word.bean.WordPicture;
+import com.binwoo.poi.word.bean.WordRow;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +27,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTableRow;
  * @author admin
  * @date 2019/9/23 15:19
  */
-public class WordExporter {
+public class WordRender {
 
   private static final char CHAR_START = '{';
   private static final char CHAR_END = '}';
@@ -46,7 +48,7 @@ public class WordExporter {
    * @param template 模板文件路径
    * @throws IOException 异常
    */
-  public WordExporter(String template) throws IOException {
+  public WordRender(String template) throws IOException {
     try (InputStream input = new FileInputStream(template)) {
       document = new XWPFDocument(input);
     }
@@ -58,7 +60,7 @@ public class WordExporter {
    * @param input 模板文件流
    * @throws IOException 异常
    */
-  public WordExporter(InputStream input) throws IOException {
+  public WordRender(InputStream input) throws IOException {
     document = new XWPFDocument(input);
   }
 
@@ -69,14 +71,14 @@ public class WordExporter {
    * @param params 参数
    * @throws IOException 异常
    */
-  public void export(String dest, Map<String, Object> params)
+  public void build(String dest, Map<String, Object> params)
       throws IOException {
     File file = new File(dest);
     if (!file.getParentFile().exists()) {
       boolean b = file.getParentFile().mkdirs();
     }
     try (OutputStream out = new FileOutputStream(dest)) {
-      export(out, params);
+      build(out, params);
     }
   }
 
@@ -87,7 +89,7 @@ public class WordExporter {
    * @param params 参数
    * @throws IOException 异常
    */
-  public void export(OutputStream out, Map<String, Object> params)
+  public void build(OutputStream out, Map<String, Object> params)
       throws IOException {
     replaceForParagraphs(params);
     repeatForRows(params);

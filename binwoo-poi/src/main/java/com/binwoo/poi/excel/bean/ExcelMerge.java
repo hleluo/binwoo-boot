@@ -1,4 +1,4 @@
-package com.binwoo.poi.excel;
+package com.binwoo.poi.excel.bean;
 
 /**
  * Excel合并.
