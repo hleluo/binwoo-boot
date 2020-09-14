@@ -49,9 +49,9 @@ public class ApiController {
   @ApiOperation("保存接口信息")
   @PostMapping
   public HttpResponse<Api> save(@RequestBody Api api) {
-    log.info("save param = {}", api);
+    log.info("write param = {}", api);
     api = apiService.save(api);
-    log.info("save response = {}", api);
+    log.info("write response = {}", api);
     return HttpResponseBuilder.save(api);
   }
 

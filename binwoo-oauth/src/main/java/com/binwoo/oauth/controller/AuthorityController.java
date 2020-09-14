@@ -51,9 +51,9 @@ public class AuthorityController {
   @ApiOperation("保存权职信息")
   @PostMapping
   public HttpResponse<Authority> save(@RequestBody Authority authority) throws HttpException {
-    log.info("save param = {}", authority);
+    log.info("write param = {}", authority);
     authority = authorityService.save(authority);
-    log.info("save response = {}", authority);
+    log.info("write response = {}", authority);
     return HttpResponseBuilder.save(authority);
   }
 

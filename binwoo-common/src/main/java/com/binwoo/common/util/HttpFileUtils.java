@@ -54,7 +54,7 @@ public class HttpFileUtils {
     if (!dest.getParentFile().exists()) {
       boolean b = dest.getParentFile().mkdirs();
     }
-    FileUtils.save(input, dest);
+    FileUtils.write(input, dest);
     return String.format("/%s/%s", bucket, filename);
   }
 

@@ -56,9 +56,9 @@ public class UserController {
   @ApiOperation("保存用户信息：修改用户信息时，password不为空时设置新的密码")
   @PostMapping
   public HttpResponse<User> save(@RequestBody User user) throws HttpException {
-    log.info("save param = {}", user);
+    log.info("write param = {}", user);
     user = userService.save(user);
-    log.info("save response = {}", user);
+    log.info("write response = {}", user);
     return HttpResponseBuilder.save(user);
   }
 

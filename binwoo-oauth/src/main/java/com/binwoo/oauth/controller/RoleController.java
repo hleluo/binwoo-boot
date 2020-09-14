@@ -50,9 +50,9 @@ public class RoleController {
   @ApiOperation("保存角色信息")
   @PostMapping
   public HttpResponse<Role> save(@RequestBody Role role) {
-    log.info("save param = {}", role);
+    log.info("write param = {}", role);
     role = roleService.save(role);
-    log.info("save response = {}", role);
+    log.info("write response = {}", role);
     return HttpResponseBuilder.save(role);
   }
 

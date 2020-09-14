@@ -51,9 +51,9 @@ public class ResourceController {
   @ApiOperation("保存资源信息")
   @PostMapping
   public HttpResponse<Resource> save(@RequestBody Resource resource) throws HttpException {
-    log.info("save param = {}", resource);
+    log.info("write param = {}", resource);
     resource = resourceService.save(resource);
-    log.info("save response = {}", resource);
+    log.info("write response = {}", resource);
     return HttpResponseBuilder.save(resource);
   }
 

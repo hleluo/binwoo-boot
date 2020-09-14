@@ -51,9 +51,9 @@ public class MenuController {
   @ApiOperation("保存菜单信息")
   @PostMapping
   public HttpResponse<Menu> save(@RequestBody Menu menu) {
-    log.info("save param = {}", menu);
+    log.info("write param = {}", menu);
     menu = menuService.save(menu);
-    log.info("save response = {}", menu);
+    log.info("write response = {}", menu);
     return HttpResponseBuilder.save(menu);
   }
 

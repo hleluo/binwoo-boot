@@ -51,9 +51,9 @@ public class AppController {
   @ApiOperation("保存应用信息")
   @PostMapping
   public HttpResponse<App> save(@RequestBody App app) throws HttpException {
-    log.info("save param = {}", app);
+    log.info("write param = {}", app);
     app = appService.save(app);
-    log.info("save response = {}", app);
+    log.info("write response = {}", app);
     return HttpResponseBuilder.save(app);
   }
 

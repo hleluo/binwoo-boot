@@ -55,9 +55,9 @@ public class ClientController {
   @ApiOperation("保存客户端信息")
   @PostMapping
   public HttpResponse<Client> save(@RequestBody Client client) throws HttpException {
-    log.info("save param = {}", client);
+    log.info("write param = {}", client);
     client = clientService.save(client);
-    log.info("save response = {}", client);
+    log.info("write response = {}", client);
     return HttpResponseBuilder.save(client);
   }
 

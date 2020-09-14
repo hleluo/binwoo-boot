@@ -50,9 +50,9 @@ public class GroupController {
   @ApiOperation("保存组信息")
   @PostMapping
   public HttpResponse<Group> save(@RequestBody Group group) {
-    log.info("save param = {}", group);
+    log.info("write param = {}", group);
     group = groupService.save(group);
-    log.info("save response = {}", group);
+    log.info("write response = {}", group);
     return HttpResponseBuilder.save(group);
   }
 
